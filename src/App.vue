@@ -12,7 +12,7 @@
             Github 
             <a href="https://github.com/tower1229/el-upload" target="_blank">el-upload</a>
             Npm 
-            <a href="https://github.com/tower1229/el-upload" target="_blank">@tower1229/el-upload</a>
+            <a href="https://github.com/tower1229/el-upload" target="_blank">@tower1229/uploader</a>
         </p>
     </footer>
   </div>

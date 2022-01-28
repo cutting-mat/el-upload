@@ -24,6 +24,8 @@
 </template>
 
 <script>
+// TODO 图片剪裁 https://github.com/dai-siki/vue-image-crop-upload/blob/master/upload-2.vue
+
 import Vue from "vue";
 import { fixImgFile } from "ios-photo-repair";
 
