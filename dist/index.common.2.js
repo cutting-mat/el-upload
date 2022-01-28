@@ -11,16 +11,15 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, "getSuffix", function() { return /* reexport */ getSuffix; });
 __webpack_require__.d(__webpack_exports__, "getExtByType", function() { return /* reexport */ getExtByType; });
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=ce77dcbc&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=020cd7e6&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',{attrs:{"action":"","show-file-list":_vm.showFileList,"accept":_vm.actualAccept,"data":_vm.data,"list-type":_vm.listType,"file-list":_vm.fileList,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload,"disabled":_vm.disabled,"multiple":_vm.multiple,"limit":_vm.limit,"on-exceed":_vm.handleExceed}},[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=ce77dcbc&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=020cd7e6&scoped=true&
 
-// EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
-var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
-var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpack_require__.n(external_commonjs_vue_commonjs2_vue_root_Vue_);
+// EXTERNAL MODULE: ./src/index.js
+var src = __webpack_require__("b635");
 
 // EXTERNAL MODULE: ./node_modules/ios-photo-repair/dist/module.js
 var dist_module = __webpack_require__("af90");
@@ -61,97 +60,97 @@ var dist_module = __webpack_require__("af90");
  * 提取文件名中的扩展名
  * @param filename[String] 要提取扩展名的字符串
  * @return 转小写后的扩展名字符串
-*/
+ */
 const getSuffix = (filename) => {
-    let pos = filename.lastIndexOf('.')
-    let suffix = ''
-    if (pos != -1) {
-        suffix = filename.substring(pos + 1)
-    }
-    return suffix.toLowerCase();
-}
+  let pos = filename.lastIndexOf(".");
+  let suffix = "";
+  if (pos != -1) {
+    suffix = filename.substring(pos + 1);
+  }
+  return suffix.toLowerCase();
+};
 
 /**
  * 通过文件类型获取扩展名列表
  * @param type[String] FileTypeMap 中约定的类型名
  * @return 目标类型的扩展名数组
  * */
-const FileTypeMap = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.FileTypeMap || {};
+const FileTypeMap = src["b" /* uploaderDefault */].FileTypeMap || {};
 
 const getExtByType = (type) => {
-    if (type && Array.isArray(FileTypeMap[type])) {
-        let classList = [];
-        let extList = [];
-        FileTypeMap[type].forEach(e => {
-            if (e.indexOf("t-") === 0) {
-                classList.push(e)
-            } else {
-                extList.push(e)
-            }
-        })
-        if (classList.length) {
-            classList.forEach(classType => {
-                extList = extList.concat(getExtByType(classType))
-            })
-        }
-        return extList
-    } else if(type && type.split){
-        return [type.toLowerCase()]
+  if (type && Array.isArray(FileTypeMap[type])) {
+    let classList = [];
+    let extList = [];
+    FileTypeMap[type].forEach((e) => {
+      if (e.indexOf("t-") === 0) {
+        classList.push(e);
+      } else {
+        extList.push(e);
+      }
+    });
+    if (classList.length) {
+      classList.forEach((classType) => {
+        extList = extList.concat(getExtByType(classType));
+      });
     }
-}
-
+    return extList;
+  } else if (type && type.split) {
+    return [type.toLowerCase()];
+  }
+};
 
 /* harmony default export */ var el_uploadvue_type_script_lang_js_ = ({
+  name: "Uploader",
   props: {
     multiple: {
       type: Boolean,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.multiple
+      default: src["b" /* uploaderDefault */].multiple,
     },
     data: {
       type: Object,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.data
+      default: src["b" /* uploaderDefault */].data,
     },
     name: {
       type: String,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.name
+      default: src["b" /* uploaderDefault */].name,
     },
     showFileList: {
       type: Boolean,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.showFileList
+      default: src["b" /* uploaderDefault */].showFileList,
     },
     accept: {
       type: String,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.accept
+      default: src["b" /* uploaderDefault */].accept,
     },
     listType: {
       type: String,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.listType
+      default: src["b" /* uploaderDefault */].listType,
     },
     fileList: {
       type: Array,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.fileList
+      default: src["b" /* uploaderDefault */].fileList,
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.disabled
+      default: src["b" /* uploaderDefault */].disabled,
     },
     limit: {
       type: Number,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.limit
+      default: src["b" /* uploaderDefault */].limit,
     },
     beforeUpload: {
       type: Function,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.beforeUpload
+      default: src["b" /* uploaderDefault */].beforeUpload,
     },
     triggerId: {
       type: String,
@@ -161,28 +160,28 @@ const getExtByType = (type) => {
     imgCompress: {
       type: Boolean,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.imgCompress
+      default: src["b" /* uploaderDefault */].imgCompress,
     },
     imgCompressOption: {
       type: Object,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.imgCompressOption
+      default: src["b" /* uploaderDefault */].imgCompressOption,
     },
     uploadFunc: {
       type: Function,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.uploadFunc
+      default: src["b" /* uploaderDefault */].uploadFunc,
     },
     uploadBase64Func: {
       type: Function,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.uploadBase64Func
+      default: src["b" /* uploaderDefault */].uploadBase64Func,
     },
     limitSize: {
       type: Number,
       required: false,
-      default: external_commonjs_vue_commonjs2_vue_root_Vue_default.a.uploaderDefault.limitSize
-    }
+      default: src["b" /* uploaderDefault */].limitSize,
+    },
   },
   computed: {
     actualAccept() {
@@ -222,7 +221,7 @@ const getExtByType = (type) => {
         return false;
       }
       // 文件名不得超过500字符
-      if(file.name.length > 500){
+      if (file.name.length > 500) {
         this.$message.warning("文件名不得超过500字符");
         return false;
       }
@@ -288,7 +287,7 @@ var component = Object(componentNormalizer["a" /* default */])(
   staticRenderFns,
   false,
   null,
-  "ce77dcbc",
+  "020cd7e6",
   null
   
 )

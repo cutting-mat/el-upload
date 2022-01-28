@@ -2,7 +2,7 @@
  * @tower1229/el-upload
  * 
  * */ 
-const uploaderDefault = {
+export const uploaderDefault = {
     multiple: false,
     data() {
         return {}
@@ -43,8 +43,8 @@ const uploaderDefault = {
 
 export default {
     install: function (Vue, option) {
-        Vue.uploaderDefault = Object.assign(uploaderDefault, option || {})
+        Object.assign(uploaderDefault, option || {})
 
-        Vue.component('uploader', () => import('@/components/el-upload'))
+        Vue.component('Uploader', () => import('@/components/el-upload'))
     }
 }

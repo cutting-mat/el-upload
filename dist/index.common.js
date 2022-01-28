@@ -287,45 +287,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ "8bbf":
-/***/ (function(module, exports) {
-
-module.exports = require("vue");
-
-/***/ }),
-
-/***/ "fb15":
+/***/ "b635":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
-// This file is imported into lib/wc client bundles.
-
-if (typeof window !== 'undefined') {
-  var currentScript = window.document.currentScript
-  if (true) {
-    var getCurrentScript = __webpack_require__("8875")
-    currentScript = getCurrentScript()
-
-    // for backward compatibility, because previously we directly included the polyfill
-    if (!('currentScript' in document)) {
-      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
-    }
-  }
-
-  var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
-  if (src) {
-    __webpack_require__.p = src[1] // eslint-disable-line
-  }
-}
-
-// Indicate to webpack that this file can be concatenated
-/* harmony default export */ var setPublicPath = (null);
-
-// CONCATENATED MODULE: ./src/index.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return uploaderDefault; });
 /**
  * @tower1229/el-upload
  * 
@@ -369,17 +335,57 @@ const uploaderDefault = {
 }
 
 
-/* harmony default export */ var src_0 = ({
+/* harmony default export */ __webpack_exports__["a"] = ({
     install: function (Vue, option) {
-        Vue.uploaderDefault = Object.assign(uploaderDefault, option || {})
+        Object.assign(uploaderDefault, option || {})
 
-        Vue.component('uploader', () => Promise.all(/* import() */[__webpack_require__.e(1), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, "ca4e")))
+        Vue.component('Uploader', () => Promise.all(/* import() */[__webpack_require__.e(1), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, "ca4e")))
     }
 });
+
+/***/ }),
+
+/***/ "fb15":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "uploaderDefault", function() { return /* reexport */ src_0["b" /* uploaderDefault */]; });
+
+// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
+// This file is imported into lib/wc client bundles.
+
+if (typeof window !== 'undefined') {
+  var currentScript = window.document.currentScript
+  if (true) {
+    var getCurrentScript = __webpack_require__("8875")
+    currentScript = getCurrentScript()
+
+    // for backward compatibility, because previously we directly included the polyfill
+    if (!('currentScript' in document)) {
+      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
+    }
+  }
+
+  var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
+  if (src) {
+    __webpack_require__.p = src[1] // eslint-disable-line
+  }
+}
+
+// Indicate to webpack that this file can be concatenated
+/* harmony default export */ var setPublicPath = (null);
+
+// EXTERNAL MODULE: ./src/index.js
+var src_0 = __webpack_require__("b635");
+
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
 
-/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (src_0);
+/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (src_0["a" /* default */]);
 
 
 

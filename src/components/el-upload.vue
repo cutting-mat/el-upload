@@ -26,104 +26,104 @@
 <script>
 // TODO 图片剪裁 https://github.com/dai-siki/vue-image-crop-upload/blob/master/upload-2.vue
 
-import Vue from "vue";
+import { uploaderDefault } from "../index.js";
 import { fixImgFile } from "ios-photo-repair";
 
 /**
  * 提取文件名中的扩展名
  * @param filename[String] 要提取扩展名的字符串
  * @return 转小写后的扩展名字符串
-*/
+ */
 export const getSuffix = (filename) => {
-    let pos = filename.lastIndexOf('.')
-    let suffix = ''
-    if (pos != -1) {
-        suffix = filename.substring(pos + 1)
-    }
-    return suffix.toLowerCase();
-}
+  let pos = filename.lastIndexOf(".");
+  let suffix = "";
+  if (pos != -1) {
+    suffix = filename.substring(pos + 1);
+  }
+  return suffix.toLowerCase();
+};
 
 /**
  * 通过文件类型获取扩展名列表
  * @param type[String] FileTypeMap 中约定的类型名
  * @return 目标类型的扩展名数组
  * */
-const FileTypeMap = Vue.uploaderDefault.FileTypeMap || {};
+const FileTypeMap = uploaderDefault.FileTypeMap || {};
 
 export const getExtByType = (type) => {
-    if (type && Array.isArray(FileTypeMap[type])) {
-        let classList = [];
-        let extList = [];
-        FileTypeMap[type].forEach(e => {
-            if (e.indexOf("t-") === 0) {
-                classList.push(e)
-            } else {
-                extList.push(e)
-            }
-        })
-        if (classList.length) {
-            classList.forEach(classType => {
-                extList = extList.concat(getExtByType(classType))
-            })
-        }
-        return extList
-    } else if(type && type.split){
-        return [type.toLowerCase()]
+  if (type && Array.isArray(FileTypeMap[type])) {
+    let classList = [];
+    let extList = [];
+    FileTypeMap[type].forEach((e) => {
+      if (e.indexOf("t-") === 0) {
+        classList.push(e);
+      } else {
+        extList.push(e);
+      }
+    });
+    if (classList.length) {
+      classList.forEach((classType) => {
+        extList = extList.concat(getExtByType(classType));
+      });
     }
-}
-
+    return extList;
+  } else if (type && type.split) {
+    return [type.toLowerCase()];
+  }
+};
 
 export default {
+  name: "Uploader",
   props: {
     multiple: {
       type: Boolean,
       required: false,
-      default: Vue.uploaderDefault.multiple
+      default: uploaderDefault.multiple,
     },
     data: {
       type: Object,
       required: false,
-      default: Vue.uploaderDefault.data
+      default: uploaderDefault.data,
     },
     name: {
       type: String,
       required: false,
-      default: Vue.uploaderDefault.name
+      default: uploaderDefault.name,
     },
     showFileList: {
       type: Boolean,
       required: false,
-      default: Vue.uploaderDefault.showFileList
+      default: uploaderDefault.showFileList,
     },
     accept: {
       type: String,
       required: false,
-      default: Vue.uploaderDefault.accept
+      default: uploaderDefault.accept,
     },
     listType: {
       type: String,
       required: false,
-      default: Vue.uploaderDefault.listType
+      default: uploaderDefault.listType,
     },
     fileList: {
       type: Array,
       required: false,
-      default: Vue.uploaderDefault.fileList
+      default: uploaderDefault.fileList,
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: Vue.uploaderDefault.disabled
+      default: uploaderDefault.disabled,
     },
     limit: {
       type: Number,
       required: false,
-      default: Vue.uploaderDefault.limit
+      default: uploaderDefault.limit,
     },
     beforeUpload: {
       type: Function,
       required: false,
-      default: Vue.uploaderDefault.beforeUpload
+      default: uploaderDefault.beforeUpload,
     },
     triggerId: {
       type: String,
@@ -133,28 +133,28 @@ export default {
     imgCompress: {
       type: Boolean,
       required: false,
-      default: Vue.uploaderDefault.imgCompress
+      default: uploaderDefault.imgCompress,
     },
     imgCompressOption: {
       type: Object,
       required: false,
-      default: Vue.uploaderDefault.imgCompressOption
+      default: uploaderDefault.imgCompressOption,
     },
     uploadFunc: {
       type: Function,
       required: false,
-      default: Vue.uploaderDefault.uploadFunc
+      default: uploaderDefault.uploadFunc,
     },
     uploadBase64Func: {
       type: Function,
       required: false,
-      default: Vue.uploaderDefault.uploadBase64Func
+      default: uploaderDefault.uploadBase64Func,
     },
     limitSize: {
       type: Number,
       required: false,
-      default: Vue.uploaderDefault.limitSize
-    }
+      default: uploaderDefault.limitSize,
+    },
   },
   computed: {
     actualAccept() {
@@ -194,7 +194,7 @@ export default {
         return false;
       }
       // 文件名不得超过500字符
-      if(file.name.length > 500){
+      if (file.name.length > 500) {
         this.$message.warning("文件名不得超过500字符");
         return false;
       }
