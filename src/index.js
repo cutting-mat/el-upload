@@ -40,11 +40,12 @@ export const uploaderDefault = {
     }
 }
 
+import Uploader from '@/components/el-upload';
 
 export default {
     install: function (Vue, option) {
         Object.assign(uploaderDefault, option || {})
 
-        Vue.component('Uploader', () => import('@/components/el-upload'))
+        Vue.component('Uploader', Uploader)
     }
 }
