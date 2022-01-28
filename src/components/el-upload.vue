@@ -25,23 +25,63 @@
 
 <script>
 import Vue from "vue";
-import { getSuffix } from "../assets/util";
-import { getExtByType } from "../assets/file-type";
 import { fixImgFile } from "ios-photo-repair";
+
+/**
+ * 提取文件名中的扩展名
+ * @param filename[String] 要提取扩展名的字符串
+ * @return 转小写后的扩展名字符串
+*/
+export const getSuffix = (filename) => {
+    let pos = filename.lastIndexOf('.')
+    let suffix = ''
+    if (pos != -1) {
+        suffix = filename.substring(pos + 1)
+    }
+    return suffix.toLowerCase();
+}
+
+/**
+ * 通过文件类型获取扩展名列表
+ * @param type[String] FileTypeMap 中约定的类型名
+ * @return 目标类型的扩展名数组
+ * */
+const FileTypeMap = Vue.uploaderDefault.FileTypeMap || {};
+
+export const getExtByType = (type) => {
+    if (type && Array.isArray(FileTypeMap[type])) {
+        let classList = [];
+        let extList = [];
+        FileTypeMap[type].forEach(e => {
+            if (e.indexOf("t-") === 0) {
+                classList.push(e)
+            } else {
+                extList.push(e)
+            }
+        })
+        if (classList.length) {
+            classList.forEach(classType => {
+                extList = extList.concat(getExtByType(classType))
+            })
+        }
+        return extList
+    } else if(type && type.split){
+        return [type.toLowerCase()]
+    }
+}
+
 
 export default {
   props: {
     multiple: {
       type: Boolean,
       required: false,
-      default: false
+      default: Vue.uploaderDefault.multiple
     },
     data: {
       type: Object,
       required: false,
-      default() {
-        return {};
-      },
+      default: Vue.uploaderDefault.data
     },
     name: {
       type: String,
@@ -51,41 +91,37 @@ export default {
     showFileList: {
       type: Boolean,
       required: false,
-      default: true,
+      default: Vue.uploaderDefault.showFileList
     },
     accept: {
       type: String,
       required: false,
-      default: "*",
+      default: Vue.uploaderDefault.accept
     },
     listType: {
       type: String,
       required: false,
-      default: "text",
+      default: Vue.uploaderDefault.listType
     },
     fileList: {
       type: Array,
       required: false,
-      default() {
-        return [];
-      },
+      default: Vue.uploaderDefault.fileList
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: false,
+      default: Vue.uploaderDefault.disabled
     },
     limit: {
       type: Number,
       required: false,
-      default: 9
+      default: Vue.uploaderDefault.limit
     },
     beforeUpload: {
       type: Function,
       required: false,
-      default() {
-        return true;
-      },
+      default: Vue.uploaderDefault.beforeUpload
     },
     triggerId: {
       type: String,
@@ -95,32 +131,27 @@ export default {
     imgCompress: {
       type: Boolean,
       required: false,
-      default: true,
+      default: Vue.uploaderDefault.imgCompress
     },
     imgCompressOption: {
       type: Object,
       required: false,
-      default() {
-        return {
-          width: 1000,
-          height: 1000
-        }
-      },
+      default: Vue.uploaderDefault.imgCompressOption
     },
     uploadFunc: {
       type: Function,
       required: false,
-      default: null
+      default: Vue.uploaderDefault.uploadFunc
     },
     uploadBase64Func: {
       type: Function,
       required: false,
-      default: null
+      default: Vue.uploaderDefault.uploadBase64Func
     },
     limitSize: {
       type: Number,
       required: false,
-      default: 100 * 1024 * 1024  // 100M
+      default: Vue.uploaderDefault.limitSize
     }
   },
   computed: {

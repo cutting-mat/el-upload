@@ -21,7 +21,7 @@
 <script>
 
 export default {
-  name: 'el-upload',
+  name: 'el-upload-demo',
   data() {
     return {
       data: {
