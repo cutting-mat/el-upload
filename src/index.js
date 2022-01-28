@@ -45,6 +45,6 @@ export default {
     install: function (Vue, option) {
         Vue.uploaderDefault = Object.assign(uploaderDefault, option || {})
 
-        Vue.component('uploader', () => import('./components/el-upload'))
+        Vue.component('uploader', () => import('@/components/el-upload'))
     }
 }
