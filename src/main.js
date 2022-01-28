@@ -7,6 +7,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 //import '@/core/element-theme/index.css';
 Vue.use(ElementUI);
 
+import elUpload from "@/index";
+import uploadConfig from "@/upload.config"
+Vue.use(elUpload, uploadConfig);
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { upload, uploadImg } from "@/test/common";
+import Vue from "vue";
 import { getSuffix } from "../assets/util";
 import { getExtByType } from "../assets/file-type";
 import { fixImgFile } from "ios-photo-repair";
@@ -46,7 +46,7 @@ export default {
     name: {
       type: String,
       required: false,
-      default: "file",
+      default: Vue.uploaderDefault.name
     },
     showFileList: {
       type: Boolean,
@@ -110,12 +110,12 @@ export default {
     uploadFunc: {
       type: Function,
       required: false,
-      default: upload
+      default: null
     },
     uploadBase64Func: {
       type: Function,
       required: false,
-      default: uploadImg
+      default: null
     },
     limitSize: {
       type: Number,

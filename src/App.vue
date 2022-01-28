@@ -4,7 +4,7 @@
       切换为横向
     </label>
     <div>
-      <elUpload />
+      <uploader />
     </div>
     <footer class="foot">
         <p>© 2022 - 3022 Author
@@ -19,13 +19,9 @@
 </template>
 
 <script>
-import elUpload from "@/components/el-upload";
 
 export default {
   name: 'el-upload',
-  components: {
-    elUpload
-  },
   data() {
     return {
       data: {

@@ -17,7 +17,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-bundle": "vue-cli-service build --target lib --dest dist --name index ./src/components/el-upload.vue"
+    "build-bundle": "vue-cli-service build --target lib --dest dist --name index ./src/index"
   },
   "dependencies": {
     "ios-photo-repair": "^1.0.12",
