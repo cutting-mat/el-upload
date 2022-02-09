@@ -4,7 +4,11 @@
       切换为横向
     </label>
     <div>
-      <uploader />
+      <el-upload-plugin
+        :data="{test:123}"
+        :limit="2"
+        @exceed="handleExceed" 
+      />
     </div>
     <footer class="foot">
         <p>© 2022 - 3022 Author
@@ -30,7 +34,9 @@ export default {
     }
   },
   methods: {
-   
+   handleExceed(){
+     this.$message('超出最大上传数量')
+   }
   }
 }
 </script>

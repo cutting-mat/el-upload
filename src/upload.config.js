@@ -1,6 +1,6 @@
-import { upload, uploadImg } from "@/test/common";
+import { upload as uploadRequest } from "@/test/common";
 
 export default {
-    uploadFunc: upload,
-    uploadBase64Func: uploadImg,
+    uploadRequest,
+    
 }

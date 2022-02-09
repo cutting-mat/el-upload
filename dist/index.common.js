@@ -1237,15 +1237,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
+/***/ "8bbf":
+/***/ (function(module, exports) {
+
+module.exports = require("vue");
+
+/***/ }),
+
 /***/ "fb15":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "uploaderDefault", function() { return /* reexport */ uploaderDefault; });
 
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
 // This file is imported into lib/wc client bundles.
@@ -1271,12 +1275,16 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=020cd7e6&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=65f4fe61&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',{attrs:{"action":"","show-file-list":_vm.showFileList,"accept":_vm.actualAccept,"data":_vm.data,"list-type":_vm.listType,"file-list":_vm.fileList,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload,"disabled":_vm.disabled,"multiple":_vm.multiple,"limit":_vm.limit,"on-exceed":_vm.handleExceed}},[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=020cd7e6&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=65f4fe61&scoped=true&
+
+// EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
+var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
+var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpack_require__.n(external_commonjs_vue_commonjs2_vue_root_Vue_);
 
 // EXTERNAL MODULE: ./node_modules/exif-js/exif.js
 var exif = __webpack_require__("6f45");
@@ -1434,6 +1442,26 @@ const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
 
 //# sourceMappingURL=module.js.map
 
+// CONCATENATED MODULE: ./src/assets/data2blob.js
+/**
+ * database64文件格式转换为2进制
+ *
+ * @param  {[String]} data dataURL 的格式为 “data:image/png;base64,****”,逗号之前都是一些说明性的文字，我们只需要逗号之后的就行了
+ * @param  {[String]} mime [description]
+ * @return {[blob]}      [description]
+ */
+ /* harmony default export */ var data2blob = (function(data, mime) {
+	data = data.split(',')[1];
+	data = window.atob(data);
+	var ia = new Uint8Array(data.length);
+	for (var i = 0; i < data.length; i++) {
+		ia[i] = data.charCodeAt(i);
+	};
+	// canvas.toDataURL 返回的默认格式就是 image/png
+	return new Blob([ia], {
+		type: mime
+	});
+});;
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=script&lang=js&
 //
 //
@@ -1466,10 +1494,20 @@ const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
 
 
 
+// 默认配置
+const FileTypeMap = {
+  "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
+  "t-video": [".mp4", ".rmvb", ".avi", ".mov", "3.gp"],
+  "t-word": [".docx", ".doc"],
+  "t-excel": [".xlsx", ".xls"],
+  "t-ppt": [".ppt", ".pptx"],
+  "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
+  "t-zip": [".zip", ".ar"],
+};
 /**
  * 提取文件名中的扩展名
  * @param filename[String] 要提取扩展名的字符串
- * @return 转小写后的扩展名字符串
+ * return[String] 转小写后的扩展名字符串
  */
 const getSuffix = (filename) => {
   let pos = filename.lastIndexOf(".");
@@ -1483,15 +1521,14 @@ const getSuffix = (filename) => {
 /**
  * 通过文件类型获取扩展名列表
  * @param type[String] FileTypeMap 中约定的类型名
- * @return 目标类型的扩展名数组
+ * return[Array] 目标类型的扩展名数组
  * */
-const FileTypeMap = uploaderDefault.FileTypeMap || {};
-
 const getExtByType = (type) => {
-  if (type && Array.isArray(FileTypeMap[type])) {
+  const quickType = Object.assign({}, FileTypeMap, external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.quickType || {})
+  if (type && Array.isArray(quickType[type])) {
     let classList = [];
     let extList = [];
-    FileTypeMap[type].forEach((e) => {
+    quickType[type].forEach((e) => {
       if (e.indexOf("t-") === 0) {
         classList.push(e);
       } else {
@@ -1508,59 +1545,99 @@ const getExtByType = (type) => {
     return [type.toLowerCase()];
   }
 };
+/**
+ * 预先从全局用户配置中获取props默认值
+ * @param key[String] prop的key
+ * @param defaultValue[Any] 组件内置默认值
+ * return[Any] props.key的最终默认值
+*/
+const getDefaultValue = function (key, defaultValue) {
+  const globalOption = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption;
+  if (Object.keys(globalOption).indexOf(key) !== -1) {
+    return globalOption[key];
+  }
+  return defaultValue;
+};
 
 /* harmony default export */ var el_uploadvue_type_script_lang_js_ = ({
-  name: "Uploader",
+  name: "ElUploadPlugin",
   props: {
     multiple: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.multiple,
+      default() {
+        return getDefaultValue("multiple", false);
+      },
     },
     data: {
       type: Object,
       required: false,
-      default: uploaderDefault.data,
+      default() {
+        return getDefaultValue("data", {});
+      },
     },
     name: {
       type: String,
       required: false,
-      default: uploaderDefault.name,
+      default() {
+        return getDefaultValue("name", "file");
+      },
     },
     showFileList: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.showFileList,
+      default() {
+        return getDefaultValue("showFileList", true);
+      },
     },
     accept: {
       type: String,
       required: false,
-      default: uploaderDefault.accept,
+      default() {
+        return getDefaultValue("accept", "*");
+      },
     },
     listType: {
       type: String,
       required: false,
-      default: uploaderDefault.listType,
+      default() {
+        return getDefaultValue("listType", "text");
+      },
     },
     fileList: {
       type: Array,
       required: false,
-      default: uploaderDefault.fileList,
+      default() {
+        return getDefaultValue("fileList", []);
+      },
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.disabled,
+      default() {
+        return getDefaultValue("disabled", false);
+      },
     },
     limit: {
       type: Number,
       required: false,
-      default: uploaderDefault.limit,
+      default() {
+        return getDefaultValue("limit", 9);
+      },
     },
     beforeUpload: {
       type: Function,
       required: false,
-      default: uploaderDefault.beforeUpload,
+      default(file) {
+        if (
+          external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
+          typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.beforeUpload === "function"
+        ) {
+          return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.beforeUpload(file);
+        } else {
+          return true;
+        }
+      },
     },
     triggerId: {
       type: String,
@@ -1570,28 +1647,31 @@ const getExtByType = (type) => {
     imgCompress: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.imgCompress,
+      default() {
+        return getDefaultValue("imgCompress", true);
+      },
     },
     imgCompressOption: {
       type: Object,
       required: false,
-      default: uploaderDefault.imgCompressOption,
-    },
-    uploadFunc: {
-      type: Function,
-      required: false,
-      default: uploaderDefault.uploadFunc,
-    },
-    uploadBase64Func: {
-      type: Function,
-      required: false,
-      default: uploaderDefault.uploadBase64Func,
+      default() {
+        return getDefaultValue("imgCompressOption", {
+          width: 1000,
+          height: 1000,
+        });
+      },
     },
     limitSize: {
       type: Number,
       required: false,
-      default: uploaderDefault.limitSize,
+      default() {
+        return getDefaultValue("limitSize", 100 * 1024 * 1024);
+      },
     },
+    uploadRequest: {
+      type: Function,
+      required: false,
+    }
   },
   computed: {
     actualAccept() {
@@ -1605,6 +1685,9 @@ const getExtByType = (type) => {
       } else {
         return this.accept;
       }
+    },
+    ready() {
+      return !!external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption;
     },
   },
   methods: {
@@ -1638,42 +1721,44 @@ const getExtByType = (type) => {
       // 扩展校验方法
       return this.beforeUpload(file);
     },
-    customUpload: function (params) {
-      if (this.imgCompress && params.file.type.indexOf("image/") === 0) {
-        // 图片自动压缩
-        $5b02762f359a5b4d$export$9fe3fb24d050ce98(params.file, this.imgCompressOption).then((base64) => {
-          const name = params.file.name.replace(/\.[^.]+\w+$/, ".png");
-          if (base64 && name) {
-            this.uploadBase64Func({
-              base64,
-              name,
-            })
-              .then((res) => {
-                this.handleSuccess(res.data);
-              })
-              .catch((err) => {
-                this.handleError(err);
-              });
-          } else {
-            console.warn("图片压缩error", base64, name);
-          }
-        });
-      } else {
-        // 非图片上传
-        let formData = new FormData();
-        formData.append(this.name, params.file);
-        // 扩展数据
-        Object.keys(this.data).forEach((key) => {
-          formData.append(key, this.data[key]);
-        });
-        this.uploadFunc(formData)
-          .then((res) => {
-            this.handleSuccess(res.data);
-          })
-          .catch((err) => {
-            this.handleError(err);
-          });
+    customUpload: async function (params) {
+      if (!external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption && !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.uploadRequest && !this.uploadRequest) {
+        return console.warn("Uploader: The required configuration [uploadRequest] is missing!");
       }
+
+      const theUploadRequest = this.uploadRequest || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.uploadRequest;
+      if(!typeof(theUploadRequest)==='function'){
+        return console.warn("Uploader: [uploadRequest] must be a Function!");
+      }
+
+      let formData = new FormData();
+
+      if (this.imgCompress && params.file.type.indexOf("image/") === 0) {
+        // 图片压缩
+        const imgBlob = await $5b02762f359a5b4d$export$9fe3fb24d050ce98(
+          params.file,
+          this.imgCompressOption
+        ).then((base64) => {
+          return data2blob(base64, "image/jpeg");
+        });
+        formData.append(this.name, imgBlob, params.file.name + ".jpg");
+      } else {
+        // 非图片文件
+        formData.append(this.name, params.file);
+      }
+      // 扩展数据
+      Object.keys(this.data).forEach((key) => {
+        formData.append(key, this.data[key]);
+      });
+      // 上传
+      external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption
+        .uploadRequest(formData)
+        .then((res) => {
+          this.handleSuccess(res.data);
+        })
+        .catch((err) => {
+          this.handleError(err);
+        });
     },
   },
 });
@@ -1794,7 +1879,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "020cd7e6",
+  "65f4fe61",
   null
   
 )
@@ -1805,51 +1890,13 @@ var component = normalizeComponent(
  * @tower1229/el-upload
  * 
  * */ 
-const uploaderDefault = {
-    multiple: false,
-    data() {
-        return {}
-    },
-    name: "file",
-    showFileList: true,
-    accept: "*",
-    listType: "text",
-    fileList() {
-        return [];
-    },
-    disabled: false,
-    limit: 9,
-    beforeUpload() {
-        return true;
-    },
-    imgCompress: true,
-    imgCompressOption() {
-        return {
-            width: 1000,
-            height: 1000
-        }
-    },
-    uploadFunc: null,
-    uploadBase64Func: null,
-    limitSize: 100 * 1024 * 1024,  // 100M
-    FileTypeMap: {
-        "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
-        "t-video": [".mp4", ".rmvb", ".avi", ".mov", "3.gp"],
-        "t-word": [".docx", ".doc"],
-        "t-excel": [".xlsx", ".xls"],
-        "t-ppt": [".ppt", ".pptx"],
-        "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
-        "t-zip": [".zip", ".ar"]
-    }
-}
-
 
 
 /* harmony default export */ var src_0 = ({
     install: function (Vue, option) {
-        Object.assign(uploaderDefault, option || {})
+        Vue.$uploaderOption = option || {}
 
-        Vue.component('Uploader', el_upload)
+        Vue.component('ElUploadPlugin', el_upload)
     }
 });
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js

@@ -25,14 +25,24 @@
 
 <script>
 // TODO 图片剪裁 https://github.com/dai-siki/vue-image-crop-upload/blob/master/upload-2.vue
-
-import { uploaderDefault } from "../index.js";
+import Vue from "vue";
 import { fixImgFile } from "ios-photo-repair";
+import data2blob from "../assets/data2blob";
 
+// 默认配置
+const FileTypeMap = {
+  "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
+  "t-video": [".mp4", ".rmvb", ".avi", ".mov", "3.gp"],
+  "t-word": [".docx", ".doc"],
+  "t-excel": [".xlsx", ".xls"],
+  "t-ppt": [".ppt", ".pptx"],
+  "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
+  "t-zip": [".zip", ".ar"],
+};
 /**
  * 提取文件名中的扩展名
  * @param filename[String] 要提取扩展名的字符串
- * @return 转小写后的扩展名字符串
+ * return[String] 转小写后的扩展名字符串
  */
 export const getSuffix = (filename) => {
   let pos = filename.lastIndexOf(".");
@@ -46,15 +56,14 @@ export const getSuffix = (filename) => {
 /**
  * 通过文件类型获取扩展名列表
  * @param type[String] FileTypeMap 中约定的类型名
- * @return 目标类型的扩展名数组
+ * return[Array] 目标类型的扩展名数组
  * */
-const FileTypeMap = uploaderDefault.FileTypeMap || {};
-
 export const getExtByType = (type) => {
-  if (type && Array.isArray(FileTypeMap[type])) {
+  const quickType = Object.assign({}, FileTypeMap, Vue.$uploaderOption.quickType || {})
+  if (type && Array.isArray(quickType[type])) {
     let classList = [];
     let extList = [];
-    FileTypeMap[type].forEach((e) => {
+    quickType[type].forEach((e) => {
       if (e.indexOf("t-") === 0) {
         classList.push(e);
       } else {
@@ -71,59 +80,99 @@ export const getExtByType = (type) => {
     return [type.toLowerCase()];
   }
 };
+/**
+ * 预先从全局用户配置中获取props默认值
+ * @param key[String] prop的key
+ * @param defaultValue[Any] 组件内置默认值
+ * return[Any] props.key的最终默认值
+*/
+const getDefaultValue = function (key, defaultValue) {
+  const globalOption = Vue.$uploaderOption;
+  if (Object.keys(globalOption).indexOf(key) !== -1) {
+    return globalOption[key];
+  }
+  return defaultValue;
+};
 
 export default {
-  name: "Uploader",
+  name: "ElUploadPlugin",
   props: {
     multiple: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.multiple,
+      default() {
+        return getDefaultValue("multiple", false);
+      },
     },
     data: {
       type: Object,
       required: false,
-      default: uploaderDefault.data,
+      default() {
+        return getDefaultValue("data", {});
+      },
     },
     name: {
       type: String,
       required: false,
-      default: uploaderDefault.name,
+      default() {
+        return getDefaultValue("name", "file");
+      },
     },
     showFileList: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.showFileList,
+      default() {
+        return getDefaultValue("showFileList", true);
+      },
     },
     accept: {
       type: String,
       required: false,
-      default: uploaderDefault.accept,
+      default() {
+        return getDefaultValue("accept", "*");
+      },
     },
     listType: {
       type: String,
       required: false,
-      default: uploaderDefault.listType,
+      default() {
+        return getDefaultValue("listType", "text");
+      },
     },
     fileList: {
       type: Array,
       required: false,
-      default: uploaderDefault.fileList,
+      default() {
+        return getDefaultValue("fileList", []);
+      },
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.disabled,
+      default() {
+        return getDefaultValue("disabled", false);
+      },
     },
     limit: {
       type: Number,
       required: false,
-      default: uploaderDefault.limit,
+      default() {
+        return getDefaultValue("limit", 9);
+      },
     },
     beforeUpload: {
       type: Function,
       required: false,
-      default: uploaderDefault.beforeUpload,
+      default(file) {
+        if (
+          Vue.$uploaderOption &&
+          typeof Vue.$uploaderOption.beforeUpload === "function"
+        ) {
+          return Vue.$uploaderOption.beforeUpload(file);
+        } else {
+          return true;
+        }
+      },
     },
     triggerId: {
       type: String,
@@ -133,28 +182,31 @@ export default {
     imgCompress: {
       type: Boolean,
       required: false,
-      default: uploaderDefault.imgCompress,
+      default() {
+        return getDefaultValue("imgCompress", true);
+      },
     },
     imgCompressOption: {
       type: Object,
       required: false,
-      default: uploaderDefault.imgCompressOption,
-    },
-    uploadFunc: {
-      type: Function,
-      required: false,
-      default: uploaderDefault.uploadFunc,
-    },
-    uploadBase64Func: {
-      type: Function,
-      required: false,
-      default: uploaderDefault.uploadBase64Func,
+      default() {
+        return getDefaultValue("imgCompressOption", {
+          width: 1000,
+          height: 1000,
+        });
+      },
     },
     limitSize: {
       type: Number,
       required: false,
-      default: uploaderDefault.limitSize,
+      default() {
+        return getDefaultValue("limitSize", 100 * 1024 * 1024);
+      },
     },
+    uploadRequest: {
+      type: Function,
+      required: false,
+    }
   },
   computed: {
     actualAccept() {
@@ -168,6 +220,9 @@ export default {
       } else {
         return this.accept;
       }
+    },
+    ready() {
+      return !!Vue.$uploaderOption;
     },
   },
   methods: {
@@ -201,42 +256,44 @@ export default {
       // 扩展校验方法
       return this.beforeUpload(file);
     },
-    customUpload: function (params) {
-      if (this.imgCompress && params.file.type.indexOf("image/") === 0) {
-        // 图片自动压缩
-        fixImgFile(params.file, this.imgCompressOption).then((base64) => {
-          const name = params.file.name.replace(/\.[^.]+\w+$/, ".png");
-          if (base64 && name) {
-            this.uploadBase64Func({
-              base64,
-              name,
-            })
-              .then((res) => {
-                this.handleSuccess(res.data);
-              })
-              .catch((err) => {
-                this.handleError(err);
-              });
-          } else {
-            console.warn("图片压缩error", base64, name);
-          }
-        });
-      } else {
-        // 非图片上传
-        let formData = new FormData();
-        formData.append(this.name, params.file);
-        // 扩展数据
-        Object.keys(this.data).forEach((key) => {
-          formData.append(key, this.data[key]);
-        });
-        this.uploadFunc(formData)
-          .then((res) => {
-            this.handleSuccess(res.data);
-          })
-          .catch((err) => {
-            this.handleError(err);
-          });
+    customUpload: async function (params) {
+      if (!Vue.$uploaderOption && !Vue.$uploaderOption.uploadRequest && !this.uploadRequest) {
+        return console.warn("Uploader: The required configuration [uploadRequest] is missing!");
       }
+
+      const theUploadRequest = this.uploadRequest || Vue.$uploaderOption.uploadRequest;
+      if(!typeof(theUploadRequest)==='function'){
+        return console.warn("Uploader: [uploadRequest] must be a Function!");
+      }
+
+      let formData = new FormData();
+
+      if (this.imgCompress && params.file.type.indexOf("image/") === 0) {
+        // 图片压缩
+        const imgBlob = await fixImgFile(
+          params.file,
+          this.imgCompressOption
+        ).then((base64) => {
+          return data2blob(base64, "image/jpeg");
+        });
+        formData.append(this.name, imgBlob, params.file.name + ".jpg");
+      } else {
+        // 非图片文件
+        formData.append(this.name, params.file);
+      }
+      // 扩展数据
+      Object.keys(this.data).forEach((key) => {
+        formData.append(key, this.data[key]);
+      });
+      // 上传
+      Vue.$uploaderOption
+        .uploadRequest(formData)
+        .then((res) => {
+          this.handleSuccess(res.data);
+        })
+        .catch((err) => {
+          this.handleError(err);
+        });
     },
   },
 };
