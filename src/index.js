@@ -1,5 +1,5 @@
 /**
- * @tower1229/el-upload
+ * @cutting-mat/el-upload
  * 
  * */ 
 import Uploader from '@/components/el-upload';

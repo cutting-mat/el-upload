@@ -1896,7 +1896,7 @@ var component = normalizeComponent(
 /* harmony default export */ var el_upload = (component.exports);
 // CONCATENATED MODULE: ./src/index.js
 /**
- * @tower1229/el-upload
+ * @cutting-mat/el-upload
  * 
  * */ 
 

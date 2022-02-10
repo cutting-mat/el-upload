@@ -1,4 +1,4 @@
-import axios from '@tower1229/axios';
+import axios from '@cutting-mat/axios';
 import requestConfig from './request.config';
 // 创建请求实例
 const instance = axios.create(requestConfig);
