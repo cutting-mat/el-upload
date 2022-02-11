@@ -1284,12 +1284,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=65f4fe61&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=125daa82&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',{attrs:{"action":"","show-file-list":_vm.showFileList,"accept":_vm.actualAccept,"data":_vm.data,"list-type":_vm.listType,"file-list":_vm.fileList,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload,"disabled":_vm.disabled,"multiple":_vm.multiple,"limit":_vm.limit,"on-exceed":_vm.handleExceed}},[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=65f4fe61&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=125daa82&scoped=true&
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
@@ -1511,7 +1511,7 @@ const FileTypeMap = {
   "t-excel": [".xlsx", ".xls"],
   "t-ppt": [".ppt", ".pptx"],
   "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
-  "t-zip": [".zip", ".ar"],
+  "t-zip": [".zip", ".rar"],
 };
 /**
  * 提取文件名中的扩展名
@@ -1596,7 +1596,7 @@ const getDefaultValue = function (key, defaultValue) {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("showFileList", true);
+        return getDefaultValue("showFileList", false);
       },
     },
     accept: {
@@ -1888,7 +1888,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "65f4fe61",
+  "125daa82",
   null
   
 )

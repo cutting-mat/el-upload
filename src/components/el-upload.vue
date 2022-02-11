@@ -37,7 +37,7 @@ const FileTypeMap = {
   "t-excel": [".xlsx", ".xls"],
   "t-ppt": [".ppt", ".pptx"],
   "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
-  "t-zip": [".zip", ".ar"],
+  "t-zip": [".zip", ".rar"],
 };
 /**
  * 提取文件名中的扩展名
@@ -122,7 +122,7 @@ export default {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("showFileList", true);
+        return getDefaultValue("showFileList", false);
       },
     },
     accept: {
