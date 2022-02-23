@@ -253,9 +253,13 @@ export default {
       type: Function,
       required: false,
     },
-    responseTransfer(response) {
+    responseTransfer: {
       // 接口返回数据 与 fileList 数据格式转换函数
-      return response.data;
+      type: Function,
+      required: false,
+      default(response) {
+        return response.data;
+      },
     },
   },
   computed: {
