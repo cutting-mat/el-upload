@@ -1,18 +1,10 @@
 <template>
   <el-upload
+    v-bind="$props"
     action=""
     :accept="actualAccept"
-    :data="data"
-    :show-file-list="showFileList"
-    :list-type="listType"
-    :file-list="fileList"
     :before-upload="handleBeforeUpload"
     :http-request="customUpload"
-    :disabled="disabled"
-    :multiple="multiple"
-    :limit="limit"
-    :on-exceed="onExceed"
-    :on-change="handleChange"
   >
     <div :id="triggerId">
       <slot>
@@ -60,7 +52,11 @@ export const getSuffix = (filename) => {
  * return[Array] 目标类型的扩展名数组
  * */
 export const getExtByType = (type) => {
-  const quickType = Object.assign({}, FileTypeMap, Vue.$uploaderOption.quickType || {})
+  const quickType = Object.assign(
+    {},
+    FileTypeMap,
+    Vue.$uploaderOption.quickType || {}
+  );
   if (type && Array.isArray(quickType[type])) {
     let classList = [];
     let extList = [];
@@ -86,7 +82,7 @@ export const getExtByType = (type) => {
  * @param key[String] prop的key
  * @param defaultValue[Any] 组件内置默认值
  * return[Any] props.key的最终默认值
-*/
+ */
 const getDefaultValue = function (key, defaultValue) {
   const globalOption = Vue.$uploaderOption;
   if (Object.keys(globalOption).indexOf(key) !== -1) {
@@ -98,8 +94,8 @@ const getDefaultValue = function (key, defaultValue) {
 export default {
   name: "ElUploadPlugin",
   model: {
-    prop: 'fileList',
-    event: 'change'
+    prop: "fileList",
+    event: "change",
   },
   props: {
     multiple: {
@@ -189,16 +185,18 @@ export default {
         ) {
           Vue.$uploaderOption.onExceed(files, fileList);
         } else {
-          this.$message.warning('文件超出上传数量限制');
+          this.$message.warning("文件超出上传数量限制");
         }
       },
     },
     triggerId: {
+      // 配合实现富文本插件上传功能
       type: String,
       required: false,
       default: "upload_image_trigger" + parseInt(Math.random() * 1e8),
     },
     imgCompress: {
+      // 开启图片压缩
       type: Boolean,
       required: false,
       default() {
@@ -206,6 +204,7 @@ export default {
       },
     },
     imgCompressOption: {
+      // 图片压缩配置
       type: Object,
       required: false,
       default() {
@@ -216,6 +215,7 @@ export default {
       },
     },
     imgCrop: {
+      // 开启图片剪裁
       type: Boolean,
       required: false,
       default() {
@@ -223,15 +223,17 @@ export default {
       },
     },
     imgCropOption: {
+      // 图片剪裁配置
       type: Object,
       required: false,
       default() {
         return getDefaultValue("imgCropOption", {
-          ratio: 1 // Width-to-Height Ratio
+          ratio: 1, // Width-to-Height Ratio
         });
       },
     },
     fileSizeLimit: {
+      // 文件尺寸限制
       type: Number,
       required: false,
       default() {
@@ -239,6 +241,7 @@ export default {
       },
     },
     fileNameLengthLimit: {
+      // 文件名长度限制
       type: Number,
       required: false,
       default() {
@@ -246,9 +249,14 @@ export default {
       },
     },
     uploadRequest: {
+      // 自定义上传函数 接收 formdata 参数
       type: Function,
       required: false,
-    }
+    },
+    responseTransfer(response) {
+      // 接口返回数据 与 fileList 数据格式转换函数
+      return response.data;
+    },
   },
   computed: {
     actualAccept() {
@@ -263,14 +271,21 @@ export default {
         return this.accept;
       }
     },
-    ready() {
-      return !!Vue.$uploaderOption;
+    uploadFiles() {
+      // 监听el-upload组件内的 uploadFiles 数据变化，同步给外部
+      const ValueOfElUpload = this.$children[0]
+        ? [...this.$children[0].uploadFiles]
+        : [];
+      this.$emit(
+        "change",
+        ValueOfElUpload.map((e) =>
+          e.response ? this.responseTransfer(e.response) : e
+        )
+      );
+      return ValueOfElUpload;
     },
   },
   methods: {
-    handleChange: function(file, fileList){
-      this.$emit('change', fileList)
-    },
     handleSuccess: function (res) {
       this.$emit("success", res);
     },
@@ -292,19 +307,28 @@ export default {
       }
       // 文件名不得超过500字符
       if (file.name.length > this.fileNameLengthLimit) {
-        this.$message.warning(`文件名不得超过 ${this.fileNameLengthLimit} 字符`);
+        this.$message.warning(
+          `文件名不得超过 ${this.fileNameLengthLimit} 字符`
+        );
         return false;
       }
       // 扩展校验方法
       return this.beforeUpload(file);
     },
     customUpload: async function (params) {
-      if (!Vue.$uploaderOption && !Vue.$uploaderOption.uploadRequest && !this.uploadRequest) {
-        return console.warn("Uploader: The required configuration [uploadRequest] is missing!");
+      if (
+        !Vue.$uploaderOption &&
+        !Vue.$uploaderOption.uploadRequest &&
+        !this.uploadRequest
+      ) {
+        return console.warn(
+          "Uploader: The required configuration [uploadRequest] is missing!"
+        );
       }
 
-      const theUploadRequest = this.uploadRequest || Vue.$uploaderOption.uploadRequest;
-      if(!typeof(theUploadRequest)==='function'){
+      const theUploadRequest =
+        this.uploadRequest || Vue.$uploaderOption.uploadRequest;
+      if (!typeof theUploadRequest === "function") {
         return console.warn("Uploader: [uploadRequest] must be a Function!");
       }
 
@@ -328,9 +352,10 @@ export default {
         formData.append(key, this.data[key]);
       });
       // 上传
-      theUploadRequest(formData)
+      return theUploadRequest(formData)
         .then((res) => {
           this.handleSuccess(res.data);
+          return res.data;
         })
         .catch((err) => {
           this.handleError(err);

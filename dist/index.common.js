@@ -1275,12 +1275,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=408b78f8&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',{attrs:{"action":"","accept":_vm.actualAccept,"data":_vm.data,"show-file-list":_vm.showFileList,"list-type":_vm.listType,"file-list":_vm.fileList,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload,"disabled":_vm.disabled,"multiple":_vm.multiple,"limit":_vm.limit,"on-exceed":_vm.onExceed,"on-change":_vm.handleChange}},[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)])}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1465658a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=150be8e5&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',_vm._b({attrs:{"action":"","accept":_vm.actualAccept,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload}},'el-upload',_vm.$props,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=408b78f8&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=150be8e5&scoped=true&
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
@@ -1481,14 +1481,6 @@ const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 // TODO 图片剪裁 https://github.com/dai-siki/vue-image-crop-upload/blob/master/upload-2.vue
 
@@ -1525,7 +1517,11 @@ const getSuffix = (filename) => {
  * return[Array] 目标类型的扩展名数组
  * */
 const getExtByType = (type) => {
-  const quickType = Object.assign({}, FileTypeMap, external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.quickType || {})
+  const quickType = Object.assign(
+    {},
+    FileTypeMap,
+    external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.quickType || {}
+  );
   if (type && Array.isArray(quickType[type])) {
     let classList = [];
     let extList = [];
@@ -1551,7 +1547,7 @@ const getExtByType = (type) => {
  * @param key[String] prop的key
  * @param defaultValue[Any] 组件内置默认值
  * return[Any] props.key的最终默认值
-*/
+ */
 const getDefaultValue = function (key, defaultValue) {
   const globalOption = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption;
   if (Object.keys(globalOption).indexOf(key) !== -1) {
@@ -1563,8 +1559,8 @@ const getDefaultValue = function (key, defaultValue) {
 /* harmony default export */ var el_uploadvue_type_script_lang_js_ = ({
   name: "ElUploadPlugin",
   model: {
-    prop: 'fileList',
-    event: 'change'
+    prop: "fileList",
+    event: "change",
   },
   props: {
     multiple: {
@@ -1654,16 +1650,18 @@ const getDefaultValue = function (key, defaultValue) {
         ) {
           external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed(files, fileList);
         } else {
-          this.$message.warning('文件超出上传数量限制');
+          this.$message.warning("文件超出上传数量限制");
         }
       },
     },
     triggerId: {
+      // 配合实现富文本插件上传功能
       type: String,
       required: false,
       default: "upload_image_trigger" + parseInt(Math.random() * 1e8),
     },
     imgCompress: {
+      // 开启图片压缩
       type: Boolean,
       required: false,
       default() {
@@ -1671,6 +1669,7 @@ const getDefaultValue = function (key, defaultValue) {
       },
     },
     imgCompressOption: {
+      // 图片压缩配置
       type: Object,
       required: false,
       default() {
@@ -1681,6 +1680,7 @@ const getDefaultValue = function (key, defaultValue) {
       },
     },
     imgCrop: {
+      // 开启图片剪裁
       type: Boolean,
       required: false,
       default() {
@@ -1688,15 +1688,17 @@ const getDefaultValue = function (key, defaultValue) {
       },
     },
     imgCropOption: {
+      // 图片剪裁配置
       type: Object,
       required: false,
       default() {
         return getDefaultValue("imgCropOption", {
-          ratio: 1 // Width-to-Height Ratio
+          ratio: 1, // Width-to-Height Ratio
         });
       },
     },
     fileSizeLimit: {
+      // 文件尺寸限制
       type: Number,
       required: false,
       default() {
@@ -1704,6 +1706,7 @@ const getDefaultValue = function (key, defaultValue) {
       },
     },
     fileNameLengthLimit: {
+      // 文件名长度限制
       type: Number,
       required: false,
       default() {
@@ -1711,9 +1714,14 @@ const getDefaultValue = function (key, defaultValue) {
       },
     },
     uploadRequest: {
+      // 自定义上传函数 接收 formdata 参数
       type: Function,
       required: false,
-    }
+    },
+    responseTransfer(response) {
+      // 接口返回数据 与 fileList 数据格式转换函数
+      return response.data;
+    },
   },
   computed: {
     actualAccept() {
@@ -1728,14 +1736,21 @@ const getDefaultValue = function (key, defaultValue) {
         return this.accept;
       }
     },
-    ready() {
-      return !!external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption;
+    uploadFiles() {
+      // 监听el-upload组件内的 uploadFiles 数据变化，同步给外部
+      const ValueOfElUpload = this.$children[0]
+        ? [...this.$children[0].uploadFiles]
+        : [];
+      this.$emit(
+        "change",
+        ValueOfElUpload.map((e) =>
+          e.response ? this.responseTransfer(e.response) : e
+        )
+      );
+      return ValueOfElUpload;
     },
   },
   methods: {
-    handleChange: function(file, fileList){
-      this.$emit('change', fileList)
-    },
     handleSuccess: function (res) {
       this.$emit("success", res);
     },
@@ -1757,19 +1772,28 @@ const getDefaultValue = function (key, defaultValue) {
       }
       // 文件名不得超过500字符
       if (file.name.length > this.fileNameLengthLimit) {
-        this.$message.warning(`文件名不得超过 ${this.fileNameLengthLimit} 字符`);
+        this.$message.warning(
+          `文件名不得超过 ${this.fileNameLengthLimit} 字符`
+        );
         return false;
       }
       // 扩展校验方法
       return this.beforeUpload(file);
     },
     customUpload: async function (params) {
-      if (!external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption && !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.uploadRequest && !this.uploadRequest) {
-        return console.warn("Uploader: The required configuration [uploadRequest] is missing!");
+      if (
+        !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
+        !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.uploadRequest &&
+        !this.uploadRequest
+      ) {
+        return console.warn(
+          "Uploader: The required configuration [uploadRequest] is missing!"
+        );
       }
 
-      const theUploadRequest = this.uploadRequest || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.uploadRequest;
-      if(!typeof(theUploadRequest)==='function'){
+      const theUploadRequest =
+        this.uploadRequest || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.uploadRequest;
+      if (!typeof theUploadRequest === "function") {
         return console.warn("Uploader: [uploadRequest] must be a Function!");
       }
 
@@ -1793,9 +1817,10 @@ const getDefaultValue = function (key, defaultValue) {
         formData.append(key, this.data[key]);
       });
       // 上传
-      theUploadRequest(formData)
+      return theUploadRequest(formData)
         .then((res) => {
           this.handleSuccess(res.data);
+          return res.data;
         })
         .catch((err) => {
           this.handleError(err);
@@ -1920,7 +1945,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "408b78f8",
+  "150be8e5",
   null
   
 )
