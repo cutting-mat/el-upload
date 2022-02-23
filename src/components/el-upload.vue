@@ -11,7 +11,7 @@
     :disabled="disabled"
     :multiple="multiple"
     :limit="limit"
-    :on-exceed="handleExceed"
+    :on-exceed="onExceed"
   >
     <div :id="triggerId">
       <slot>
@@ -174,6 +174,20 @@ export default {
         }
       },
     },
+    onExceed: {
+      type: Function,
+      required: false,
+      default(files, fileList) {
+        if (
+          Vue.$uploaderOption &&
+          typeof Vue.$uploaderOption.onExceed === "function"
+        ) {
+          Vue.$uploaderOption.onExceed(files, fileList);
+        } else {
+          this.$message.warning('文件超出上传数量限制');
+        }
+      },
+    },
     triggerId: {
       type: String,
       required: false,
@@ -196,11 +210,34 @@ export default {
         });
       },
     },
-    limitSize: {
+    imgCrop: {
+      type: Boolean,
+      required: false,
+      default() {
+        return getDefaultValue("imgCrop", true);
+      },
+    },
+    imgCropOption: {
+      type: Object,
+      required: false,
+      default() {
+        return getDefaultValue("imgCropOption", {
+          ratio: 1 // Width-to-Height Ratio
+        });
+      },
+    },
+    fileSizeLimit: {
       type: Number,
       required: false,
       default() {
-        return getDefaultValue("limitSize", 100 * 1024 * 1024);
+        return getDefaultValue("fileSizeLimit", 100 * 1024 * 1024);
+      },
+    },
+    fileNameLengthLimit: {
+      type: Number,
+      required: false,
+      default() {
+        return getDefaultValue("fileNameLengthLimit", 500);
       },
     },
     uploadRequest: {
@@ -226,9 +263,6 @@ export default {
     },
   },
   methods: {
-    handleExceed() {
-      this.$emit("exceed");
-    },
     handleSuccess: function (res) {
       this.$emit("success", res.data);
     },
@@ -244,13 +278,13 @@ export default {
         return false;
       }
       // 尺寸校验
-      if (file.size > this.limitSize) {
+      if (file.size > this.fileSizeLimit) {
         this.$message.warning("文件超出最大限制");
         return false;
       }
       // 文件名不得超过500字符
-      if (file.name.length > 500) {
-        this.$message.warning("文件名不得超过500字符");
+      if (file.name.length > this.fileNameLengthLimit) {
+        this.$message.warning(`文件名不得超过 ${this.fileNameLengthLimit} 字符`);
         return false;
       }
       // 扩展校验方法
@@ -286,8 +320,7 @@ export default {
         formData.append(key, this.data[key]);
       });
       // 上传
-      Vue.$uploaderOption
-        .uploadRequest(formData)
+      theUploadRequest(formData)
         .then((res) => {
           this.handleSuccess(res.data);
         })
