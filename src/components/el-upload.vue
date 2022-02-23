@@ -1,9 +1,9 @@
 <template>
   <el-upload
     action=""
-    :show-file-list="showFileList"
     :accept="actualAccept"
     :data="data"
+    :show-file-list="showFileList"
     :list-type="listType"
     :file-list="fileList"
     :before-upload="handleBeforeUpload"
@@ -12,6 +12,7 @@
     :multiple="multiple"
     :limit="limit"
     :on-exceed="onExceed"
+    :on-change="handleChange"
   >
     <div :id="triggerId">
       <slot>
@@ -96,6 +97,10 @@ const getDefaultValue = function (key, defaultValue) {
 
 export default {
   name: "ElUploadPlugin",
+  model: {
+    prop: 'fileList',
+    event: 'change'
+  },
   props: {
     multiple: {
       type: Boolean,
@@ -263,8 +268,11 @@ export default {
     },
   },
   methods: {
+    handleChange: function(file, fileList){
+      this.$emit('change', fileList)
+    },
     handleSuccess: function (res) {
-      this.$emit("success", res.data);
+      this.$emit("success", res);
     },
     handleError: function (err) {
       this.$emit("error", err);

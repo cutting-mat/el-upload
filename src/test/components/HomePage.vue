@@ -17,16 +17,11 @@
 
     <h3 class="channeltitle">示例</h3>
 
-    <el-upload-plugin :showFileList="true" :data="{ test: 123 }" :limit="2" @exceed="handleExceed" />
+    <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list />
 
     <div class="code">
       <textarea>
-        <el-upload-plugin 
-          :showFileList="true" 
-          :data="{ test: 123 }" 
-          :limit="2" 
-          @exceed="handleExceed" 
-        />
+        <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list />
       </textarea>
     </div>
   </div>
@@ -35,12 +30,12 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      fileList: []
+    };
   },
   methods: {
-    handleExceed(){
-      this.$message.warning('超出上传数量限制')
-    }
+    
   }
 };
 </script>

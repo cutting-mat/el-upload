@@ -5,9 +5,10 @@
 ## Feature
 
 - [x] 支持全局配置
+- [x] 支持 v-model 受控模式
 - [x] 图片上传前压缩
 - [ ] 图片上传前剪裁
-- [x] IOS图片方向自动校正(需开启压缩)
+- [x] IOS 拍照方向自动校正(需开启压缩)
 - [x] 自定义文件类型
 - [x] 上传文件大小限制
 - [x] 上传文件名长度限制
@@ -50,7 +51,7 @@ Vue.use(elUpload, uploadConfig);
  * accept[String]:              允许上传的文件类型, 额外支持自定义文件类型（见下方 quickType ）, default: "*"
  * showFileList[Boolean]:       展示上传文件列表, 同el-upload, default: false
  * listType[String]:            列表类型, 同el-upload, default: "text"
- * fileList[Array]:             已上传文件数据, 同el-upload, default: []
+ * v-model / fileList[Array]:   已上传文件数据, 同el-upload, default: []
  * disabled[Boolean]:           禁用上传功能, 同el-upload, default: false
  * limit[Number]:               最大可上传文件数, 同el-upload, default: 9
  * beforeUpload[Function]:      上传前校验方法, 同el-upload, default: (file) => true
