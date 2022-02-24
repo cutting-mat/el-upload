@@ -3,12 +3,6 @@ import requestConfig from './request.config';
 // 创建请求实例
 const instance = axios.create(requestConfig);
 
-
-// 上传图片base64
-export const uploadImg = params => {
-    return instance.post(`/file/upload/base64`, params)
-}
-
 // 上传文件
 export const upload = params => {
     return instance.post(`/file/upload`, params, {

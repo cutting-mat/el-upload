@@ -1,7 +1,7 @@
 
 // 环境配置
 const ENVIRONMENT = {
-    mock: 'http://rap2api.taobao.org/app/mock/223572',
+    mock: 'http://rap2api.taobao.org/app/mock/3567',
     dev: 'http://retire.kaifa/japi',
     test: 'http://test.com/api',
     master: '//master.com/api'
@@ -14,7 +14,7 @@ const HASH = {
     "master.com": ENVIRONMENT.master
 }
 
-const baseURL = HASH[window.location.host] || ENVIRONMENT.dev;
+const baseURL = HASH[window.location.host] || ENVIRONMENT.mock;
 
 export default {
     baseURL,
