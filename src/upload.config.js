@@ -5,7 +5,7 @@
  * 
  * accept[String]:              允许上传的文件类型, 额外支持自定义文件类型（见下方 quickType ）, default: "*"
  * showFileList[Boolean]:       展示上传文件列表, 同el-upload, default: false
- * v-model / fileList[Array]:   已上传文件数据, 同el-upload, default: []
+ * v-model / value[Array]:   已上传文件数据, 同el-upload, default: []
  * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, default: (files, fileList) => this.$message.warning('文件超出上传数量限制');
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
  * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
@@ -43,4 +43,7 @@ import { upload as uploadRequest } from "@/test/api/common";
 
 export default {
     uploadRequest,
+    responseTransfer(res) {
+        return res.data
+    }
 }

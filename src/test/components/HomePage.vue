@@ -20,7 +20,7 @@
     <div class="flex-row main">
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list>
+          <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list @change="handleUpload">
             <el-button>
               上传个文件
             </el-button>
@@ -35,7 +35,7 @@
       </div>
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin :fileList="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data">
+          <el-upload-plugin :value="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data">
             <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover" />
             <el-button v-else>
               上传个头像
@@ -45,7 +45,7 @@
 
         <div class="code">
           <textarea>
-            <el-upload-plugin :fileList="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data" />
+            <el-upload-plugin :value="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data" />
           </textarea>
         </div>
       </div>
@@ -57,12 +57,17 @@
 export default {
   data() {
     return {
-      fileList: [],
+      fileList: [{
+        name: "test",
+        url: "http://dummyimage.com/200x200/f2d279/fff&text=IMAGE"
+      }],
       avatar: null
     };
   },
   methods: {
-    
+    handleUpload(files){
+      console.log('files change', files)
+    }
   }
 };
 </script>

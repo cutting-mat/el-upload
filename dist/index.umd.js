@@ -110,6 +110,22 @@ module.exports = exports;
 
 /***/ }),
 
+/***/ "1546":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("2f9b");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__("499e").default
+var update = add("5431419e", content, true, {"sourceMap":false,"shadowMode":false});
+
+/***/ }),
+
 /***/ "24fb":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -208,6 +224,20 @@ function toComment(sourceMap) {
   var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
   return "/*# ".concat(data, " */");
 }
+
+/***/ }),
+
+/***/ "2f9b":
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, ".cropper[data-v-1ebae89e] .el-dialog__body{padding:0}.cropper_main[data-v-1ebae89e]{height:400px}.cropper_actions[data-v-1ebae89e]{padding:.5em}.cropper_actions[data-v-1ebae89e] .el-button-group{margin-right:10px}", ""]);
+// Exports
+module.exports = exports;
+
 
 /***/ }),
 
@@ -477,27 +507,13 @@ function applyToTag (styleElement, obj) {
 
 /***/ }),
 
-/***/ "4d50":
+/***/ "5fa0":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_21ffc66a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("b5c2");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_21ffc66a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_21ffc66a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_1ebae89e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1546");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_1ebae89e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_1ebae89e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
-
-
-/***/ }),
-
-/***/ "5560":
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, ".cropper[data-v-21ffc66a] .el-dialog__body{padding:0}.cropper_main[data-v-21ffc66a]{height:400px}.cropper_actions[data-v-21ffc66a]{padding:.5em}.cropper_actions[data-v-21ffc66a] .el-button-group{margin-right:10px}", ""]);
-// Exports
-module.exports = exports;
 
 
 /***/ }),
@@ -1672,22 +1688,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
-
-/***/ }),
-
-/***/ "b5c2":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("5560");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = __webpack_require__("499e").default
-var update = add("449fb286", content, true, {"sourceMap":false,"shadowMode":false});
 
 /***/ }),
 
@@ -5359,12 +5359,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8858bfcc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=21ffc66a&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',[_c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","accept":_vm.actualAccept,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload}},'el-upload',_vm.$props,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)]),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","width":"600px"},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"})]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}})]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"})])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary"},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_vm._v(" 确定 ")])],1)])],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8858bfcc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=1ebae89e&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',[_c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","fileList":_vm.fileListFinnal,"accept":_vm.actualAccept,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload}},'el-upload',_vm.$props,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)]),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","width":"600px"},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"})]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}})]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"})])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary"},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_vm._v(" 确定 ")])],1)])],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=21ffc66a&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=1ebae89e&scoped=true&
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
@@ -5618,6 +5618,25 @@ var dist_cropper_default = /*#__PURE__*/__webpack_require__.n(dist_cropper);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5700,10 +5719,17 @@ const getDefaultValue = function (key, defaultValue) {
 /* harmony default export */ var el_uploadvue_type_script_lang_js_ = ({
   name: "ElUploadPlugin",
   model: {
-    prop: "fileList",
+    prop: "value",
     event: "change",
   },
   props: {
+    value: {
+      type: Array,
+      required: false,
+      default() {
+        return getDefaultValue("value", []);
+      },
+    },
     multiple: {
       type: Boolean,
       required: false,
@@ -5746,13 +5772,6 @@ const getDefaultValue = function (key, defaultValue) {
         return getDefaultValue("listType", "text");
       },
     },
-    fileList: {
-      type: Array,
-      required: false,
-      default() {
-        return getDefaultValue("fileList", []);
-      },
-    },
     disabled: {
       type: Boolean,
       required: false,
@@ -5764,7 +5783,7 @@ const getDefaultValue = function (key, defaultValue) {
       type: Number,
       required: false,
       default() {
-        return getDefaultValue("limit", 9);
+        return getDefaultValue("limit");
       },
     },
     beforeUpload: {
@@ -5868,7 +5887,14 @@ const getDefaultValue = function (key, defaultValue) {
       type: Function,
       required: false,
       default(response) {
-        return response;
+        if (
+          external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
+          typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.responseTransfer === "function"
+        ) {
+          return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.responseTransfer(response);
+        } else {
+          return response;
+        }
       },
     },
   },
@@ -5877,6 +5903,10 @@ const getDefaultValue = function (key, defaultValue) {
       dialogVisible: false,
       cropResult: null,
       uploadedFileType: null,
+      uploadFiles: {
+        value: [],
+      },
+      fileListFinnal: this.fileList
     };
   },
   computed: {
@@ -5891,19 +5921,6 @@ const getDefaultValue = function (key, defaultValue) {
       } else {
         return this.accept;
       }
-    },
-    uploadFiles() {
-      // 监听el-upload组件内的 uploadFiles 数据变化，同步给外部
-      const ValueOfElUpload = this.$children[0]
-        ? [...this.$children[0].uploadFiles]
-        : [];
-      this.$emit(
-        "change",
-        ValueOfElUpload.map((e) =>
-          e.response ? this.responseTransfer(e.response) : e
-        )
-      );
-      return ValueOfElUpload;
     },
   },
   methods: {
@@ -5991,9 +6008,8 @@ const getDefaultValue = function (key, defaultValue) {
           if (imgBlob) {
             console.log("imgCrop", imgBlob);
             formData.append(this.name, imgBlob, params.file.name);
-            this.cropperMethod('close')
+            this.cropperMethod("close");
           }
-          
         } else if (this.imgCompress) {
           // 图片压缩
           const imgBlob = await $5b02762f359a5b4d$export$9fe3fb24d050ce98(
@@ -6037,7 +6053,7 @@ const getDefaultValue = function (key, defaultValue) {
               imageSmoothingQuality: "medium",
             })
             .toDataURL("image/jpeg");
-          console.log(base64)
+          console.log(base64);
           this.cropResult = data2blob(base64, this.uploadedFileType);
           break;
         case "close":
@@ -6046,39 +6062,62 @@ const getDefaultValue = function (key, defaultValue) {
           if (cropperInstance) {
             cropperInstance.destroy();
           }
-          if(!this.cropResult){
-            // console.log(this.$refs.myupload.abort) // element 内部报错
-            // this.$refs.myupload.abort(this.fileList[0])
-            this.fileList.pop()
+          if (!this.cropResult) {
+            this.uploadFiles.value.pop()
           }
           break;
-        
+
         case "rotateLeft":
-          cropperInstance.rotate(-90)
+          cropperInstance.rotate(-90);
           break;
         case "rotateRight":
-          cropperInstance.rotate(90)
+          cropperInstance.rotate(90);
           break;
         case "scaleX":
-          cropperInstance.scaleX(-1)
+          cropperInstance.scaleX(-1);
           break;
         case "scaleY":
-          cropperInstance.scaleY(-1)
+          cropperInstance.scaleY(-1);
           break;
         case "reset":
-          cropperInstance.reset()
+          cropperInstance.reset();
           break;
         default:
-          console.warn('cropperMethod 参数错误: ', action)
+          console.warn("cropperMethod 参数错误: ", action);
       }
     },
+  },
+  created(){
+    if(this.value.length){
+      this.fileListFinnal = this.value
+    }
+  },
+  mounted() {
+    console.log(this.responseTransfer);
+    // 监听 el-upload 组件内部 uploadFiles 数据
+    this.$set(this.uploadFiles, "value", this.$children[0].uploadFiles);
+
+    this.$watch(
+      "uploadFiles.value",
+      (ValueOfElUpload) => {
+        this.$emit(
+          "change",
+          ValueOfElUpload.filter((e) => e.response).map((e) =>
+            this.responseTransfer(e.response)
+          )
+        );
+      },
+      {
+        deep: true,
+      }
+    );
   },
 });
 
 // CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_el_uploadvue_type_script_lang_js_ = (el_uploadvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/el-upload.vue?vue&type=style&index=0&id=21ffc66a&scoped=true&lang=css&
-var el_uploadvue_type_style_index_0_id_21ffc66a_scoped_true_lang_css_ = __webpack_require__("4d50");
+// EXTERNAL MODULE: ./src/components/el-upload.vue?vue&type=style&index=0&id=1ebae89e&scoped=true&lang=css&
+var el_uploadvue_type_style_index_0_id_1ebae89e_scoped_true_lang_css_ = __webpack_require__("5fa0");
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 /* globals __VUE_SSR_CONTEXT__ */
@@ -6195,7 +6234,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "21ffc66a",
+  "1ebae89e",
   null
   
 )

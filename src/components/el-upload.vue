@@ -4,6 +4,7 @@
       ref="myupload"
       v-bind="$props"
       action=""
+      :fileList="fileListFinnal"
       :accept="actualAccept"
       :before-upload="handleBeforeUpload"
       :http-request="customUpload"
@@ -30,28 +31,46 @@
       <div class="cropper_actions flex-row align-center">
         <div class="flex-1">
           <el-button-group>
-            <el-button size="small" title="左旋" @click="cropperMethod('rotateLeft')">
+            <el-button
+              size="small"
+              title="左旋"
+              @click="cropperMethod('rotateLeft')"
+            >
               <i class="el-icon-refresh-left"></i>
             </el-button>
-            <el-button size="small" title="右旋" @click="cropperMethod('rotateRight')">
+            <el-button
+              size="small"
+              title="右旋"
+              @click="cropperMethod('rotateRight')"
+            >
               <i class="el-icon-refresh-right"></i>
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button size="small" title="水平镜像" @click="cropperMethod('scaleX')">
+            <el-button
+              size="small"
+              title="水平镜像"
+              @click="cropperMethod('scaleX')"
+            >
               <i class="el-icon-sort" style="transform: rotateZ(90deg)"></i>
             </el-button>
-            <el-button size="small" title="垂直镜像" @click="cropperMethod('scaleY')">
+            <el-button
+              size="small"
+              title="垂直镜像"
+              @click="cropperMethod('scaleY')"
+            >
               <i class="el-icon-sort"></i>
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button size="small" title="重置" @click="cropperMethod('reset')">
+            <el-button
+              size="small"
+              title="重置"
+              @click="cropperMethod('reset')"
+            >
               <i class="el-icon-refresh"></i>
             </el-button>
-            
           </el-button-group>
-          
         </div>
 
         <el-button size="small" type="primary" @click="cropperMethod('save')">
@@ -144,10 +163,17 @@ const getDefaultValue = function (key, defaultValue) {
 export default {
   name: "ElUploadPlugin",
   model: {
-    prop: "fileList",
+    prop: "value",
     event: "change",
   },
   props: {
+    value: {
+      type: Array,
+      required: false,
+      default() {
+        return getDefaultValue("value", []);
+      },
+    },
     multiple: {
       type: Boolean,
       required: false,
@@ -190,13 +216,6 @@ export default {
         return getDefaultValue("listType", "text");
       },
     },
-    fileList: {
-      type: Array,
-      required: false,
-      default() {
-        return getDefaultValue("fileList", []);
-      },
-    },
     disabled: {
       type: Boolean,
       required: false,
@@ -208,7 +227,7 @@ export default {
       type: Number,
       required: false,
       default() {
-        return getDefaultValue("limit", 9);
+        return getDefaultValue("limit");
       },
     },
     beforeUpload: {
@@ -312,7 +331,14 @@ export default {
       type: Function,
       required: false,
       default(response) {
-        return response;
+        if (
+          Vue.$uploaderOption &&
+          typeof Vue.$uploaderOption.responseTransfer === "function"
+        ) {
+          return Vue.$uploaderOption.responseTransfer(response);
+        } else {
+          return response;
+        }
       },
     },
   },
@@ -321,6 +347,10 @@ export default {
       dialogVisible: false,
       cropResult: null,
       uploadedFileType: null,
+      uploadFiles: {
+        value: [],
+      },
+      fileListFinnal: this.fileList
     };
   },
   computed: {
@@ -335,19 +365,6 @@ export default {
       } else {
         return this.accept;
       }
-    },
-    uploadFiles() {
-      // 监听el-upload组件内的 uploadFiles 数据变化，同步给外部
-      const ValueOfElUpload = this.$children[0]
-        ? [...this.$children[0].uploadFiles]
-        : [];
-      this.$emit(
-        "change",
-        ValueOfElUpload.map((e) =>
-          e.response ? this.responseTransfer(e.response) : e
-        )
-      );
-      return ValueOfElUpload;
     },
   },
   methods: {
@@ -435,9 +452,8 @@ export default {
           if (imgBlob) {
             console.log("imgCrop", imgBlob);
             formData.append(this.name, imgBlob, params.file.name);
-            this.cropperMethod('close')
+            this.cropperMethod("close");
           }
-          
         } else if (this.imgCompress) {
           // 图片压缩
           const imgBlob = await fixImgFile(
@@ -481,7 +497,7 @@ export default {
               imageSmoothingQuality: "medium",
             })
             .toDataURL("image/jpeg");
-          console.log(base64)
+          console.log(base64);
           this.cropResult = data2blob(base64, this.uploadedFileType);
           break;
         case "close":
@@ -490,32 +506,55 @@ export default {
           if (cropperInstance) {
             cropperInstance.destroy();
           }
-          if(!this.cropResult){
-            // console.log(this.$refs.myupload.abort) // element 内部报错
-            // this.$refs.myupload.abort(this.fileList[0])
-            this.fileList.pop()
+          if (!this.cropResult) {
+            this.uploadFiles.value.pop()
           }
           break;
-        
+
         case "rotateLeft":
-          cropperInstance.rotate(-90)
+          cropperInstance.rotate(-90);
           break;
         case "rotateRight":
-          cropperInstance.rotate(90)
+          cropperInstance.rotate(90);
           break;
         case "scaleX":
-          cropperInstance.scaleX(-1)
+          cropperInstance.scaleX(-1);
           break;
         case "scaleY":
-          cropperInstance.scaleY(-1)
+          cropperInstance.scaleY(-1);
           break;
         case "reset":
-          cropperInstance.reset()
+          cropperInstance.reset();
           break;
         default:
-          console.warn('cropperMethod 参数错误: ', action)
+          console.warn("cropperMethod 参数错误: ", action);
       }
     },
+  },
+  created(){
+    if(this.value.length){
+      this.fileListFinnal = this.value
+    }
+  },
+  mounted() {
+    console.log(this.responseTransfer);
+    // 监听 el-upload 组件内部 uploadFiles 数据
+    this.$set(this.uploadFiles, "value", this.$children[0].uploadFiles);
+
+    this.$watch(
+      "uploadFiles.value",
+      (ValueOfElUpload) => {
+        this.$emit(
+          "change",
+          ValueOfElUpload.filter((e) => e.response).map((e) =>
+            this.responseTransfer(e.response)
+          )
+        );
+      },
+      {
+        deep: true,
+      }
+    );
   },
 };
 </script>
