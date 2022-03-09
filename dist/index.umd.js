@@ -110,22 +110,6 @@ module.exports = exports;
 
 /***/ }),
 
-/***/ "1546":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("2f9b");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = __webpack_require__("499e").default
-var update = add("5431419e", content, true, {"sourceMap":false,"shadowMode":false});
-
-/***/ }),
-
 /***/ "24fb":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -227,17 +211,19 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ "2f9b":
+/***/ "2f38":
 /***/ (function(module, exports, __webpack_require__) {
 
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, ".cropper[data-v-1ebae89e] .el-dialog__body{padding:0}.cropper_main[data-v-1ebae89e]{height:400px}.cropper_actions[data-v-1ebae89e]{padding:.5em}.cropper_actions[data-v-1ebae89e] .el-button-group{margin-right:10px}", ""]);
-// Exports
-module.exports = exports;
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
+// load the styles
+var content = __webpack_require__("5041");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__("499e").default
+var update = add("5bf75e9f", content, true, {"sourceMap":false,"shadowMode":false});
 
 /***/ }),
 
@@ -507,13 +493,16 @@ function applyToTag (styleElement, obj) {
 
 /***/ }),
 
-/***/ "5fa0":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "5041":
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_1ebae89e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1546");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_1ebae89e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_1ebae89e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, ".cropper[data-v-20174e3b] .el-dialog__body{padding:0}.cropper_main[data-v-20174e3b]{height:400px}.cropper_actions[data-v-20174e3b]{padding:.5em}.cropper_actions[data-v-20174e3b] .el-button-group{margin-right:10px}", ""]);
+// Exports
+module.exports = exports;
 
 
 /***/ }),
@@ -1688,6 +1677,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
+
+/***/ }),
+
+/***/ "96c6":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_20174e3b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("2f38");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_20174e3b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_20174e3b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
 
 /***/ }),
 
@@ -5359,12 +5359,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8858bfcc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=1ebae89e&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',[_c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","fileList":_vm.fileListFinnal,"accept":_vm.actualAccept,"before-upload":_vm.handleBeforeUpload,"http-request":_vm.customUpload}},'el-upload',_vm.$props,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',{attrs:{"size":"small","type":"primary","disabled":_vm.disabled}},[_vm._v(" 点击上传 ")])]})],2)]),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","width":"600px"},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"})]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}})]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"})])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary"},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_vm._v(" 确定 ")])],1)])],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8858bfcc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=20174e3b&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',[_c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","fileList":_vm.fileListFinnal,"accept":_vm.acceptFinnal,"before-upload":_vm.handleBeforeUpload,"on-exceed":_vm.handleonExceed,"on-change":_vm.handleChange,"on-remove":_vm.handleRemove,"http-request":_vm.customUpload}},'el-upload',_vm.$attrs,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',[_vm._v(" 点击上传 ")])]})],2)]),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","width":"600px"},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"})]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}})]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"})])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary"},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_vm._v(" 确定 ")])],1)])],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=1ebae89e&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=20174e3b&scoped=true&
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
@@ -5637,6 +5637,7 @@ var dist_cropper_default = /*#__PURE__*/__webpack_require__.n(dist_cropper);
 //
 //
 //
+//
 
 
 
@@ -5730,90 +5731,6 @@ const getDefaultValue = function (key, defaultValue) {
         return getDefaultValue("value", []);
       },
     },
-    multiple: {
-      type: Boolean,
-      required: false,
-      default() {
-        return getDefaultValue("multiple", false);
-      },
-    },
-    data: {
-      type: Object,
-      required: false,
-      default() {
-        return getDefaultValue("data", {});
-      },
-    },
-    name: {
-      type: String,
-      required: false,
-      default() {
-        return getDefaultValue("name", "file");
-      },
-    },
-    showFileList: {
-      type: Boolean,
-      required: false,
-      default() {
-        return getDefaultValue("showFileList", false);
-      },
-    },
-    accept: {
-      type: String,
-      required: false,
-      default() {
-        return getDefaultValue("accept", "*");
-      },
-    },
-    listType: {
-      type: String,
-      required: false,
-      default() {
-        return getDefaultValue("listType", "text");
-      },
-    },
-    disabled: {
-      type: Boolean,
-      required: false,
-      default() {
-        return getDefaultValue("disabled", false);
-      },
-    },
-    limit: {
-      type: Number,
-      required: false,
-      default() {
-        return getDefaultValue("limit");
-      },
-    },
-    beforeUpload: {
-      type: Function,
-      required: false,
-      default(file) {
-        if (
-          external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
-          typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.beforeUpload === "function"
-        ) {
-          return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.beforeUpload(file);
-        } else {
-          return true;
-        }
-      },
-    },
-    onExceed: {
-      type: Function,
-      required: false,
-      default(files, fileList) {
-        if (
-          external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
-          typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed === "function"
-        ) {
-          external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed(files, fileList);
-        } else {
-          this.$message.warning("文件超出上传数量限制");
-        }
-      },
-    },
     triggerId: {
       // 配合实现富文本插件上传功能
       type: String,
@@ -5861,22 +5778,6 @@ const getDefaultValue = function (key, defaultValue) {
         });
       },
     },
-    fileSizeLimit: {
-      // 文件尺寸限制
-      type: Number,
-      required: false,
-      default() {
-        return getDefaultValue("fileSizeLimit", 100 * 1024 * 1024);
-      },
-    },
-    fileNameLengthLimit: {
-      // 文件名长度限制
-      type: Number,
-      required: false,
-      default() {
-        return getDefaultValue("fileNameLengthLimit", 500);
-      },
-    },
     uploadRequest: {
       // 自定义上传函数 接收 formdata 参数
       type: Function,
@@ -5903,55 +5804,91 @@ const getDefaultValue = function (key, defaultValue) {
       dialogVisible: false,
       cropResult: null,
       uploadedFileType: null,
-      uploadFiles: {
-        value: [],
-      },
-      fileListFinnal: this.fileList
+      fileListFinnal: [],
     };
   },
   computed: {
-    actualAccept() {
-      if (this.accept.indexOf("t-") !== -1) {
-        const typeArray = this.accept.split(",");
+    acceptFinnal() {
+      if (this.$attrs.accept && this.$attrs.accept.indexOf("t-") !== -1) {
+        const typeArray = this.$attrs.accept.split(",");
         let result = [];
         typeArray.forEach((type) => {
           result = result.concat(getExtByType(type));
         });
         return result.join(",");
       } else {
-        return this.accept;
+        return this.$attrs.accept || "*";
       }
+    },
+    nameFinnal() {
+      return this.$attrs.name || "file";
+    },
+    dataFinnal() {
+      return this.$attrs.data || {};
     },
   },
   methods: {
-    handleSuccess: function (res) {
+    handleSuccess: function (res, file, fileList) {
       this.$emit("success", res);
     },
     handleError: function (err) {
       this.$emit("error", err);
     },
     handleBeforeUpload: function (file) {
-      // 格式检查
-      const fileExt = getSuffix(file.name);
-      const extWhite = this.actualAccept.replace(/\./g, "").split(",");
-      if (extWhite.findIndex((ext) => ext === "*" || ext === fileExt) === -1) {
-        this.$message.warning("文件格式错误");
-        return false;
+      if (typeof this.$attrs["before-upload"] === "function") {
+        return this.$attrs["before-upload"](file);
+      } else if (
+        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
+        typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.beforeUpload === "function"
+      ) {
+        return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.beforeUpload(file);
+      } else {
+        return true;
       }
-      // 尺寸校验
-      if (file.size > this.fileSizeLimit) {
-        this.$message.warning("文件超出最大限制");
-        return false;
+    },
+    handleonExceed: function (file, fileList) {
+      if (typeof this.$attrs["on-exceed"] === "function") {
+        this.$attrs["on-exceed"](file, fileList);
+      } else if (
+        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption &&
+        typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed === "function"
+      ) {
+        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed(file, fileList);
+      } else {
+        this.$message.warning("文件超出上传数量限制");
       }
-      // 文件名不得超过500字符
-      if (file.name.length > this.fileNameLengthLimit) {
-        this.$message.warning(
-          `文件名不得超过 ${this.fileNameLengthLimit} 字符`
+    },
+    handleChange: function (file, fileList) {
+      if (typeof this.$refs["on-change"] === "function") {
+        this.$refs["on-change"](file, fileList);
+      }
+      const doneFiles = fileList.filter((e) => e.status === "success");
+      if (doneFiles.length === fileList.length) {
+        this.$emit(
+          "change",
+          doneFiles.map((e) => {
+            let data = e.response ? this.responseTransfer(e.response) : e;
+            // 扩展字段
+            data.uid = e.uid;
+            data.status = e.status;
+            return data;
+          })
         );
-        return false;
       }
-      // 扩展校验方法
-      return this.beforeUpload(file);
+    },
+    handleRemove: function (file, fileList) {
+      if (typeof this.$refs["on-remove"] === "function") {
+        this.$refs["on-remove"](file, fileList);
+      }
+
+      this.$emit(
+        "change",
+        fileList.map((e) => {
+          let data = e.response ? this.responseTransfer(e.response) : e;
+          data.uid = e.uid;
+          return data;
+        })
+      );
     },
     customUpload: async function (params) {
       if (
@@ -5972,7 +5909,7 @@ const getDefaultValue = function (key, defaultValue) {
 
       let formData = new FormData();
       this.uploadedFileType = params.file.type;
-
+      //console.log(this.uploadedFileType)
       if (this.uploadedFileType.indexOf("image/") === 0) {
         if (this.imgCrop) {
           // 图片剪裁
@@ -6006,8 +5943,8 @@ const getDefaultValue = function (key, defaultValue) {
           });
 
           if (imgBlob) {
-            console.log("imgCrop", imgBlob);
-            formData.append(this.name, imgBlob, params.file.name);
+            // console.log("imgCrop", imgBlob);
+            formData.append(this.nameFinnal, imgBlob, params.file.name);
             this.cropperMethod("close");
           }
         } else if (this.imgCompress) {
@@ -6019,21 +5956,25 @@ const getDefaultValue = function (key, defaultValue) {
             return data2blob(base64, this.uploadedFileType);
           });
 
-          console.log("imgCompress", imgBlob);
-          formData.append(this.name, imgBlob, params.file.name);
+          // console.log("imgCompress", imgBlob);
+          formData.append(this.nameFinnal, imgBlob, params.file.name);
         }
       } else {
         // 非图片文件
-        formData.append(this.name, params.file);
+        formData.append(this.nameFinnal, params.file);
       }
       // 扩展数据
-      Object.keys(this.data).forEach((key) => {
-        formData.append(key, this.data[key]);
+      Object.keys(this.dataFinnal).forEach((key) => {
+        formData.append(key, this.dataFinnal[key]);
       });
       // 上传
       return theUploadRequest(formData)
         .then((res) => {
-          this.handleSuccess(res.data);
+          this.handleSuccess(
+            res.data,
+            params.file,
+            this.$refs.myupload.uploadFiles
+          );
           return res.data;
         })
         .catch((err) => {
@@ -6053,7 +5994,7 @@ const getDefaultValue = function (key, defaultValue) {
               imageSmoothingQuality: "medium",
             })
             .toDataURL("image/jpeg");
-          console.log(base64);
+          // console.log(base64);
           this.cropResult = data2blob(base64, this.uploadedFileType);
           break;
         case "close":
@@ -6063,7 +6004,8 @@ const getDefaultValue = function (key, defaultValue) {
             cropperInstance.destroy();
           }
           if (!this.cropResult) {
-            this.uploadFiles.value.pop()
+            const newValue = this.value.pop();
+            this.$emit("change", newValue);
           }
           break;
 
@@ -6087,25 +6029,17 @@ const getDefaultValue = function (key, defaultValue) {
       }
     },
   },
-  created(){
-    if(this.value.length){
-      this.fileListFinnal = this.value
-    }
+  created() {
+    this.fileListFinnal = this.$attrs.fileList || this.value || [];
   },
   mounted() {
-    console.log(this.responseTransfer);
-    // 监听 el-upload 组件内部 uploadFiles 数据
-    this.$set(this.uploadFiles, "value", this.$children[0].uploadFiles);
-
+    // 外部数据变更同步给 el-upload
     this.$watch(
-      "uploadFiles.value",
-      (ValueOfElUpload) => {
-        this.$emit(
-          "change",
-          ValueOfElUpload.filter((e) => e.response).map((e) =>
-            this.responseTransfer(e.response)
-          )
-        );
+      "value",
+      (newValue) => {
+        this.$refs.myupload.uploadFiles = this.value.filter((ef) => {
+          return this.value.findIndex((f) => f.uid === ef.uid) !== -1;
+        });
       },
       {
         deep: true,
@@ -6116,8 +6050,8 @@ const getDefaultValue = function (key, defaultValue) {
 
 // CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_el_uploadvue_type_script_lang_js_ = (el_uploadvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/el-upload.vue?vue&type=style&index=0&id=1ebae89e&scoped=true&lang=css&
-var el_uploadvue_type_style_index_0_id_1ebae89e_scoped_true_lang_css_ = __webpack_require__("5fa0");
+// EXTERNAL MODULE: ./src/components/el-upload.vue?vue&type=style&index=0&id=20174e3b&scoped=true&lang=css&
+var el_uploadvue_type_style_index_0_id_20174e3b_scoped_true_lang_css_ = __webpack_require__("96c6");
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 /* globals __VUE_SSR_CONTEXT__ */
@@ -6234,7 +6168,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "1ebae89e",
+  "20174e3b",
   null
   
 )

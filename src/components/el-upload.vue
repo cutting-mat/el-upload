@@ -2,18 +2,19 @@
   <span>
     <el-upload
       ref="myupload"
-      v-bind="$props"
+      v-bind="$attrs"
       action=""
       :fileList="fileListFinnal"
-      :accept="actualAccept"
+      :accept="acceptFinnal"
       :before-upload="handleBeforeUpload"
+      :on-exceed="handleonExceed"
+      :on-change="handleChange"
+      :on-remove="handleRemove"
       :http-request="customUpload"
     >
       <div :id="triggerId">
         <slot>
-          <el-button size="small" type="primary" :disabled="disabled">
-            点击上传
-          </el-button>
+          <el-button> 点击上传 </el-button>
         </slot>
       </div>
     </el-upload>
@@ -174,90 +175,6 @@ export default {
         return getDefaultValue("value", []);
       },
     },
-    multiple: {
-      type: Boolean,
-      required: false,
-      default() {
-        return getDefaultValue("multiple", false);
-      },
-    },
-    data: {
-      type: Object,
-      required: false,
-      default() {
-        return getDefaultValue("data", {});
-      },
-    },
-    name: {
-      type: String,
-      required: false,
-      default() {
-        return getDefaultValue("name", "file");
-      },
-    },
-    showFileList: {
-      type: Boolean,
-      required: false,
-      default() {
-        return getDefaultValue("showFileList", false);
-      },
-    },
-    accept: {
-      type: String,
-      required: false,
-      default() {
-        return getDefaultValue("accept", "*");
-      },
-    },
-    listType: {
-      type: String,
-      required: false,
-      default() {
-        return getDefaultValue("listType", "text");
-      },
-    },
-    disabled: {
-      type: Boolean,
-      required: false,
-      default() {
-        return getDefaultValue("disabled", false);
-      },
-    },
-    limit: {
-      type: Number,
-      required: false,
-      default() {
-        return getDefaultValue("limit");
-      },
-    },
-    beforeUpload: {
-      type: Function,
-      required: false,
-      default(file) {
-        if (
-          Vue.$uploaderOption &&
-          typeof Vue.$uploaderOption.beforeUpload === "function"
-        ) {
-          return Vue.$uploaderOption.beforeUpload(file);
-        } else {
-          return true;
-        }
-      },
-    },
-    onExceed: {
-      type: Function,
-      required: false,
-      default(files, fileList) {
-        if (
-          Vue.$uploaderOption &&
-          typeof Vue.$uploaderOption.onExceed === "function"
-        ) {
-          Vue.$uploaderOption.onExceed(files, fileList);
-        } else {
-          this.$message.warning("文件超出上传数量限制");
-        }
-      },
-    },
     triggerId: {
       // 配合实现富文本插件上传功能
       type: String,
@@ -305,22 +222,6 @@ export default {
         });
       },
     },
-    fileSizeLimit: {
-      // 文件尺寸限制
-      type: Number,
-      required: false,
-      default() {
-        return getDefaultValue("fileSizeLimit", 100 * 1024 * 1024);
-      },
-    },
-    fileNameLengthLimit: {
-      // 文件名长度限制
-      type: Number,
-      required: false,
-      default() {
-        return getDefaultValue("fileNameLengthLimit", 500);
-      },
-    },
     uploadRequest: {
       // 自定义上传函数 接收 formdata 参数
       type: Function,
@@ -347,55 +248,91 @@ export default {
       dialogVisible: false,
       cropResult: null,
       uploadedFileType: null,
-      uploadFiles: {
-        value: [],
-      },
-      fileListFinnal: this.fileList
+      fileListFinnal: [],
     };
   },
   computed: {
-    actualAccept() {
-      if (this.accept.indexOf("t-") !== -1) {
-        const typeArray = this.accept.split(",");
+    acceptFinnal() {
+      if (this.$attrs.accept && this.$attrs.accept.indexOf("t-") !== -1) {
+        const typeArray = this.$attrs.accept.split(",");
         let result = [];
         typeArray.forEach((type) => {
           result = result.concat(getExtByType(type));
         });
         return result.join(",");
       } else {
-        return this.accept;
+        return this.$attrs.accept || "*";
       }
+    },
+    nameFinnal() {
+      return this.$attrs.name || "file";
+    },
+    dataFinnal() {
+      return this.$attrs.data || {};
     },
   },
   methods: {
-    handleSuccess: function (res) {
+    handleSuccess: function (res, file, fileList) {
       this.$emit("success", res);
     },
     handleError: function (err) {
       this.$emit("error", err);
     },
     handleBeforeUpload: function (file) {
-      // 格式检查
-      const fileExt = getSuffix(file.name);
-      const extWhite = this.actualAccept.replace(/\./g, "").split(",");
-      if (extWhite.findIndex((ext) => ext === "*" || ext === fileExt) === -1) {
-        this.$message.warning("文件格式错误");
-        return false;
+      if (typeof this.$attrs["before-upload"] === "function") {
+        return this.$attrs["before-upload"](file);
+      } else if (
+        Vue.$uploaderOption &&
+        typeof Vue.$uploaderOption.beforeUpload === "function"
+      ) {
+        return Vue.$uploaderOption.beforeUpload(file);
+      } else {
+        return true;
       }
-      // 尺寸校验
-      if (file.size > this.fileSizeLimit) {
-        this.$message.warning("文件超出最大限制");
-        return false;
+    },
+    handleonExceed: function (file, fileList) {
+      if (typeof this.$attrs["on-exceed"] === "function") {
+        this.$attrs["on-exceed"](file, fileList);
+      } else if (
+        Vue.$uploaderOption &&
+        typeof Vue.$uploaderOption.onExceed === "function"
+      ) {
+        Vue.$uploaderOption.onExceed(file, fileList);
+      } else {
+        this.$message.warning("文件超出上传数量限制");
       }
-      // 文件名不得超过500字符
-      if (file.name.length > this.fileNameLengthLimit) {
-        this.$message.warning(
-          `文件名不得超过 ${this.fileNameLengthLimit} 字符`
+    },
+    handleChange: function (file, fileList) {
+      if (typeof this.$refs["on-change"] === "function") {
+        this.$refs["on-change"](file, fileList);
+      }
+      const doneFiles = fileList.filter((e) => e.status === "success");
+      if (doneFiles.length === fileList.length) {
+        this.$emit(
+          "change",
+          doneFiles.map((e) => {
+            let data = e.response ? this.responseTransfer(e.response) : e;
+            // 扩展字段
+            data.uid = e.uid;
+            data.status = e.status;
+            return data;
+          })
         );
-        return false;
       }
-      // 扩展校验方法
-      return this.beforeUpload(file);
+    },
+    handleRemove: function (file, fileList) {
+      if (typeof this.$refs["on-remove"] === "function") {
+        this.$refs["on-remove"](file, fileList);
+      }
+
+      this.$emit(
+        "change",
+        fileList.map((e) => {
+          let data = e.response ? this.responseTransfer(e.response) : e;
+          data.uid = e.uid;
+          return data;
+        })
+      );
     },
     customUpload: async function (params) {
       if (
@@ -416,7 +353,7 @@ export default {
 
       let formData = new FormData();
       this.uploadedFileType = params.file.type;
-
+      //console.log(this.uploadedFileType)
       if (this.uploadedFileType.indexOf("image/") === 0) {
         if (this.imgCrop) {
           // 图片剪裁
@@ -450,8 +387,8 @@ export default {
           });
 
           if (imgBlob) {
-            console.log("imgCrop", imgBlob);
-            formData.append(this.name, imgBlob, params.file.name);
+            // console.log("imgCrop", imgBlob);
+            formData.append(this.nameFinnal, imgBlob, params.file.name);
             this.cropperMethod("close");
           }
         } else if (this.imgCompress) {
@@ -463,21 +400,25 @@ export default {
             return data2blob(base64, this.uploadedFileType);
           });
 
-          console.log("imgCompress", imgBlob);
-          formData.append(this.name, imgBlob, params.file.name);
+          // console.log("imgCompress", imgBlob);
+          formData.append(this.nameFinnal, imgBlob, params.file.name);
         }
       } else {
         // 非图片文件
-        formData.append(this.name, params.file);
+        formData.append(this.nameFinnal, params.file);
       }
       // 扩展数据
-      Object.keys(this.data).forEach((key) => {
-        formData.append(key, this.data[key]);
+      Object.keys(this.dataFinnal).forEach((key) => {
+        formData.append(key, this.dataFinnal[key]);
       });
       // 上传
       return theUploadRequest(formData)
         .then((res) => {
-          this.handleSuccess(res.data);
+          this.handleSuccess(
+            res.data,
+            params.file,
+            this.$refs.myupload.uploadFiles
+          );
           return res.data;
         })
         .catch((err) => {
@@ -497,7 +438,7 @@ export default {
               imageSmoothingQuality: "medium",
             })
             .toDataURL("image/jpeg");
-          console.log(base64);
+          // console.log(base64);
           this.cropResult = data2blob(base64, this.uploadedFileType);
           break;
         case "close":
@@ -507,7 +448,8 @@ export default {
             cropperInstance.destroy();
           }
           if (!this.cropResult) {
-            this.uploadFiles.value.pop()
+            const newValue = this.value.pop();
+            this.$emit("change", newValue);
           }
           break;
 
@@ -531,25 +473,17 @@ export default {
       }
     },
   },
-  created(){
-    if(this.value.length){
-      this.fileListFinnal = this.value
-    }
+  created() {
+    this.fileListFinnal = this.$attrs.fileList || this.value || [];
   },
   mounted() {
-    console.log(this.responseTransfer);
-    // 监听 el-upload 组件内部 uploadFiles 数据
-    this.$set(this.uploadFiles, "value", this.$children[0].uploadFiles);
-
+    // 外部数据变更同步给 el-upload
     this.$watch(
-      "uploadFiles.value",
-      (ValueOfElUpload) => {
-        this.$emit(
-          "change",
-          ValueOfElUpload.filter((e) => e.response).map((e) =>
-            this.responseTransfer(e.response)
-          )
-        );
+      "value",
+      (newValue) => {
+        this.$refs.myupload.uploadFiles = this.value.filter((ef) => {
+          return this.value.findIndex((f) => f.uid === ef.uid) !== -1;
+        });
       },
       {
         deep: true,

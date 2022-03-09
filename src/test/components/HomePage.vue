@@ -20,7 +20,7 @@
     <div class="flex-row main">
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list @change="handleUpload">
+          <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2">
             <el-button>
               上传个文件
             </el-button>
@@ -29,14 +29,14 @@
 
         <div class="code">
           <textarea>
-            <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list />
+            <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" />
           </textarea>
         </div>
       </div>
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin :value="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data">
-            <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover" />
+          <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" @success="avatar = $event.data">
+            <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover;background:#666" />
             <el-button v-else>
               上传个头像
             </el-button>
@@ -45,7 +45,7 @@
 
         <div class="code">
           <textarea>
-            <el-upload-plugin :value="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data" />
+            <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" @success="avatar = $event.data" />
           </textarea>
         </div>
       </div>
@@ -65,9 +65,7 @@ export default {
     };
   },
   methods: {
-    handleUpload(files){
-      console.log('files change', files)
-    }
+    
   }
 };
 </script>

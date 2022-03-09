@@ -43,13 +43,13 @@ Vue.use(elUpload, uploadConfig);
 ``` js
 /**
  * ElUploadPlugin 配置文件 
- * 支持原el-upload的所有配置，额外支持以下配置或默认值
+ * 支持原el-upload的所有Props（除 http-request 以外），额外支持以下配置或默认值
  * (el-upload文档: https://element.eleme.cn/#/zh-CN/component/upload)
  * 
- * accept[String]:              允许上传的文件类型, 额外支持自定义文件类型（见下方 quickType ）, default: "*"
- * showFileList[Boolean]:       展示上传文件列表, 同el-upload, default: false
- * v-model / fileList[Array]:   已上传文件数据, 同el-upload, default: []
- * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, default: (files, fileList) => this.$message.warning('文件超出上传数量限制');
+ * accept[String]:              允许上传的文件类型, default: "*"，额外支持自定义文件类型（见下方 quickType ）
+ * v-model / value[Array]:      已上传文件数据, 同el-upload, default: []
+ * beforeUpload[Function]:      上传文件之前的钩子，同el-upload, 支持全局统一配置
+ * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, 支持全局统一配置，default: (files, fileList) => this.$message.warning('文件超出上传数量限制');
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
  * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
     {
@@ -65,11 +65,9 @@ Vue.use(elUpload, uploadConfig);
         maxWidth: 1000,         // 最大输出宽度
         maxHeight: 1000,        // 最大输出高度
     }
- * fileSizeLimit[Number]:       允许上传文件最大尺寸, 单位 B , default: 100 * 1024 * 1024 (100M)
- * fileNameLengthLimit[Number]: 允许上传文件名最大字符长度, default: 500
  * uploadRequest[Function]:     上传处理方法, default: 无
- * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, 同el-upload, default: (response) => return response;
- * quickType[Object]:           自定义文件类型集合, 如： {"t-word": [".docx", ".doc"]}, default: 
+ * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, default: (response) => return response;
+ * quickType[Object]:           自定义文件类型, default: 
     {
         "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
         "t-video": [".mp4", ".rmvb", ".avi", ".mov", "3.gp"],

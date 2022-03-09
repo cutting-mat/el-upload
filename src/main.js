@@ -14,6 +14,9 @@ import uploadConfig from "@/upload.config"
 Vue.use(elUpload, uploadConfig);
 
 Vue.config.productionTip = false
+Vue.config.errorHandler = function (err, vm, info) {
+  console.warn(err, vm, info)
+}
 
 import App from './test/Index.vue'
 
