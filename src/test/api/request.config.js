@@ -21,6 +21,5 @@ export default {
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvYyI6IjAwMCIsInJpIjoxLCJpc3MiOiJzb2dkYXRhLmNvbSIsImFpIjoxLCJsdCI6MCwib2kiOjEsImlzIjowLCJpZCI6MSwiZXhwIjoxNjY5MDI0NDU3LCJhbiI6Iuezu-e7n-euoeeQhuWRmCIsImJvaSI6MX0.x8zT05ECwY6Cim20AT8cRkwg-CdBZ9aTdX4qMj7EdCw"
     }
 }

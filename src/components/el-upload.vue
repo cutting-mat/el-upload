@@ -1,28 +1,78 @@
 <template>
-  <el-upload
-    v-bind="$props"
-    action=""
-    :accept="actualAccept"
-    :before-upload="handleBeforeUpload"
-    :http-request="customUpload"
-  >
-    <div :id="triggerId">
-      <slot>
-        <el-button size="small" type="primary" :disabled="disabled">
-          点击上传
+  <span>
+    <el-upload
+      ref="myupload"
+      v-bind="$props"
+      action=""
+      :accept="actualAccept"
+      :before-upload="handleBeforeUpload"
+      :http-request="customUpload"
+    >
+      <div :id="triggerId">
+        <slot>
+          <el-button size="small" type="primary" :disabled="disabled">
+            点击上传
+          </el-button>
+        </slot>
+      </div>
+    </el-upload>
+    <el-dialog
+      :visible="dialogVisible"
+      append-to-body
+      title="图像剪裁"
+      width="600px"
+      class="cropper"
+      @close="cropperMethod('close')"
+    >
+      <div class="cropper_main">
+        <img src="" ref="CropperImg" />
+      </div>
+      <div class="cropper_actions flex-row align-center">
+        <div class="flex-1">
+          <el-button-group>
+            <el-button size="small" title="左旋" @click="cropperMethod('rotateLeft')">
+              <i class="el-icon-refresh-left"></i>
+            </el-button>
+            <el-button size="small" title="右旋" @click="cropperMethod('rotateRight')">
+              <i class="el-icon-refresh-right"></i>
+            </el-button>
+          </el-button-group>
+          <el-button-group>
+            <el-button size="small" title="水平镜像" @click="cropperMethod('scaleX')">
+              <i class="el-icon-sort" style="transform: rotateZ(90deg)"></i>
+            </el-button>
+            <el-button size="small" title="垂直镜像" @click="cropperMethod('scaleY')">
+              <i class="el-icon-sort"></i>
+            </el-button>
+          </el-button-group>
+          <el-button-group>
+            <el-button size="small" title="重置" @click="cropperMethod('reset')">
+              <i class="el-icon-refresh"></i>
+            </el-button>
+            
+          </el-button-group>
+          
+        </div>
+
+        <el-button size="small" type="primary" @click="cropperMethod('save')">
+          确定
         </el-button>
-      </slot>
-    </div>
-  </el-upload>
+      </div>
+    </el-dialog>
+  </span>
 </template>
 
 <script>
-// TODO 图片剪裁 https://github.com/dai-siki/vue-image-crop-upload/blob/master/upload-2.vue
 import Vue from "vue";
 import { fixImgFile } from "ios-photo-repair";
 import data2blob from "../assets/data2blob";
 
-// 默认配置
+import "cropperjs/dist/cropper.css";
+import Cropper from "cropperjs";
+
+let cropperInstance;
+
+// 文件类型集合
 const FileTypeMap = {
   "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
   "t-video": [".mp4", ".rmvb", ".avi", ".mov", "3.gp"],
@@ -219,7 +269,7 @@ export default {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("imgCrop", true);
+        return getDefaultValue("imgCrop", false);
       },
     },
     imgCropOption: {
@@ -228,7 +278,11 @@ export default {
       required: false,
       default() {
         return getDefaultValue("imgCropOption", {
-          ratio: 1, // Width-to-Height Ratio
+          ratio: 1,
+          minWidth: 0,
+          minHeight: 0,
+          maxWidth: 1000,
+          maxHeight: 1000,
         });
       },
     },
@@ -261,6 +315,13 @@ export default {
         return response.data;
       },
     },
+  },
+  data() {
+    return {
+      dialogVisible: false,
+      cropResult: null,
+      uploadedFileType: null,
+    };
   },
   computed: {
     actualAccept() {
@@ -337,16 +398,58 @@ export default {
       }
 
       let formData = new FormData();
+      this.uploadedFileType = params.file.type;
 
-      if (this.imgCompress && params.file.type.indexOf("image/") === 0) {
-        // 图片压缩
-        const imgBlob = await fixImgFile(
-          params.file,
-          this.imgCompressOption
-        ).then((base64) => {
-          return data2blob(base64, "image/jpeg");
-        });
-        formData.append(this.name, imgBlob, params.file.name + ".jpg");
+      if (this.uploadedFileType.indexOf("image/") === 0) {
+        if (this.imgCrop) {
+          // 图片剪裁
+          this.cropResult = null;
+          this.dialogVisible = true;
+
+          const imgBlob = await new Promise((resolve) => {
+            let oReader = new FileReader();
+            oReader.onload = (e) => {
+              let base64 = e.target.result;
+              let img = this.$refs.CropperImg;
+              img.src = base64;
+              //
+              if (cropperInstance) {
+                cropperInstance.destroy();
+              }
+
+              cropperInstance = new Cropper(img, {
+                viewMode: 1,
+                dragMode: "none",
+                movable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false,
+                toggleDragModeOnDblclick: false,
+                aspectRatio: this.imgCropOption.ratio,
+              });
+            };
+            oReader.readAsDataURL(params.file);
+
+            this.$watch("cropResult", resolve);
+          });
+
+          if (imgBlob) {
+            console.log("imgCrop", imgBlob);
+            formData.append(this.name, imgBlob, params.file.name);
+            this.cropperMethod('close')
+          }
+          
+        } else if (this.imgCompress) {
+          // 图片压缩
+          const imgBlob = await fixImgFile(
+            params.file,
+            this.imgCompressOption
+          ).then((base64) => {
+            return data2blob(base64, this.uploadedFileType);
+          });
+
+          console.log("imgCompress", imgBlob);
+          formData.append(this.name, imgBlob, params.file.name);
+        }
       } else {
         // 非图片文件
         formData.append(this.name, params.file);
@@ -365,10 +468,71 @@ export default {
           this.handleError(err);
         });
     },
+    cropperMethod(action, option) {
+      switch (action) {
+        // 保存剪裁
+        case "save":
+          const base64 = cropperInstance
+            .getCroppedCanvas({
+              minWidth: this.imgCropOption.minWidth,
+              minHeight: this.imgCropOption.minHeight,
+              maxWidth: this.imgCropOption.maxWidth || 1000,
+              maxHeight: this.imgCropOption.maxHeight || 1000,
+              imageSmoothingQuality: "medium",
+            })
+            .toDataURL("image/jpeg");
+          console.log(base64)
+          this.cropResult = data2blob(base64, this.uploadedFileType);
+          break;
+        case "close":
+          this.dialogVisible = false;
+
+          if (cropperInstance) {
+            cropperInstance.destroy();
+          }
+          if(!this.cropResult){
+            // console.log(this.$refs.myupload.abort) // element 内部报错
+            // this.$refs.myupload.abort(this.fileList[0])
+            this.fileList.pop()
+          }
+          break;
+        
+        case "rotateLeft":
+          cropperInstance.rotate(-90)
+          break;
+        case "rotateRight":
+          cropperInstance.rotate(90)
+          break;
+        case "scaleX":
+          cropperInstance.scaleX(-1)
+          break;
+        case "scaleY":
+          cropperInstance.scaleY(-1)
+          break;
+        case "reset":
+          cropperInstance.reset()
+          break;
+        default:
+          console.warn('cropperMethod 参数错误: ', action)
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+.cropper >>> .el-dialog__body {
+  padding: 0;
+}
+.cropper_main {
+  height: 400px;
+}
+
+.cropper_actions {
+  padding: 0.5em;
+}
+.cropper_actions >>> .el-button-group {
+  margin-right: 10px;
+}
 </style>
 

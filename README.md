@@ -7,11 +7,11 @@
 - [x] 支持全局配置
 - [x] 支持 v-model 受控模式
 - [x] 图片上传前压缩
-- [ ] 图片上传前剪裁
-- [x] IOS 拍照方向自动校正(需开启压缩)
+- [x] 图片上传前剪裁
+- [x] IOS 拍照方向自动校正(需开启压缩或剪裁)
 - [x] 自定义文件类型集合
-- [x] 上传文件大小限制
-- [x] 上传文件名长度限制
+- [x] 上传文件大小统一限制
+- [x] 上传文件名长度统一限制
 
 ## Quick Start
 
@@ -53,8 +53,17 @@ Vue.use(elUpload, uploadConfig);
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
  * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
     {
-        width: 1000,
-        height: 1000,
+        width: 1000,            // 最大宽度
+        height: 1000,           // 最大高度
+    }
+ * imgCrop[Boolean]:            开启图片上传前剪裁, default: false
+ * imgCropOption[Object]:       图片剪裁配置, default: 
+    {
+        ratio: 1,               // 剪裁框宽高比
+        minWidth: 0,            // 最小输出宽度
+        minHeight: 0,           // 最小输出高度
+        maxWidth: 1000,         // 最大输出宽度
+        maxHeight: 1000,        // 最大输出高度
     }
  * fileSizeLimit[Number]:       允许上传文件最大尺寸, 单位 B , default: 100 * 1024 * 1024 (100M)
  * fileNameLengthLimit[Number]: 允许上传文件名最大字符长度, default: 500

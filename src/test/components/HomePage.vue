@@ -4,7 +4,7 @@
 
     </div>
     <h1 class="maintitle">@cutting-mat/el-upload</h1>
-    <h2 class="subtitle">整合图片上传前压缩、IOS图片方向自动校正的 el-upload</h2>
+    <h2 class="subtitle">整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正的 el-upload</h2>
 
     <a
       href="https://github.com/cutting-mat/el-upload/blob/main/README.md"
@@ -17,12 +17,38 @@
 
     <h3 class="channeltitle">示例</h3>
 
-    <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list />
+    <div class="flex-row main">
+      <div class="flex-1">
+        <div class="demo">
+          <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list>
+            <el-button>
+              上传个文件
+            </el-button>
+          </el-upload-plugin>
+        </div>
 
-    <div class="code">
-      <textarea>
-        <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list />
-      </textarea>
+        <div class="code">
+          <textarea>
+            <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" show-file-list />
+          </textarea>
+        </div>
+      </div>
+      <div class="flex-1">
+        <div class="demo">
+          <el-upload-plugin :fileList="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data">
+            <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover" />
+            <el-button v-else>
+              上传个头像
+            </el-button>
+          </el-upload-plugin>
+        </div>
+
+        <div class="code">
+          <textarea>
+            <el-upload-plugin :fileList="avatar ? [avatar] : []" imgCrop @success="avatar = $event.data" />
+          </textarea>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -31,7 +57,8 @@
 export default {
   data() {
     return {
-      fileList: []
+      fileList: [],
+      avatar: null
     };
   },
   methods: {
@@ -80,11 +107,22 @@ export default {
   transition: background-color 0.1s ease;
 }
 
+
+.main .flex-1{
+  margin: 0 10px;
+}
+.demo{
+  height: 100px;
+  margin-bottom: 10px;
+  background:#f5f5f5;
+  border-radius: 8px;
+  padding: 10px;
+}
 .code{
   background:#333;
   padding: 10px;
   border-radius: 8px;
-  min-height: 200px;
+  min-height: 50px;
   margin: 20px auto;
   max-width: 600px;
 }
