@@ -312,7 +312,7 @@ export default {
       type: Function,
       required: false,
       default(response) {
-        return response.data;
+        return response;
       },
     },
   },
