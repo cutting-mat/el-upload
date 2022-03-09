@@ -25,7 +25,7 @@
  * fileSizeLimit[Number]:       允许上传文件最大尺寸, 单位 B , default: 100 * 1024 * 1024 (100M)
  * fileNameLengthLimit[Number]: 允许上传文件名最大字符长度, default: 500
  * uploadRequest[Function]:     上传处理方法, default: 无
- * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, 同el-upload, default: (response) => return response.data;
+ * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, 同el-upload, default: (response) => return response;
  * quickType[Object]:           自定义文件类型集合, 如： {"t-word": [".docx", ".doc"]}, default: 
     {
         "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
