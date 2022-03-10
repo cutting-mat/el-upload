@@ -4,14 +4,12 @@
 
 ## Feature
 
-- [x] 支持全局配置
+- [x] 部分属性支持默认配置
 - [x] 支持 v-model 受控模式
 - [x] 图片上传前压缩
 - [x] 图片上传前剪裁
 - [x] IOS 拍照方向自动校正(需开启压缩或剪裁)
 - [x] 自定义文件类型集合
-- [x] 上传文件大小统一限制
-- [x] 上传文件名长度统一限制
 
 ## Quick Start
 
@@ -43,13 +41,13 @@ Vue.use(elUpload, uploadConfig);
 ``` js
 /**
  * ElUploadPlugin 配置文件 
- * 支持原el-upload的所有Props（除 http-request 以外），额外支持以下配置或默认值
+ * 支持原el-upload的所有Props（除 http-request 以外），额外支持以下配置
  * (el-upload文档: https://element.eleme.cn/#/zh-CN/component/upload)
  * 
- * accept[String]:              允许上传的文件类型, default: "*"，额外支持自定义文件类型（见下方 quickType ）
+ * accept[String]:              允许上传的文件类型, 同el-upload, 额外支持自定义文件类型（见下方 quickType ）
  * v-model / value[Array]:      已上传文件数据, 同el-upload, default: []
- * beforeUpload[Function]:      上传文件之前的钩子，同el-upload, 支持全局统一配置
- * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, 支持全局统一配置，default: (files, fileList) => this.$message.warning('文件超出上传数量限制');
+ * beforeUpload[Function]:      上传文件之前的钩子，同el-upload, 将作为默认配置，可以被组件配置覆盖
+ * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, 将作为默认配置，可以被组件配置覆盖
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
  * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
     {

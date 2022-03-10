@@ -85,12 +85,22 @@
 <script>
 import Vue from "vue";
 import { fixImgFile } from "ios-photo-repair";
-import data2blob from "../assets/data2blob";
 
 import "cropperjs/dist/cropper.css";
 import Cropper from "cropperjs";
 
 let cropperInstance;
+
+// 调试开关
+const DEBUG = process.env.NODE_ENV === "development";
+
+// 图片压缩成jpg格式
+const fixJpgFileName = function (fileName) {
+  if (fileName.match(/\.jpg|\.jpeg$/)) {
+    return fixJpgFileName;
+  }
+  return fixJpgFileName + ".jpg";
+};
 
 // 文件类型集合
 const FileTypeMap = {
@@ -101,19 +111,6 @@ const FileTypeMap = {
   "t-ppt": [".ppt", ".pptx"],
   "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
   "t-zip": [".zip", ".rar"],
-};
-/**
- * 提取文件名中的扩展名
- * @param filename[String] 要提取扩展名的字符串
- * return[String] 转小写后的扩展名字符串
- */
-export const getSuffix = (filename) => {
-  let pos = filename.lastIndexOf(".");
-  let suffix = "";
-  if (pos != -1) {
-    suffix = filename.substring(pos + 1);
-  }
-  return suffix.toLowerCase();
 };
 
 /**
@@ -247,7 +244,6 @@ export default {
     return {
       dialogVisible: false,
       cropResult: null,
-      uploadedFileType: null,
       fileListFinnal: [],
     };
   },
@@ -272,12 +268,6 @@ export default {
     },
   },
   methods: {
-    handleSuccess: function (res, file, fileList) {
-      this.$emit("success", res);
-    },
-    handleError: function (err) {
-      this.$emit("error", err);
-    },
     handleBeforeUpload: function (file) {
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
@@ -298,14 +288,9 @@ export default {
         typeof Vue.$uploaderOption.onExceed === "function"
       ) {
         Vue.$uploaderOption.onExceed(file, fileList);
-      } else {
-        this.$message.warning("文件超出上传数量限制");
-      }
+      } 
     },
     handleChange: function (file, fileList) {
-      if (typeof this.$refs["on-change"] === "function") {
-        this.$refs["on-change"](file, fileList);
-      }
       const doneFiles = fileList.filter((e) => e.status === "success");
       if (doneFiles.length === fileList.length) {
         this.$emit(
@@ -319,12 +304,12 @@ export default {
           })
         );
       }
+
+      if (typeof this.$refs["on-change"] === "function") {
+        this.$refs["on-change"](file, fileList);
+      }
     },
     handleRemove: function (file, fileList) {
-      if (typeof this.$refs["on-remove"] === "function") {
-        this.$refs["on-remove"](file, fileList);
-      }
-
       this.$emit(
         "change",
         fileList.map((e) => {
@@ -333,6 +318,11 @@ export default {
           return data;
         })
       );
+
+      if (typeof this.$refs["on-remove"] === "function") {
+        this.$refs["on-remove"](file, fileList);
+      }
+
     },
     customUpload: async function (params) {
       if (
@@ -351,10 +341,14 @@ export default {
         return console.warn("Uploader: [uploadRequest] must be a Function!");
       }
 
+      const uploadedFileType = params.file.type;
+      DEBUG && console.log("uploadedFileType", uploadedFileType);
+
       let formData = new FormData();
-      this.uploadedFileType = params.file.type;
-      //console.log(this.uploadedFileType)
-      if (this.uploadedFileType.indexOf("image/") === 0) {
+      let formDataFileObj = params.file;
+      let formDataFileName = params.file.name;
+
+      if (uploadedFileType.indexOf("image/") === 0) {
         if (this.imgCrop) {
           // 图片剪裁
           this.cropResult = null;
@@ -387,49 +381,42 @@ export default {
           });
 
           if (imgBlob) {
-            // console.log("imgCrop", imgBlob);
-            formData.append(this.nameFinnal, imgBlob, params.file.name);
+            DEBUG && console.log("imgCrop", imgBlob);
+            formDataFileObj = imgBlob;
+            formDataFileName = fixJpgFileName(formDataFileName);
             this.cropperMethod("close");
           }
         } else if (this.imgCompress) {
           // 图片压缩
           const imgBlob = await fixImgFile(
             params.file,
-            this.imgCompressOption
-          ).then((base64) => {
-            return data2blob(base64, this.uploadedFileType);
-          });
+            Object.assign({}, this.imgCompressOption, {
+              outType: "blob",
+            })
+          );
 
-          // console.log("imgCompress", imgBlob);
-          formData.append(this.nameFinnal, imgBlob, params.file.name);
+          DEBUG && console.log("imgCompress", imgBlob);
+          formDataFileObj = imgBlob;
+          formDataFileName = fixJpgFileName(formDataFileName);
         }
-      } else {
-        // 非图片文件
-        formData.append(this.nameFinnal, params.file);
       }
+
+      formData.append(this.nameFinnal, formDataFileObj, formDataFileName);
+
       // 扩展数据
       Object.keys(this.dataFinnal).forEach((key) => {
         formData.append(key, this.dataFinnal[key]);
       });
       // 上传
-      return theUploadRequest(formData)
-        .then((res) => {
-          this.handleSuccess(
-            res.data,
-            params.file,
-            this.$refs.myupload.uploadFiles
-          );
-          return res.data;
-        })
-        .catch((err) => {
-          this.handleError(err);
-        });
+      return theUploadRequest(formData).then((res) => {
+        return res.data;
+      });
     },
-    cropperMethod(action, option) {
+    cropperMethod(action) {
+      // 剪裁相关处理方法
       switch (action) {
-        // 保存剪裁
         case "save":
-          const base64 = cropperInstance
+          cropperInstance
             .getCroppedCanvas({
               minWidth: this.imgCropOption.minWidth,
               minHeight: this.imgCropOption.minHeight,
@@ -437,13 +424,12 @@ export default {
               maxHeight: this.imgCropOption.maxHeight || 1000,
               imageSmoothingQuality: "medium",
             })
-            .toDataURL("image/jpeg");
-          // console.log(base64);
-          this.cropResult = data2blob(base64, this.uploadedFileType);
+            .toBlob((blob) => {
+              this.cropResult = blob;
+            }, "image/jpeg");
           break;
         case "close":
           this.dialogVisible = false;
-
           if (cropperInstance) {
             cropperInstance.destroy();
           }
@@ -452,7 +438,6 @@ export default {
             this.$emit("change", newValue);
           }
           break;
-
         case "rotateLeft":
           cropperInstance.rotate(-90);
           break;
@@ -481,12 +466,12 @@ export default {
     this.$watch(
       "value",
       (newValue) => {
-        this.$refs.myupload.uploadFiles = this.value.filter((ef) => {
-          return this.value.findIndex((f) => f.uid === ef.uid) !== -1;
+        this.$refs.myupload.uploadFiles = newValue.filter((ef) => {
+          return newValue.findIndex((f) => f.uid === ef.uid) !== -1;
         });
       },
       {
-        deep: true,
+        deep: true
       }
     );
   },
@@ -494,6 +479,7 @@ export default {
 </script>
 
 <style scoped>
+/* 图片剪裁弹窗 */
 .cropper >>> .el-dialog__body {
   padding: 0;
 }

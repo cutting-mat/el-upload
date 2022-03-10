@@ -96,6 +96,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
+/***/ "0724":
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, ".cropper[data-v-6977af12] .el-dialog__body{padding:0}.cropper_main[data-v-6977af12]{height:400px}.cropper_actions[data-v-6977af12]{padding:.5em}.cropper_actions[data-v-6977af12] .el-button-group{margin-right:10px}", ""]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
 /***/ "0ee6":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -208,22 +222,6 @@ function toComment(sourceMap) {
   var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
   return "/*# ".concat(data, " */");
 }
-
-/***/ }),
-
-/***/ "2f38":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("5041");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = __webpack_require__("499e").default
-var update = add("5bf75e9f", content, true, {"sourceMap":false,"shadowMode":false});
 
 /***/ }),
 
@@ -489,20 +487,6 @@ function applyToTag (styleElement, obj) {
     styleElement.appendChild(document.createTextNode(css))
   }
 }
-
-
-/***/ }),
-
-/***/ "5041":
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, ".cropper[data-v-20174e3b] .el-dialog__body{padding:0}.cropper_main[data-v-20174e3b]{height:400px}.cropper_actions[data-v-20174e3b]{padding:.5em}.cropper_actions[data-v-20174e3b] .el-button-group{margin-right:10px}", ""]);
-// Exports
-module.exports = exports;
 
 
 /***/ }),
@@ -1677,17 +1661,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
-
-/***/ }),
-
-/***/ "96c6":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_20174e3b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("2f38");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_20174e3b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_20174e3b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
 
 /***/ }),
 
@@ -5328,6 +5301,17 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
 
 /***/ }),
 
+/***/ "f66e":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_6977af12_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("fec7");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_6977af12_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_el_upload_vue_vue_type_style_index_0_id_6977af12_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "fb15":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5359,12 +5343,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"8858bfcc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=20174e3b&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"86a48620-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/el-upload.vue?vue&type=template&id=6977af12&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',[_c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","fileList":_vm.fileListFinnal,"accept":_vm.acceptFinnal,"before-upload":_vm.handleBeforeUpload,"on-exceed":_vm.handleonExceed,"on-change":_vm.handleChange,"on-remove":_vm.handleRemove,"http-request":_vm.customUpload}},'el-upload',_vm.$attrs,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',[_vm._v(" 点击上传 ")])]})],2)]),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","width":"600px"},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"})]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}})]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"})])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"})])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary"},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_vm._v(" 确定 ")])],1)])],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=20174e3b&scoped=true&
+// CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=template&id=6977af12&scoped=true&
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
@@ -5486,11 +5470,12 @@ const $5b02762f359a5b4d$var$computeSize = function(originWidth, originHeight, ma
 };
 const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
     const opt = Object.assign({
-        ratio: 2
+        ratio: 2,
+        outType: 'base64' // base64 | blob
     }, option || {
     });
     return new Promise((resolve, reject)=>{
-        if (file.type.indexOf('image') === 0) $5b02762f359a5b4d$var$getOri(file).then((orientation)=>{
+        if (file.type.indexOf('image/') === 0) $5b02762f359a5b4d$var$getOri(file).then((orientation)=>{
             let oReader = new FileReader();
             oReader.onload = function(e) {
                 let base64 = e.target.result;
@@ -5509,7 +5494,8 @@ const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
                         }
                     }
                     $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas)=>{
-                        resolve(canvas.toDataURL('image/jpeg', opt.ratio));
+                        if (opt.outType === 'blob') canvas.toBlob(resolve, 'image/jpeg', opt.ratio);
+                        else resolve(canvas.toDataURL('image/jpeg', opt.ratio));
                     });
                 };
                 img.src = base64;
@@ -5526,26 +5512,6 @@ const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
 
 //# sourceMappingURL=module.js.map
 
-// CONCATENATED MODULE: ./src/assets/data2blob.js
-/**
- * database64文件格式转换为2进制
- *
- * @param  {[String]} data dataURL 的格式为 “data:image/png;base64,****”,逗号之前都是一些说明性的文字，我们只需要逗号之后的就行了
- * @param  {[String]} mime [description]
- * @return {[blob]}      [description]
- */
- /* harmony default export */ var data2blob = (function(data, mime) {
-	data = data.split(',')[1];
-	data = window.atob(data);
-	var ia = new Uint8Array(data.length);
-	for (var i = 0; i < data.length; i++) {
-		ia[i] = data.charCodeAt(i);
-	};
-	// canvas.toDataURL 返回的默认格式就是 image/png
-	return new Blob([ia], {
-		type: mime
-	});
-});;
 // EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.css
 var cropper = __webpack_require__("6107");
 
@@ -5645,8 +5611,18 @@ var dist_cropper_default = /*#__PURE__*/__webpack_require__.n(dist_cropper);
 
 
 
-
 let cropperInstance;
+
+// 调试开关
+const DEBUG = "production" === "development";
+
+// 图片压缩成jpg格式
+const fixJpgFileName = function (fileName) {
+  if (fileName.match(/\.jpg|\.jpeg$/)) {
+    return fixJpgFileName;
+  }
+  return fixJpgFileName + ".jpg";
+};
 
 // 文件类型集合
 const FileTypeMap = {
@@ -5657,19 +5633,6 @@ const FileTypeMap = {
   "t-ppt": [".ppt", ".pptx"],
   "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
   "t-zip": [".zip", ".rar"],
-};
-/**
- * 提取文件名中的扩展名
- * @param filename[String] 要提取扩展名的字符串
- * return[String] 转小写后的扩展名字符串
- */
-const getSuffix = (filename) => {
-  let pos = filename.lastIndexOf(".");
-  let suffix = "";
-  if (pos != -1) {
-    suffix = filename.substring(pos + 1);
-  }
-  return suffix.toLowerCase();
 };
 
 /**
@@ -5803,7 +5766,6 @@ const getDefaultValue = function (key, defaultValue) {
     return {
       dialogVisible: false,
       cropResult: null,
-      uploadedFileType: null,
       fileListFinnal: [],
     };
   },
@@ -5828,12 +5790,6 @@ const getDefaultValue = function (key, defaultValue) {
     },
   },
   methods: {
-    handleSuccess: function (res, file, fileList) {
-      this.$emit("success", res);
-    },
-    handleError: function (err) {
-      this.$emit("error", err);
-    },
     handleBeforeUpload: function (file) {
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
@@ -5854,14 +5810,9 @@ const getDefaultValue = function (key, defaultValue) {
         typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed === "function"
       ) {
         external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$uploaderOption.onExceed(file, fileList);
-      } else {
-        this.$message.warning("文件超出上传数量限制");
-      }
+      } 
     },
     handleChange: function (file, fileList) {
-      if (typeof this.$refs["on-change"] === "function") {
-        this.$refs["on-change"](file, fileList);
-      }
       const doneFiles = fileList.filter((e) => e.status === "success");
       if (doneFiles.length === fileList.length) {
         this.$emit(
@@ -5875,12 +5826,12 @@ const getDefaultValue = function (key, defaultValue) {
           })
         );
       }
+
+      if (typeof this.$refs["on-change"] === "function") {
+        this.$refs["on-change"](file, fileList);
+      }
     },
     handleRemove: function (file, fileList) {
-      if (typeof this.$refs["on-remove"] === "function") {
-        this.$refs["on-remove"](file, fileList);
-      }
-
       this.$emit(
         "change",
         fileList.map((e) => {
@@ -5889,6 +5840,11 @@ const getDefaultValue = function (key, defaultValue) {
           return data;
         })
       );
+
+      if (typeof this.$refs["on-remove"] === "function") {
+        this.$refs["on-remove"](file, fileList);
+      }
+
     },
     customUpload: async function (params) {
       if (
@@ -5907,10 +5863,14 @@ const getDefaultValue = function (key, defaultValue) {
         return console.warn("Uploader: [uploadRequest] must be a Function!");
       }
 
+      const uploadedFileType = params.file.type;
+      DEBUG && console.log("uploadedFileType", uploadedFileType);
+
       let formData = new FormData();
-      this.uploadedFileType = params.file.type;
-      //console.log(this.uploadedFileType)
-      if (this.uploadedFileType.indexOf("image/") === 0) {
+      let formDataFileObj = params.file;
+      let formDataFileName = params.file.name;
+
+      if (uploadedFileType.indexOf("image/") === 0) {
         if (this.imgCrop) {
           // 图片剪裁
           this.cropResult = null;
@@ -5943,49 +5903,42 @@ const getDefaultValue = function (key, defaultValue) {
           });
 
           if (imgBlob) {
-            // console.log("imgCrop", imgBlob);
-            formData.append(this.nameFinnal, imgBlob, params.file.name);
+            DEBUG && console.log("imgCrop", imgBlob);
+            formDataFileObj = imgBlob;
+            formDataFileName = fixJpgFileName(formDataFileName);
             this.cropperMethod("close");
           }
         } else if (this.imgCompress) {
           // 图片压缩
           const imgBlob = await $5b02762f359a5b4d$export$9fe3fb24d050ce98(
             params.file,
-            this.imgCompressOption
-          ).then((base64) => {
-            return data2blob(base64, this.uploadedFileType);
-          });
+            Object.assign({}, this.imgCompressOption, {
+              outType: "blob",
+            })
+          );
 
-          // console.log("imgCompress", imgBlob);
-          formData.append(this.nameFinnal, imgBlob, params.file.name);
+          DEBUG && console.log("imgCompress", imgBlob);
+          formDataFileObj = imgBlob;
+          formDataFileName = fixJpgFileName(formDataFileName);
         }
-      } else {
-        // 非图片文件
-        formData.append(this.nameFinnal, params.file);
       }
+
+      formData.append(this.nameFinnal, formDataFileObj, formDataFileName);
+
       // 扩展数据
       Object.keys(this.dataFinnal).forEach((key) => {
         formData.append(key, this.dataFinnal[key]);
       });
       // 上传
-      return theUploadRequest(formData)
-        .then((res) => {
-          this.handleSuccess(
-            res.data,
-            params.file,
-            this.$refs.myupload.uploadFiles
-          );
-          return res.data;
-        })
-        .catch((err) => {
-          this.handleError(err);
-        });
+      return theUploadRequest(formData).then((res) => {
+        return res.data;
+      });
     },
-    cropperMethod(action, option) {
+    cropperMethod(action) {
+      // 剪裁相关处理方法
       switch (action) {
-        // 保存剪裁
         case "save":
-          const base64 = cropperInstance
+          cropperInstance
             .getCroppedCanvas({
               minWidth: this.imgCropOption.minWidth,
               minHeight: this.imgCropOption.minHeight,
@@ -5993,13 +5946,12 @@ const getDefaultValue = function (key, defaultValue) {
               maxHeight: this.imgCropOption.maxHeight || 1000,
               imageSmoothingQuality: "medium",
             })
-            .toDataURL("image/jpeg");
-          // console.log(base64);
-          this.cropResult = data2blob(base64, this.uploadedFileType);
+            .toBlob((blob) => {
+              this.cropResult = blob;
+            }, "image/jpeg");
           break;
         case "close":
           this.dialogVisible = false;
-
           if (cropperInstance) {
             cropperInstance.destroy();
           }
@@ -6008,7 +5960,6 @@ const getDefaultValue = function (key, defaultValue) {
             this.$emit("change", newValue);
           }
           break;
-
         case "rotateLeft":
           cropperInstance.rotate(-90);
           break;
@@ -6037,12 +5988,12 @@ const getDefaultValue = function (key, defaultValue) {
     this.$watch(
       "value",
       (newValue) => {
-        this.$refs.myupload.uploadFiles = this.value.filter((ef) => {
-          return this.value.findIndex((f) => f.uid === ef.uid) !== -1;
+        this.$refs.myupload.uploadFiles = newValue.filter((ef) => {
+          return newValue.findIndex((f) => f.uid === ef.uid) !== -1;
         });
       },
       {
-        deep: true,
+        deep: true
       }
     );
   },
@@ -6050,8 +6001,8 @@ const getDefaultValue = function (key, defaultValue) {
 
 // CONCATENATED MODULE: ./src/components/el-upload.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_el_uploadvue_type_script_lang_js_ = (el_uploadvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/el-upload.vue?vue&type=style&index=0&id=20174e3b&scoped=true&lang=css&
-var el_uploadvue_type_style_index_0_id_20174e3b_scoped_true_lang_css_ = __webpack_require__("96c6");
+// EXTERNAL MODULE: ./src/components/el-upload.vue?vue&type=style&index=0&id=6977af12&scoped=true&lang=css&
+var el_uploadvue_type_style_index_0_id_6977af12_scoped_true_lang_css_ = __webpack_require__("f66e");
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 /* globals __VUE_SSR_CONTEXT__ */
@@ -6168,7 +6119,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "20174e3b",
+  "6977af12",
   null
   
 )
@@ -6194,6 +6145,22 @@ var component = normalizeComponent(
 /* harmony default export */ var entry_lib = __webpack_exports__["default"] = (el_upload_plugin);
 
 
+
+/***/ }),
+
+/***/ "fec7":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("0724");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__("499e").default
+var update = add("0ee6e48c", content, true, {"sourceMap":false,"shadowMode":false});
 
 /***/ })
 

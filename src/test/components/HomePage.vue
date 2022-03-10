@@ -35,7 +35,7 @@
       </div>
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" @success="avatar = $event.data">
+          <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []"  imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}">
             <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover;background:#666" />
             <el-button v-else>
               上传个头像
@@ -45,7 +45,7 @@
 
         <div class="code">
           <textarea>
-            <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" @success="avatar = $event.data" />
+            <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}" />
           </textarea>
         </div>
       </div>
