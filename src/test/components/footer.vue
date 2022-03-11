@@ -4,8 +4,8 @@
         © 2022 - 3022 Author
         <a href="https://refined-x.com/" target="_blank">雅X共赏</a>
         Github
-        <a href="https://github.com/cutting-mat/el-upload" target="_blank"
-          >@cutting-mat/el-upload</a
+        <a href="https://github.com/cutting-mat/uploader" target="_blank"
+          >@cutting-mat/uploader</a
         >
       </p>
     </footer>

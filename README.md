@@ -1,6 +1,6 @@
-# @cutting-mat/el-upload
+# @cutting-mat/uploader
 
-[![npm](https://img.shields.io/npm/v/@cutting-mat/el-upload.svg)](https://www.npmjs.com/package/@cutting-mat/el-upload) [![license](https://img.shields.io/github/license/cutting-mat/el-upload.svg)]()
+[![npm](https://img.shields.io/npm/v/@cutting-mat/uploader.svg)](https://www.npmjs.com/package/@cutting-mat/uploader) [![license](https://img.shields.io/github/license/cutting-mat/uploader.svg)]()
 
 ## Feature
 
@@ -16,38 +16,38 @@
 1. NPM 安装
 
 ```bash
-npm i @cutting-mat/el-upload -S
+npm i @cutting-mat/uploader -S
 ```
 
 2. 引入项目并配置
 
 ```js
-import elUpload from "@cutting-mat/el-upload";
+import uploader from "@cutting-mat/uploader";
 import uploadConfig from "@/upload.config"
-Vue.use(elUpload, uploadConfig);
+Vue.use(uploader, uploadConfig);
 
 ```
 
 3. 组件内使用
 
 ```html
-<el-upload-plugin>
+<uploader>
 点击上传
-</el-upload-plugin>
+</uploader>
 ```
 
 ## Config
 
 ``` js
 /**
- * ElUploadPlugin 配置文件 
- * 支持原el-upload的所有Props（除 http-request 以外），额外支持以下配置
- * (el-upload文档: https://element.eleme.cn/#/zh-CN/component/upload)
+ * uploader 配置文件 
+ * 支持原uploader的所有Props（除 http-request 以外），额外支持以下配置
+ * (uploader文档: https://element.eleme.cn/#/zh-CN/component/upload)
  * 
- * accept[String]:              允许上传的文件类型, 同el-upload, 额外支持自定义文件类型（见下方 quickType ）
- * v-model / value[Array]:      已上传文件数据, 同el-upload, default: []
- * beforeUpload[Function]:      上传文件之前的钩子，同el-upload, 将作为默认配置，可以被组件配置覆盖
- * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, 将作为默认配置，可以被组件配置覆盖
+ * accept[String]:              允许上传的文件类型, 同uploader, 额外支持自定义文件类型（见下方 quickType ）
+ * v-model / value[Array]:      已上传文件数据, 同uploader, default: []
+ * beforeUpload[Function]:      上传文件之前的钩子，同uploader, 将作为默认配置，可以被组件配置覆盖
+ * onExceed[Function]:          文件超出个数限制时的钩子, 同uploader, 将作为默认配置，可以被组件配置覆盖
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
  * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
     {

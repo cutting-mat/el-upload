@@ -1,23 +1,23 @@
 {
-  "name": "@cutting-mat/el-upload",
+  "name": "@cutting-mat/uploader",
   "version": "1.1.5",
   "description": "",
   "main": "dist/index.common.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cutting-mat/el-upload.git"
+    "url": "git+https://github.com/cutting-mat/uploader.git"
   },
   "author": "tower1229@foxmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cutting-mat/el-upload/issues"
+    "url": "https://github.com/cutting-mat/uploader/issues"
   },
-  "homepage": "https://github.com/cutting-mat/el-upload#readme",
+  "homepage": "https://github.com/cutting-mat/uploader#readme",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build-doc": "vue-cli-service build",
-    "build": "vue-cli-service build --target lib --dest dist --name index ./src/el-upload-plugin.js"
+    "build": "vue-cli-service build --target lib --dest dist --name index ./src/index.js"
   },
   "dependencies": {
     "cropperjs": "^1.5.12",

@@ -9,9 +9,9 @@ Vue.use(ElementUI);
 // 全局样式
 import '@/test/assets/global.css';
 
-import elUpload from "@/el-upload-plugin";
+import uploader from "@/index";
 import uploadConfig from "@/upload.config"
-Vue.use(elUpload, uploadConfig);
+Vue.use(uploader, uploadConfig);
 
 Vue.config.productionTip = false
 Vue.config.errorHandler = function (err, vm, info) {

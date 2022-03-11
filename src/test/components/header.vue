@@ -1,6 +1,6 @@
 <template>
   <div class="header flex-row align-center">
-    <h1 class="logo">@cutting-mat/el-upload</h1>
+    <h1 class="logo">@cutting-mat/uploader</h1>
     <div class="center flex-1">
       <slot>
       </slot>
@@ -10,7 +10,7 @@
       class="link"
       target="_blank"
       title="Github"
-      href="https://github.com/cutting-mat/el-upload"
+      href="https://github.com/cutting-mat/uploader"
     >
       <svg
         height="32"

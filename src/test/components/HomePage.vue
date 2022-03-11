@@ -3,11 +3,11 @@
     <div class="logo">
 
     </div>
-    <h1 class="maintitle">@cutting-mat/el-upload</h1>
-    <h2 class="subtitle">整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正的 el-upload</h2>
+    <h1 class="maintitle">@cutting-mat/uploader</h1>
+    <h2 class="subtitle">整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正 Vue 上传组件</h2>
 
     <a
-      href="https://github.com/cutting-mat/el-upload/blob/main/README.md"
+      href="https://github.com/cutting-mat/uploader/blob/main/README.md"
       target="_blank"
       class="myBtn"
     >
@@ -20,32 +20,32 @@
     <div class="flex-row main">
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2">
+          <uploader v-model="fileList" :data="{ test: 123 }" :limit="2">
             <el-button>
               上传个文件
             </el-button>
-          </el-upload-plugin>
+          </uploader>
         </div>
 
         <div class="code">
           <textarea>
-            <el-upload-plugin v-model="fileList" :data="{ test: 123 }" :limit="2" />
+            <uploader v-model="fileList" :data="{ test: 123 }" :limit="2" />
           </textarea>
         </div>
       </div>
       <div class="flex-1">
         <div class="demo">
-          <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []"  imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}">
+          <uploader accept="t-image" :value="avatar ? [avatar] : []"  imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}">
             <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover;background:#666" />
             <el-button v-else>
               上传个头像
             </el-button>
-          </el-upload-plugin>
+          </uploader>
         </div>
 
         <div class="code">
           <textarea>
-            <el-upload-plugin accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}" />
+            <uploader accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}" />
           </textarea>
         </div>
       </div>

@@ -1,7 +1,7 @@
 module.exports = {
   outputDir: 'docs',
   publicPath: process.env.NODE_ENV === 'production' ?
-    '/el-upload/' : '/',
+    '/uploader/' : '/',
   css: {
     extract: false
   }
