@@ -4,7 +4,7 @@
 
     </div>
     <h1 class="maintitle">@cutting-mat/uploader</h1>
-    <h2 class="subtitle">整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正 Vue 上传组件</h2>
+    <h2 class="subtitle">整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的 Vue 上传组件</h2>
 
     <a
       href="https://github.com/cutting-mat/uploader/blob/main/README.md"
