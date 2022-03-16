@@ -1,52 +1,72 @@
 <template>
-  <div class="wrap">
-    <div class="logo">
+  <div>
+    <div class="wrap">
+      <div class="logo"></div>
+      <h1 class="maintitle">@cutting-mat/uploader</h1>
+      <h2 class="subtitle">
+        整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的
+        Vue 上传组件
+      </h2>
 
-    </div>
-    <h1 class="maintitle">@cutting-mat/uploader</h1>
-    <h2 class="subtitle">整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的 Vue 上传组件</h2>
+      <a
+        href="https://github.com/cutting-mat/uploader/blob/main/README.md"
+        target="_blank"
+        class="myBtn"
+      >
+        <i class="el-icon-reading"></i>
+        文档
+      </a>
 
-    <a
-      href="https://github.com/cutting-mat/uploader/blob/main/README.md"
-      target="_blank"
-      class="myBtn"
-    >
-      <i class="el-icon-reading"></i>
-      文档
-    </a>
+      <h3 class="channeltitle">示例</h3>
 
-    <h3 class="channeltitle">示例</h3>
+      <div class="flex-row main">
+        <div class="flex-1">
+          <div class="demo">
+            <uploader v-model="fileList" :data="{ test: 123 }" :limit="2">
+              <el-button> 上传个文件 </el-button>
+            </uploader>
+          </div>
 
-    <div class="flex-row main">
-      <div class="flex-1">
-        <div class="demo">
-          <uploader v-model="fileList" :data="{ test: 123 }" :limit="2">
-            <el-button>
-              上传个文件
-            </el-button>
-          </uploader>
-        </div>
-
-        <div class="code">
-          <textarea>
+          <div class="code">
+            <textarea>
             <uploader v-model="fileList" :data="{ test: 123 }" :limit="2" />
-          </textarea>
+          </textarea
+            >
+          </div>
         </div>
-      </div>
-      <div class="flex-1">
-        <div class="demo">
-          <uploader accept="t-image" :value="avatar ? [avatar] : []"  imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}">
-            <img :src="avatar.url" v-if="avatar" style="width:100px;height:100px;object-fit:cover;background:#666" />
-            <el-button v-else>
-              上传个头像
-            </el-button>
-          </uploader>
-        </div>
+        <div class="flex-1">
+          <div class="demo">
+            <uploader
+              accept="t-image"
+              :value="avatar ? [avatar] : []"
+              imgCrop
+              :show-file-list="false"
+              :on-success="
+                (res) => {
+                  avatar = res.data;
+                }
+              "
+            >
+              <img
+                :src="avatar.url"
+                v-if="avatar"
+                style="
+                  width: 100px;
+                  height: 100px;
+                  object-fit: cover;
+                  background: #666;
+                "
+              />
+              <el-button v-else> 上传个头像 </el-button>
+            </uploader>
+          </div>
 
-        <div class="code">
-          <textarea>
+          <div class="code">
+            <textarea>
             <uploader accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}" />
-          </textarea>
+          </textarea
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -57,16 +77,16 @@
 export default {
   data() {
     return {
-      fileList: [{
-        name: "test",
-        url: "http://dummyimage.com/200x200/f2d279/fff&text=IMAGE"
-      }],
-      avatar: null
+      fileList: [
+        {
+          name: "test",
+          url: "http://dummyimage.com/200x200/f2d279/fff&text=IMAGE",
+        },
+      ],
+      avatar: null,
     };
   },
-  methods: {
-    
-  }
+  methods: {},
 };
 </script>
 
@@ -110,34 +130,33 @@ export default {
   transition: background-color 0.1s ease;
 }
 
-
-.main .flex-1{
+.main .flex-1 {
   margin: 0 10px;
 }
-.demo{
+.demo {
   height: 100px;
   margin-bottom: 10px;
-  background:#f5f5f5;
+  background: #f5f5f5;
   border-radius: 8px;
   padding: 10px;
 }
-.code{
-  background:#333;
+.code {
+  background: #333;
   padding: 10px;
   border-radius: 8px;
   min-height: 50px;
   margin: 20px auto;
   max-width: 600px;
 }
-.code>textarea{
+.code > textarea {
   width: 100%;
   height: 100%;
   border: 0;
   color: #fff;
-  background:transparent;
+  background: transparent;
   resize: none;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   line-height: 1.7;
 }
-
 </style>
