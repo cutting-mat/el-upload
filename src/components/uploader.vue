@@ -177,6 +177,14 @@ export default {
       required: false,
       default: "upload_image_trigger" + parseInt(Math.random() * 1e8),
     },
+    limitSize: {
+      // 文件尺寸限制
+      type: Number,
+      required: false,
+      default() {
+        return getDefaultValue("limitSize", 100 * 1024 * 1024);
+      },
+    },
     imgCompress: {
       // 开启图片压缩
       type: Boolean,
@@ -268,6 +276,12 @@ export default {
   },
   methods: {
     handleBeforeUpload: function (file) {
+      // 尺寸校验
+      if (file.size > this.limitSize) {
+          Vue.prototype.$message.warning("文件大小超出限制");
+          return false;
+      }
+
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
       } else if (
