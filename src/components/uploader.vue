@@ -159,7 +159,6 @@ const getDefaultValue = function (key, defaultValue) {
 };
 
 export default {
-  name: "ElUploadPlugin",
   model: {
     prop: "value",
     event: "change",
