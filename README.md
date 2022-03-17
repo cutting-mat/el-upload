@@ -19,7 +19,7 @@
 npm i @cutting-mat/uploader -S
 ```
 
-2. 引入项目并配置
+2. 安装插件
 
 ```js
 import uploader from "@cutting-mat/uploader";
@@ -28,7 +28,7 @@ Vue.use(uploader, uploadConfig);
 
 ```
 
-3. 组件内使用
+3. 使用组件
 
 ```html
 <uploader>
