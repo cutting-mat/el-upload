@@ -6,7 +6,7 @@ import Uploader from '@/components/uploader';
 
 export default {
     install: function (Vue, option) {
-        Vue.$uploaderOption = option || {}
+        Vue.$UploaderOption = option || {}
 
         Vue.component('uploader', Uploader)
     }

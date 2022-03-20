@@ -1,6 +1,6 @@
 {
   "name": "@cutting-mat/uploader",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "",
   "main": "dist/index.common.js",
   "repository": {
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "cropperjs": "^1.5.12",
-    "ios-photo-repair": "^1.1.0",
+    "ios-photo-repair": "^1.1.1",
     "vue": "^2.6.14"
   },
   "devDependencies": {

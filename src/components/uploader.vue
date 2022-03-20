@@ -84,6 +84,7 @@
 
 <script>
 import Vue from "vue";
+
 import { fixImgFile } from "ios-photo-repair";
 
 import "cropperjs/dist/cropper.css";
@@ -122,7 +123,7 @@ export const getExtByType = (type) => {
   const quickType = Object.assign(
     {},
     FileTypeMap,
-    Vue.$uploaderOption.quickType || {}
+    Vue.$UploaderOption.quickType || {}
   );
   if (type && Array.isArray(quickType[type])) {
     let classList = [];
@@ -151,7 +152,7 @@ export const getExtByType = (type) => {
  * return[Any] props.key的最终默认值
  */
 const getDefaultValue = function (key, defaultValue) {
-  const globalOption = Vue.$uploaderOption;
+  const globalOption = Vue.$UploaderOption;
   if (Object.keys(globalOption).indexOf(key) !== -1) {
     return globalOption[key];
   }
@@ -199,8 +200,8 @@ export default {
       required: false,
       default() {
         return getDefaultValue("imgCompressOption", {
-          width: 1000,
-          height: 1000,
+          maxWidth: 1000,
+          maxHeight: 1000,
         });
       },
     },
@@ -237,10 +238,10 @@ export default {
       required: false,
       default(response) {
         if (
-          Vue.$uploaderOption &&
-          typeof Vue.$uploaderOption.responseTransfer === "function"
+          Vue.$UploaderOption &&
+          typeof Vue.$UploaderOption.responseTransfer === "function"
         ) {
-          return Vue.$uploaderOption.responseTransfer(response);
+          return Vue.$UploaderOption.responseTransfer(response);
         } else {
           return response;
         }
@@ -285,10 +286,10 @@ export default {
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
       } else if (
-        Vue.$uploaderOption &&
-        typeof Vue.$uploaderOption.beforeUpload === "function"
+        Vue.$UploaderOption &&
+        typeof Vue.$UploaderOption.beforeUpload === "function"
       ) {
-        return Vue.$uploaderOption.beforeUpload(file);
+        return Vue.$UploaderOption.beforeUpload(file);
       } else {
         return true;
       }
@@ -297,10 +298,10 @@ export default {
       if (typeof this.$attrs["on-exceed"] === "function") {
         this.$attrs["on-exceed"](file, fileList);
       } else if (
-        Vue.$uploaderOption &&
-        typeof Vue.$uploaderOption.onExceed === "function"
+        Vue.$UploaderOption &&
+        typeof Vue.$UploaderOption.onExceed === "function"
       ) {
-        Vue.$uploaderOption.onExceed(file, fileList);
+        Vue.$UploaderOption.onExceed(file, fileList);
       } 
     },
     handleChange: function (file, fileList) {
@@ -339,8 +340,8 @@ export default {
     },
     customUpload: async function (params) {
       if (
-        !Vue.$uploaderOption &&
-        !Vue.$uploaderOption.uploadRequest &&
+        !Vue.$UploaderOption &&
+        !Vue.$UploaderOption.uploadRequest &&
         !this.uploadRequest
       ) {
         return console.warn(
@@ -349,8 +350,8 @@ export default {
       }
 
       const theUploadRequest =
-        this.uploadRequest || Vue.$uploaderOption.uploadRequest;
-      if (!typeof theUploadRequest === "function") {
+        this.uploadRequest || Vue.$UploaderOption.uploadRequest;
+      if (typeof theUploadRequest !== "function") {
         return console.warn("Uploader: [uploadRequest] must be a Function!");
       }
 
