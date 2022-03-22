@@ -98,9 +98,9 @@ const DEBUG = process.env.NODE_ENV === "development";
 // 图片压缩成jpg格式
 const fixJpgFileName = function (fileName) {
   if (fileName.match(/\.jpg|\.jpeg$/)) {
-    return fixJpgFileName;
+    return fileName;
   }
-  return fixJpgFileName + ".jpg";
+  return fileName + ".jpg";
 };
 
 // 文件类型集合
@@ -407,8 +407,9 @@ export default {
           formDataFileName = fixJpgFileName(formDataFileName);
         }
       }
-
+      
       // 上传
+      DEBUG && console.log('upload params', formDataFileName, formDataFileObj);
       return theUploadRequest(formDataFileObj, formDataFileName).then((res) => {
         return res.data;
       });
