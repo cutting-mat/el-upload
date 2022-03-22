@@ -4,12 +4,12 @@
 
 ## Feature
 
-- [x] 部分属性支持默认配置
+- [x] 支持全局配置
 - [x] 支持 v-model 受控模式
 - [x] 图片上传前压缩
 - [x] 图片上传前剪裁
-- [x] IOS 拍照方向自动校正(需开启压缩或剪裁)
-- [x] 自定义文件类型集合
+- [x] 拍照方向自动校正(需开启压缩或剪裁)
+- [x] 自定义 accept 类型集合
 
 ## Quick Start
 
@@ -24,14 +24,14 @@ npm i @cutting-mat/uploader -S
 ```js
 import uploader from "@cutting-mat/uploader";
 import uploadConfig from "@/upload.config"
-Vue.use(uploader, uploadConfig);
+Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配置
 
 ```
 
 3. 使用组件
 
 ```html
-<uploader>
+<uploader :uploadMethod="(file, fileName) => {...}">
 点击上传
 </uploader>
 ```
@@ -41,9 +41,11 @@ Vue.use(uploader, uploadConfig);
 ``` js
 /**
  * @cutting-mat/uploader 配置文件 
- * 支持原el-upload的所有Props（除 http-request 以外），额外支持以下配置
- * (el-upload文档: https://element.eleme.cn/#/zh-CN/component/upload)
+ * 支持 el-upload 除请求相关（action, headers, data, name, with-credentials, http-request）以外的所有Props
+ * 附 el-upload 文档: https://element.eleme.cn/#/zh-CN/component/upload
  * 
+ * 额外支持以下属性，均支持全局配置：
+
  * accept[String]:              允许上传的文件类型, 同el-upload, 额外支持自定义文件类型（见下方 quickType ）
  * v-model / value[Array]:      已上传文件数据, 同el-upload, default: []
  * beforeUpload[Function]:      上传文件之前的钩子，同el-upload, 将作为默认配置，可以被组件配置覆盖
@@ -64,7 +66,7 @@ Vue.use(uploader, uploadConfig);
         maxWidth: 1000,         // 最大输出宽度
         maxHeight: 1000,        // 最大输出高度
     }
- * uploadRequest[Function]:     上传处理方法, default: 无
+ * uploadMethod[Function]:      上传处理方法, 接收两个参数（file/blob, fileName），default: 无
  * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, default: (response) => return response;
  * quickType[Object]:           自定义文件类型, default: 
     {

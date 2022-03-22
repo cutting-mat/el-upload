@@ -227,8 +227,8 @@ export default {
         });
       },
     },
-    uploadRequest: {
-      // 自定义上传函数 接收 formdata 参数
+    uploadMethod: {
+      // 自定义上传方法，参数（file/blob, fileName）
       type: Function,
       required: false,
     },
@@ -267,12 +267,6 @@ export default {
       } else {
         return this.$attrs.accept || "*";
       }
-    },
-    nameFinnal() {
-      return this.$attrs.name || "file";
-    },
-    dataFinnal() {
-      return this.$attrs.data || {};
     },
   },
   methods: {
@@ -341,24 +335,23 @@ export default {
     customUpload: async function (params) {
       if (
         !Vue.$UploaderOption &&
-        !Vue.$UploaderOption.uploadRequest &&
-        !this.uploadRequest
+        !Vue.$UploaderOption.uploadMethod &&
+        !this.uploadMethod
       ) {
         return console.warn(
-          "Uploader: The required configuration [uploadRequest] is missing!"
+          "Uploader: The required configuration [uploadMethod] is missing!"
         );
       }
 
       const theUploadRequest =
-        this.uploadRequest || Vue.$UploaderOption.uploadRequest;
+        this.uploadMethod || Vue.$UploaderOption.uploadMethod;
       if (typeof theUploadRequest !== "function") {
-        return console.warn("Uploader: [uploadRequest] must be a Function!");
+        return console.warn("Uploader: [uploadMethod] must be a Function!");
       }
 
       const uploadedFileType = params.file.type;
       DEBUG && console.log("uploadedFileType", uploadedFileType);
 
-      let formData = new FormData();
       let formDataFileObj = params.file;
       let formDataFileName = params.file.name;
 
@@ -415,14 +408,8 @@ export default {
         }
       }
 
-      formData.append(this.nameFinnal, formDataFileObj, formDataFileName);
-
-      // 扩展数据
-      Object.keys(this.dataFinnal).forEach((key) => {
-        formData.append(key, this.dataFinnal[key]);
-      });
       // 上传
-      return theUploadRequest(formData).then((res) => {
+      return theUploadRequest(formDataFileObj, formDataFileName).then((res) => {
         return res.data;
       });
     },
