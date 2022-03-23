@@ -22,7 +22,7 @@
       :visible="dialogVisible"
       append-to-body
       title="图像剪裁"
-      width="600px"
+      top="10vh"
       class="cropper"
       @close="cropperMethod('close')"
     >
@@ -38,6 +38,7 @@
               @click="cropperMethod('rotateLeft')"
             >
               <i class="el-icon-refresh-left"></i>
+              左旋
             </el-button>
             <el-button
               size="small"
@@ -45,6 +46,7 @@
               @click="cropperMethod('rotateRight')"
             >
               <i class="el-icon-refresh-right"></i>
+              右旋
             </el-button>
           </el-button-group>
           <el-button-group>
@@ -54,6 +56,7 @@
               @click="cropperMethod('scaleX')"
             >
               <i class="el-icon-sort" style="transform: rotateZ(90deg)"></i>
+              水平镜像
             </el-button>
             <el-button
               size="small"
@@ -61,6 +64,7 @@
               @click="cropperMethod('scaleY')"
             >
               <i class="el-icon-sort"></i>
+              垂直镜像
             </el-button>
           </el-button-group>
           <el-button-group>
@@ -70,11 +74,13 @@
               @click="cropperMethod('reset')"
             >
               <i class="el-icon-refresh"></i>
+              重置
             </el-button>
           </el-button-group>
         </div>
 
-        <el-button size="small" type="primary" @click="cropperMethod('save')">
+        <el-button size="small" type="primary" plain @click="cropperMethod('save')">
+          <i class="el-icon-crop"></i>
           确定
         </el-button>
       </div>
@@ -486,7 +492,8 @@ export default {
   padding: 0;
 }
 .cropper_main {
-  height: 400px;
+  height: 50vh;
+  min-height: 500px;
 }
 
 .cropper_actions {
