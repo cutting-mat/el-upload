@@ -1,23 +1,22 @@
 <template>
-  <span>
-    <el-upload
-      ref="myupload"
-      v-bind="$attrs"
-      action=""
-      :fileList="fileListFinnal"
-      :accept="acceptFinnal"
-      :before-upload="handleBeforeUpload"
-      :on-exceed="handleonExceed"
-      :on-change="handleChange"
-      :on-remove="handleRemove"
-      :http-request="customUpload"
-    >
-      <div :id="triggerId">
-        <slot>
-          <el-button> 点击上传 </el-button>
-        </slot>
-      </div>
-    </el-upload>
+  <el-upload
+    ref="myupload"
+    v-bind="$attrs"
+    action
+    :fileList="fileListFinnal"
+    :accept="acceptFinnal"
+    :before-upload="handleBeforeUpload"
+    :on-exceed="handleonExceed"
+    :on-change="handleChange"
+    :on-remove="handleRemove"
+    :http-request="customUpload"
+  >
+    <div :id="triggerId">
+      <slot>
+        <el-button>点击上传</el-button>
+      </slot>
+    </div>
+    <!-- edit dialog -->
     <el-dialog
       :visible="dialogVisible"
       append-to-body
@@ -29,52 +28,32 @@
       @close="cropperMethod('close')"
     >
       <div class="cropper_main">
-        <img src="" ref="CropperImg" />
+        <img src ref="CropperImg" />
       </div>
       <div class="cropper_actions flex-row align-center">
         <div class="flex-1">
           <el-button-group>
-            <el-button
-              size="small"
-              title="左旋"
-              @click="cropperMethod('rotateLeft')"
-            >
+            <el-button size="small" title="左旋" @click="cropperMethod('rotateLeft')">
               <i class="el-icon-refresh-left"></i>
               左旋
             </el-button>
-            <el-button
-              size="small"
-              title="右旋"
-              @click="cropperMethod('rotateRight')"
-            >
+            <el-button size="small" title="右旋" @click="cropperMethod('rotateRight')">
               <i class="el-icon-refresh-right"></i>
               右旋
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button
-              size="small"
-              title="水平镜像"
-              @click="cropperMethod('scaleX')"
-            >
+            <el-button size="small" title="水平镜像" @click="cropperMethod('scaleX')">
               <i class="el-icon-sort" style="transform: rotateZ(90deg)"></i>
               水平镜像
             </el-button>
-            <el-button
-              size="small"
-              title="垂直镜像"
-              @click="cropperMethod('scaleY')"
-            >
+            <el-button size="small" title="垂直镜像" @click="cropperMethod('scaleY')">
               <i class="el-icon-sort"></i>
               垂直镜像
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button
-              size="small"
-              title="重置"
-              @click="cropperMethod('reset')"
-            >
+            <el-button size="small" title="重置" @click="cropperMethod('reset')">
               <i class="el-icon-refresh"></i>
               重置
             </el-button>
@@ -87,7 +66,7 @@
         </el-button>
       </div>
     </el-dialog>
-  </span>
+  </el-upload>
 </template>
 
 <script>
@@ -281,8 +260,8 @@ export default {
     handleBeforeUpload: function (file) {
       // 尺寸校验
       if (file.size > this.limitSize) {
-          Vue.prototype.$message.warning("文件大小超出限制");
-          return false;
+        Vue.prototype.$message.warning("文件大小超出限制");
+        return false;
       }
 
       if (typeof this.$attrs["before-upload"] === "function") {
@@ -304,7 +283,7 @@ export default {
         typeof Vue.$UploaderOption.onExceed === "function"
       ) {
         Vue.$UploaderOption.onExceed(file, fileList);
-      } 
+      }
     },
     handleChange: function (file, fileList) {
       const doneFiles = fileList.filter((e) => e.status === "success");
@@ -415,7 +394,7 @@ export default {
           formDataFileName = fixJpgFileName(formDataFileName);
         }
       }
-      
+
       // 上传
       DEBUG && console.log('upload params', formDataFileName, formDataFileObj);
       return theUploadRequest(formDataFileObj, formDataFileName).then((res) => {
