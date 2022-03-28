@@ -23,15 +23,14 @@
         <div class="flex-1">
           <div class="demo">
             <uploader v-model="fileList" :data="{ test: 123 }" :limit="2">
-              <el-button> 上传个文件 </el-button>
+              <el-button>上传个文件</el-button>
             </uploader>
           </div>
 
           <div class="code">
             <textarea>
             <uploader v-model="fileList" :data="{ test: 123 }" :limit="2" />
-          </textarea
-            >
+            </textarea>
           </div>
         </div>
         <div class="flex-1">
@@ -57,15 +56,14 @@
                   background: #666;
                 "
               />
-              <el-button v-else> 上传个头像 </el-button>
+              <el-button v-else>上传个头像</el-button>
             </uploader>
           </div>
 
           <div class="code">
             <textarea>
             <uploader accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}" />
-          </textarea
-            >
+            </textarea>
           </div>
         </div>
       </div>

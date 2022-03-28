@@ -12,9 +12,11 @@
     :http-request="customUpload"
   >
     <div :id="triggerId">
-      <slot>
+      <slot name="default">
         <el-button>点击上传</el-button>
       </slot>
+      <slot name="trigger"></slot>
+      <slot name="tip"></slot>
     </div>
     <!-- edit dialog -->
     <el-dialog
