@@ -75,16 +75,19 @@
 export default {
   data() {
     return {
-      fileList: [
-        {
-          name: "test",
-          url: "http://dummyimage.com/200x200/f2d279/fff&text=IMAGE",
-        },
-      ],
+      fileList: [],
       avatar: null,
     };
   },
   methods: {},
+  created() {
+    setTimeout(() => {
+      this.fileList = [{
+        name: "test",
+        url: "http://dummyimage.com/200x200/a1f279/fff&text=IMAGE.png"
+      }]
+    }, 1000)
+  }
 };
 </script>
 

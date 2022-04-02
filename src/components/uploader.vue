@@ -258,6 +258,15 @@ export default {
       }
     },
   },
+  watch: {
+    value: {
+      handler() {
+        this.fileListFinnal = this.$attrs.fileList || this.value || [];
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     handleBeforeUpload: function (file) {
       // 尺寸校验
@@ -448,9 +457,6 @@ export default {
           console.warn("cropperMethod 参数错误: ", action);
       }
     },
-  },
-  created() {
-    this.fileListFinnal = this.$attrs.fileList || this.value || [];
   },
   mounted() {
     // 外部数据变更同步给 el-upload
