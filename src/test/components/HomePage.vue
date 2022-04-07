@@ -22,7 +22,12 @@
       <div class="flex-row main">
         <div class="flex-1">
           <div class="demo">
-            <uploader v-model="fileList" :data="{ test: 123 }" :limit="2">
+            <uploader
+              v-model="fileList"
+              :data="{ test: 123 }"
+              :limit="2"
+              :on-progress="handleProgress"
+            >
               <el-button>上传个文件</el-button>
             </uploader>
           </div>
@@ -79,7 +84,11 @@ export default {
       avatar: null,
     };
   },
-  methods: {},
+  methods: {
+    handleProgress(e) {
+      console.log('handleProgress:', e.percent)
+    }
+  },
   created() {
     setTimeout(() => {
       this.fileList = [{

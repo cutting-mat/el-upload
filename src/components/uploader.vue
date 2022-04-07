@@ -312,8 +312,16 @@ export default {
         );
       }
 
-      if (typeof this.$refs["on-change"] === "function") {
-        this.$refs["on-change"](file, fileList);
+      if (typeof this.$attrs["on-change"] === "function") {
+        this.$attrs["on-change"](file, fileList);
+      }
+    },
+    handleProgress(e) {
+      if (typeof this.$attrs["on-progress"] === "function") {
+        if (e.total > 0) {
+          e.percent = e.loaded / e.total * 100;
+        }
+        this.$attrs["on-progress"](e);
       }
     },
     handleRemove: function (file, fileList) {
@@ -326,8 +334,8 @@ export default {
         })
       );
 
-      if (typeof this.$refs["on-remove"] === "function") {
-        this.$refs["on-remove"](file, fileList);
+      if (typeof this.$attrs["on-remove"] === "function") {
+        this.$attrs["on-remove"](file, fileList);
       }
 
     },
@@ -409,7 +417,7 @@ export default {
 
       // 上传
       DEBUG && console.log('upload params', formDataFileName, formDataFileObj);
-      return theUploadRequest(formDataFileObj, formDataFileName).then((res) => {
+      return theUploadRequest(formDataFileObj, formDataFileName, this.handleProgress).then((res) => {
         return res.data;
       });
     },
@@ -457,6 +465,18 @@ export default {
         default:
           console.warn("cropperMethod 参数错误: ", action);
       }
+    },
+    clearFiles() {
+      // el-upload 方法
+      this.$refs.myupload.clearFiles()
+    },
+    abort() {
+      // el-upload 方法
+      this.$refs.myupload.abort()
+    },
+    submit() {
+      // el-upload 方法
+      this.$refs.myupload.submit()
     },
   },
   mounted() {

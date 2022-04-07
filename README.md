@@ -41,7 +41,8 @@ Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配�
 ``` js
 /**
  * @cutting-mat/uploader 配置文件 
- * 支持 el-upload 除请求相关（action, headers, data, name, with-credentials, http-request）以外的所有Props
+ * 支持 el-upload 除请求相关（action, headers, data, name, with-credentials, http-request）以外的所有 Prop
+ * 支持 el-upload 的所有 Method
  * 附 el-upload 文档: https://element.eleme.cn/#/zh-CN/component/upload
  * 
  * 额外支持以下属性，均支持全局配置：
