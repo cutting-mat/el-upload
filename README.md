@@ -48,8 +48,8 @@ Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配�
 
  * accept[String]:              允许上传的文件类型, 同el-upload, 额外支持自定义文件类型（见下方 quickType ）
  * v-model / value[Array]:      已上传文件数据, 同el-upload, default: []
- * beforeUpload[Function]:      上传文件之前的钩子，同el-upload, 将作为默认配置，可以被组件配置覆盖
- * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload, 将作为默认配置，可以被组件配置覆盖
+ * beforeUpload[Function]:      上传文件之前的钩子，同el-upload
+ * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload
  * limitSize[Number]:           允许上传的最大文件尺寸，默认 100 * 1024 * 1024（100M）
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
  * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
