@@ -23,6 +23,7 @@
         <div class="flex-1">
           <div class="demo">
             <uploader
+              ref="myUploader"
               v-model="fileList"
               :data="{ test: 123 }"
               :limit="2"

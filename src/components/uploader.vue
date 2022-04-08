@@ -243,6 +243,7 @@ export default {
       dialogVisible: false,
       cropResult: null,
       fileListFinnal: [],
+      controller: null
     };
   },
   computed: {
@@ -417,7 +418,11 @@ export default {
 
       // 上传
       DEBUG && console.log('upload params', formDataFileName, formDataFileObj);
-      return theUploadRequest(formDataFileObj, formDataFileName, this.handleProgress).then((res) => {
+      this.controller = new AbortController();
+      return theUploadRequest(formDataFileObj, formDataFileName, {
+        onUploadProgress: this.handleProgress,
+        signal: this.controller.signal
+      }).then((res) => {
         return res.data;
       });
     },
@@ -471,8 +476,7 @@ export default {
       this.$refs.myupload.clearFiles()
     },
     abort() {
-      // el-upload 方法
-      this.$refs.myupload.abort()
+      this.controller.abort();
     },
     submit() {
       // el-upload 方法
