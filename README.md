@@ -71,7 +71,7 @@ Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配�
  * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, default: (response) => return response;
  * quickType[Object]:           自定义文件类型, default: 
     {
-        "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
+        "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
         "t-video": [".mp4", ".rmvb", ".avi", ".mov", ".3gp", ".webm"],
         "t-audio": [".wav", ".mp3", ".ogg", ".acc"],
         "t-word": [".docx", ".doc"],
