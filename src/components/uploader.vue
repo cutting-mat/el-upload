@@ -1,16 +1,7 @@
 <template>
-  <el-upload
-    ref="myupload"
-    v-bind="$attrs"
-    action
-    :fileList="fileListFinnal"
-    :accept="acceptFinnal"
-    :before-upload="handleBeforeUpload"
-    :on-exceed="handleonExceed"
-    :on-change="handleChange"
-    :on-remove="handleRemove"
-    :http-request="customUpload"
-  >
+  <el-upload ref="myupload" v-bind="$attrs" action :fileList="fileListFinnal" :accept="acceptFinnal"
+    :before-upload="handleBeforeUpload" :on-exceed="handleonExceed" :on-change="handleChange" :on-remove="handleRemove"
+    :http-request="customUpload">
     <div :id="triggerId">
       <slot name="default">
         <el-button>点击上传</el-button>
@@ -19,16 +10,8 @@
       <slot name="tip"></slot>
     </div>
     <!-- edit dialog -->
-    <el-dialog
-      :visible="dialogVisible"
-      append-to-body
-      title="图像剪裁"
-      top="10vh"
-      class="cropper"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      @close="cropperMethod('close')"
-    >
+    <el-dialog :visible="dialogVisible" append-to-body title="图像剪裁" top="10vh" class="cropper"
+      :close-on-click-modal="false" :close-on-press-escape="false" @close="cropperMethod('close')">
       <div class="cropper_main">
         <img src ref="CropperImg" />
       </div>
@@ -68,7 +51,7 @@
         </el-button>
       </div>
     </el-dialog>
-  </el-upload>
+    </el-upload>
 </template>
 
 <script>
@@ -94,7 +77,7 @@ const fixJpgFileName = function (fileName) {
 
 // 文件类型集合
 const FileTypeMap = {
-  "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".webp"],
+  "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
   "t-video": [".mp4", ".rmvb", ".avi", ".mov", ".3gp", ".webm"],
   "t-audio": [".wav", ".mp3", ".ogg", ".acc"],
   "t-word": [".docx", ".doc"],
@@ -502,9 +485,10 @@ export default {
 
 <style scoped>
 /* 图片剪裁弹窗 */
-.cropper >>> .el-dialog__body {
+.cropper>>>.el-dialog__body {
   padding: 0;
 }
+
 .cropper_main {
   height: 50vh;
   min-height: 500px;
@@ -513,7 +497,8 @@ export default {
 .cropper_actions {
   padding: 0.5em;
 }
-.cropper_actions >>> .el-button-group {
+
+.cropper_actions>>>.el-button-group {
   margin-right: 10px;
 }
 </style>
