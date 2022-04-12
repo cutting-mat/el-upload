@@ -303,6 +303,7 @@ export default {
       }
       // 格式校验
       if (
+        this.acceptFinnal !== "*" &&
         this.acceptFinnal.indexOf(
           file.name.substring(file.name.lastIndexOf("."))
         ) === -1
