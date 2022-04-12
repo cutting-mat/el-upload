@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/@cutting-mat/uploader.svg)](https://www.npmjs.com/package/@cutting-mat/uploader) [![license](https://img.shields.io/github/license/cutting-mat/uploader.svg)]()
 
+基于ElementUI，整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的 Vue 上传组件
+
 ## Feature
 
 - [x] 支持全局配置
