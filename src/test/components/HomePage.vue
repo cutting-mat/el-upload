@@ -4,7 +4,7 @@
       <div class="logo"></div>
       <h1 class="maintitle">&lt;uploader&gt;</h1>
       <h2 class="subtitle">
-        整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的
+        基于ElementUI，整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的
         Vue 上传组件
       </h2>
 
@@ -87,17 +87,19 @@ export default {
   },
   methods: {
     handleProgress(e) {
-      console.log('handleProgress:', e.percent)
-    }
+      console.log("handleProgress:", e.percent);
+    },
   },
   created() {
     setTimeout(() => {
-      this.fileList = [{
-        name: "test",
-        url: "http://dummyimage.com/200x200/a1f279/fff&text=IMAGE.png"
-      }]
-    }, 1000)
-  }
+      this.fileList = [
+        {
+          name: "test",
+          url: "http://dummyimage.com/200x200/a1f279/fff&text=IMAGE.png",
+        },
+      ];
+    }, 1000);
+  },
 };
 </script>
 

@@ -1,7 +1,16 @@
 <template>
-  <el-upload ref="myupload" v-bind="$attrs" action :fileList="fileListFinnal" :accept="acceptFinnal"
-    :before-upload="handleBeforeUpload" :on-exceed="handleonExceed" :on-change="handleChange" :on-remove="handleRemove"
-    :http-request="customUpload">
+  <el-upload
+    ref="myupload"
+    v-bind="$attrs"
+    action
+    :fileList="fileListFinnal"
+    :accept="acceptFinnal"
+    :before-upload="handleBeforeUpload"
+    :on-exceed="handleonExceed"
+    :on-change="handleChange"
+    :on-remove="handleRemove"
+    :http-request="customUpload"
+  >
     <div :id="triggerId">
       <slot name="default">
         <el-button>点击上传</el-button>
@@ -10,48 +19,81 @@
       <slot name="tip"></slot>
     </div>
     <!-- edit dialog -->
-    <el-dialog :visible="dialogVisible" append-to-body title="图像剪裁" top="10vh" class="cropper"
-      :close-on-click-modal="false" :close-on-press-escape="false" @close="cropperMethod('close')">
+    <el-dialog
+      :visible="dialogVisible"
+      append-to-body
+      title="图像剪裁"
+      top="10vh"
+      class="cropper"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      @close="cropperMethod('close')"
+    >
       <div class="cropper_main">
         <img src ref="CropperImg" />
       </div>
       <div class="cropper_actions flex-row align-center">
         <div class="flex-1">
           <el-button-group>
-            <el-button size="small" title="左旋" @click="cropperMethod('rotateLeft')">
+            <el-button
+              size="small"
+              title="左旋"
+              @click="cropperMethod('rotateLeft')"
+            >
               <i class="el-icon-refresh-left"></i>
               左旋
             </el-button>
-            <el-button size="small" title="右旋" @click="cropperMethod('rotateRight')">
+            <el-button
+              size="small"
+              title="右旋"
+              @click="cropperMethod('rotateRight')"
+            >
               <i class="el-icon-refresh-right"></i>
               右旋
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button size="small" title="水平镜像" @click="cropperMethod('scaleX')">
+            <el-button
+              size="small"
+              title="水平镜像"
+              @click="cropperMethod('scaleX')"
+            >
               <i class="el-icon-sort" style="transform: rotateZ(90deg)"></i>
               水平镜像
             </el-button>
-            <el-button size="small" title="垂直镜像" @click="cropperMethod('scaleY')">
+            <el-button
+              size="small"
+              title="垂直镜像"
+              @click="cropperMethod('scaleY')"
+            >
               <i class="el-icon-sort"></i>
               垂直镜像
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button size="small" title="重置" @click="cropperMethod('reset')">
+            <el-button
+              size="small"
+              title="重置"
+              @click="cropperMethod('reset')"
+            >
               <i class="el-icon-refresh"></i>
               重置
             </el-button>
           </el-button-group>
         </div>
 
-        <el-button size="small" type="primary" plain @click="cropperMethod('save')">
+        <el-button
+          size="small"
+          type="primary"
+          plain
+          @click="cropperMethod('save')"
+        >
           <i class="el-icon-crop"></i>
           确定
         </el-button>
       </div>
     </el-dialog>
-    </el-upload>
+  </el-upload>
 </template>
 
 <script>
@@ -226,7 +268,7 @@ export default {
       dialogVisible: false,
       cropResult: null,
       fileListFinnal: [],
-      controller: null
+      controller: null,
     };
   },
   computed: {
@@ -249,14 +291,23 @@ export default {
         this.fileListFinnal = this.$attrs.fileList || this.value || [];
       },
       deep: true,
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     handleBeforeUpload: function (file) {
       // 尺寸校验
       if (file.size > this.limitSize) {
         Vue.prototype.$message.warning("文件大小超出限制");
+        return false;
+      }
+      // 格式校验
+      if (
+        this.acceptFinnal.indexOf(
+          file.name.substring(file.name.lastIndexOf("."))
+        ) === -1
+      ) {
+        Vue.prototype.$message.warning("文件格式不正确");
         return false;
       }
 
@@ -303,7 +354,7 @@ export default {
     handleProgress(e) {
       if (typeof this.$attrs["on-progress"] === "function") {
         if (e.total > 0) {
-          e.percent = e.loaded / e.total * 100;
+          e.percent = (e.loaded / e.total) * 100;
         }
         this.$attrs["on-progress"](e);
       }
@@ -321,7 +372,6 @@ export default {
       if (typeof this.$attrs["on-remove"] === "function") {
         this.$attrs["on-remove"](file, fileList);
       }
-
     },
     customUpload: async function (params) {
       if (
@@ -400,11 +450,11 @@ export default {
       }
 
       // 上传
-      DEBUG && console.log('upload params', formDataFileName, formDataFileObj);
+      DEBUG && console.log("upload params", formDataFileName, formDataFileObj);
       this.controller = new AbortController();
       return theUploadRequest(formDataFileObj, formDataFileName, {
         onUploadProgress: this.handleProgress,
-        signal: this.controller.signal
+        signal: this.controller.signal,
       }).then((res) => {
         return res.data;
       });
@@ -456,14 +506,14 @@ export default {
     },
     clearFiles() {
       // el-upload 方法
-      this.$refs.myupload.clearFiles()
+      this.$refs.myupload.clearFiles();
     },
     abort() {
       this.controller.abort();
     },
     submit() {
       // el-upload 方法
-      this.$refs.myupload.submit()
+      this.$refs.myupload.submit();
     },
   },
   mounted() {
@@ -476,7 +526,7 @@ export default {
         });
       },
       {
-        deep: true
+        deep: true,
       }
     );
   },
@@ -485,7 +535,7 @@ export default {
 
 <style scoped>
 /* 图片剪裁弹窗 */
-.cropper>>>.el-dialog__body {
+.cropper >>> .el-dialog__body {
   padding: 0;
 }
 
@@ -498,8 +548,7 @@ export default {
   padding: 0.5em;
 }
 
-.cropper_actions>>>.el-button-group {
+.cropper_actions >>> .el-button-group {
   margin-right: 10px;
 }
 </style>
-
