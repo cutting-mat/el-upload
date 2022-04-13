@@ -1,6 +1,6 @@
 {
   "name": "@cutting-mat/uploader",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "description": "",
   "main": "dist/index.common.js",
   "repository": {
@@ -25,9 +25,19 @@
     "vue": "^2.6.14"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-eslint": "^4.5.13",
     "@vue/cli-service": "^4.5.6",
+    "abortcontroller-polyfill": "^1.7.3",
     "axios": "^0.26.0",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-component": "^1.1.1",
+    "core-js": "^3.13.1",
     "element-ui": "^2.15.6",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.10.0",
+    "promise-polyfill": "^8.2.3",
+    "unfetch": "^4.2.0",
     "vue-template-compiler": "^2.6.12"
   }
 }

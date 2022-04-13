@@ -87,6 +87,285 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
+/***/ "004a":
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, ".cropper[data-v-13f9cba2] .el-dialog__body{padding:0}.cropper_main[data-v-13f9cba2]{height:50vh;min-height:500px}.cropper_actions[data-v-13f9cba2]{padding:.5em}.cropper_actions[data-v-13f9cba2] .el-button-group{margin-right:10px}", ""]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "07f7":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _finally__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("fe91");
+/* harmony import */ var _allSettled__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("f8d9");
+
+
+
+// Store setTimeout reference so promise-polyfill will be unaffected by
+// other code modifying setTimeout (like sinon.useFakeTimers())
+var setTimeoutFunc = setTimeout;
+
+function isArray(x) {
+  return Boolean(x && typeof x.length !== 'undefined');
+}
+
+function noop() {}
+
+// Polyfill for Function.prototype.bind
+function bind(fn, thisArg) {
+  return function() {
+    fn.apply(thisArg, arguments);
+  };
+}
+
+/**
+ * @constructor
+ * @param {Function} fn
+ */
+function Promise(fn) {
+  if (!(this instanceof Promise))
+    throw new TypeError('Promises must be constructed via new');
+  if (typeof fn !== 'function') throw new TypeError('not a function');
+  /** @type {!number} */
+  this._state = 0;
+  /** @type {!boolean} */
+  this._handled = false;
+  /** @type {Promise|undefined} */
+  this._value = undefined;
+  /** @type {!Array<!Function>} */
+  this._deferreds = [];
+
+  doResolve(fn, this);
+}
+
+function handle(self, deferred) {
+  while (self._state === 3) {
+    self = self._value;
+  }
+  if (self._state === 0) {
+    self._deferreds.push(deferred);
+    return;
+  }
+  self._handled = true;
+  Promise._immediateFn(function() {
+    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+    if (cb === null) {
+      (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
+      return;
+    }
+    var ret;
+    try {
+      ret = cb(self._value);
+    } catch (e) {
+      reject(deferred.promise, e);
+      return;
+    }
+    resolve(deferred.promise, ret);
+  });
+}
+
+function resolve(self, newValue) {
+  try {
+    // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+    if (newValue === self)
+      throw new TypeError('A promise cannot be resolved with itself.');
+    if (
+      newValue &&
+      (typeof newValue === 'object' || typeof newValue === 'function')
+    ) {
+      var then = newValue.then;
+      if (newValue instanceof Promise) {
+        self._state = 3;
+        self._value = newValue;
+        finale(self);
+        return;
+      } else if (typeof then === 'function') {
+        doResolve(bind(then, newValue), self);
+        return;
+      }
+    }
+    self._state = 1;
+    self._value = newValue;
+    finale(self);
+  } catch (e) {
+    reject(self, e);
+  }
+}
+
+function reject(self, newValue) {
+  self._state = 2;
+  self._value = newValue;
+  finale(self);
+}
+
+function finale(self) {
+  if (self._state === 2 && self._deferreds.length === 0) {
+    Promise._immediateFn(function() {
+      if (!self._handled) {
+        Promise._unhandledRejectionFn(self._value);
+      }
+    });
+  }
+
+  for (var i = 0, len = self._deferreds.length; i < len; i++) {
+    handle(self, self._deferreds[i]);
+  }
+  self._deferreds = null;
+}
+
+/**
+ * @constructor
+ */
+function Handler(onFulfilled, onRejected, promise) {
+  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+  this.promise = promise;
+}
+
+/**
+ * Take a potentially misbehaving resolver function and make sure
+ * onFulfilled and onRejected are only called once.
+ *
+ * Makes no guarantees about asynchrony.
+ */
+function doResolve(fn, self) {
+  var done = false;
+  try {
+    fn(
+      function(value) {
+        if (done) return;
+        done = true;
+        resolve(self, value);
+      },
+      function(reason) {
+        if (done) return;
+        done = true;
+        reject(self, reason);
+      }
+    );
+  } catch (ex) {
+    if (done) return;
+    done = true;
+    reject(self, ex);
+  }
+}
+
+Promise.prototype['catch'] = function(onRejected) {
+  return this.then(null, onRejected);
+};
+
+Promise.prototype.then = function(onFulfilled, onRejected) {
+  // @ts-ignore
+  var prom = new this.constructor(noop);
+
+  handle(this, new Handler(onFulfilled, onRejected, prom));
+  return prom;
+};
+
+Promise.prototype['finally'] = _finally__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"];
+
+Promise.all = function(arr) {
+  return new Promise(function(resolve, reject) {
+    if (!isArray(arr)) {
+      return reject(new TypeError('Promise.all accepts an array'));
+    }
+
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
+      try {
+        if (val && (typeof val === 'object' || typeof val === 'function')) {
+          var then = val.then;
+          if (typeof then === 'function') {
+            then.call(
+              val,
+              function(val) {
+                res(i, val);
+              },
+              reject
+            );
+            return;
+          }
+        }
+        args[i] = val;
+        if (--remaining === 0) {
+          resolve(args);
+        }
+      } catch (ex) {
+        reject(ex);
+      }
+    }
+
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+};
+
+Promise.allSettled = _allSettled__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"];
+
+Promise.resolve = function(value) {
+  if (value && typeof value === 'object' && value.constructor === Promise) {
+    return value;
+  }
+
+  return new Promise(function(resolve) {
+    resolve(value);
+  });
+};
+
+Promise.reject = function(value) {
+  return new Promise(function(resolve, reject) {
+    reject(value);
+  });
+};
+
+Promise.race = function(arr) {
+  return new Promise(function(resolve, reject) {
+    if (!isArray(arr)) {
+      return reject(new TypeError('Promise.race accepts an array'));
+    }
+
+    for (var i = 0, len = arr.length; i < len; i++) {
+      Promise.resolve(arr[i]).then(resolve, reject);
+    }
+  });
+};
+
+// Use polyfill for setImmediate for performance gains
+Promise._immediateFn =
+  // @ts-ignore
+  (typeof setImmediate === 'function' &&
+    function(fn) {
+      // @ts-ignore
+      setImmediate(fn);
+    }) ||
+  function(fn) {
+    setTimeoutFunc(fn, 0);
+  };
+
+Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
+  if (typeof console !== 'undefined' && console) {
+    console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+  }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Promise);
+
+
+/***/ }),
+
 /***/ "0ee6":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -98,22 +377,6 @@ exports.push([module.i, "/*!\n * Cropper.js v1.5.12\n * https://fengyuanchen.git
 // Exports
 module.exports = exports;
 
-
-/***/ }),
-
-/***/ "1d7d":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("d23e");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = __webpack_require__("499e").default
-var update = add("5c28c766", content, true, {"sourceMap":false,"shadowMode":false});
 
 /***/ }),
 
@@ -497,6 +760,98 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = __webpack_require__("499e").default
 var update = add("3dee760c", content, true, {"sourceMap":false,"shadowMode":false});
+
+/***/ }),
+
+/***/ "62e4":
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+
+/***/ "684e":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("07f7");
+/* harmony import */ var _finally__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("fe91");
+/* harmony import */ var _allSettled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("f8d9");
+
+
+
+
+/** @suppress {undefinedVars} */
+var globalNS = (function() {
+  // the only reliable means to get the global object is
+  // `Function('return this')()`
+  // However, this causes CSP violations in Chrome apps.
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+  if (typeof global !== 'undefined') {
+    return global;
+  }
+  throw new Error('unable to locate global object');
+})();
+
+// Expose the polyfill if Promise is undefined or set to a
+// non-function value. The latter can be due to a named HTMLElement
+// being exposed by browsers for legacy reasons.
+// https://github.com/taylorhakes/promise-polyfill/issues/114
+if (typeof globalNS['Promise'] !== 'function') {
+  globalNS['Promise'] = _index__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"];
+} else {
+  if (!globalNS.Promise.prototype['finally']) {
+    globalNS.Promise.prototype['finally'] = _finally__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"];
+  } 
+  if (!globalNS.Promise.allSettled) {
+    globalNS.Promise.allSettled = _allSettled__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"];
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba")))
+
+/***/ }),
+
+/***/ "6de1":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("004a");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__("499e").default
+var update = add("4490f7d4", content, true, {"sourceMap":false,"shadowMode":false});
 
 /***/ }),
 
@@ -1565,6 +1920,14 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function() {
 
 /***/ }),
 
+/***/ "79e7":
+/***/ (function(module, exports) {
+
+self.fetch||(self.fetch=function(e,n){return n=n||{},new Promise(function(t,s){var r=new XMLHttpRequest,o=[],u=[],i={},a=function(){return{ok:2==(r.status/100|0),statusText:r.statusText,status:r.status,url:r.responseURL,text:function(){return Promise.resolve(r.responseText)},json:function(){return Promise.resolve(r.responseText).then(JSON.parse)},blob:function(){return Promise.resolve(new Blob([r.response]))},clone:a,headers:{keys:function(){return o},entries:function(){return u},get:function(e){return i[e.toLowerCase()]},has:function(e){return e.toLowerCase()in i}}}};for(var c in r.open(n.method||"get",e,!0),r.onload=function(){r.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm,function(e,n,t){o.push(n=n.toLowerCase()),u.push([n,t]),i[n]=i[n]?i[n]+","+t:t}),t(a())},r.onerror=s,r.withCredentials="include"==n.credentials,n.headers)r.setRequestHeader(c,n.headers[c]);r.send(n.body||null)})});
+
+
+/***/ }),
+
 /***/ "8875":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1654,6 +2017,745 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports) {
 
 module.exports = require("vue");
+
+/***/ }),
+
+/***/ "98b8":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+var runtime = function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function define(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []); // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+    return generator;
+  }
+
+  exports.wrap = wrap; // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+
+  function tryCatch(fn, obj, arg) {
+    try {
+      return {
+        type: "normal",
+        arg: fn.call(obj, arg)
+      };
+    } catch (err) {
+      return {
+        type: "throw",
+        arg: err
+      };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed"; // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+
+  var ContinueSentinel = {}; // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+
+  function Generator() {}
+
+  function GeneratorFunction() {}
+
+  function GeneratorFunctionPrototype() {} // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+
+
+  var IteratorPrototype = {};
+  define(IteratorPrototype, iteratorSymbol, function () {
+    return this;
+  });
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+
+  if (NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = GeneratorFunctionPrototype;
+  define(Gp, "constructor", GeneratorFunctionPrototype);
+  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
+  GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"); // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function (method) {
+      define(prototype, method, function (arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  exports.isGeneratorFunction = function (genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor ? ctor === GeneratorFunction || // For the native GeneratorFunction constructor, the best we can
+    // do is to check its .name property.
+    (ctor.displayName || ctor.name) === "GeneratorFunction" : false;
+  };
+
+  exports.mark = function (genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
+    }
+
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  }; // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+
+
+  exports.awrap = function (arg) {
+    return {
+      __await: arg
+    };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+
+        if (value && _typeof(value) === "object" && hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function (value) {
+            invoke("next", value, resolve, reject);
+          }, function (err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function (unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function (error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function (resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise = // If enqueue has been called before, then we want to wait until
+      // all previous Promises have been resolved before calling invoke,
+      // so that results are always delivered in the correct order. If
+      // enqueue has not been called before, then it is important to
+      // call invoke immediately, without waiting on a callback to fire,
+      // so that the async generator function has the opportunity to do
+      // any necessary setup in a predictable way. This predictability
+      // is why the Promise constructor synchronously invokes its
+      // executor callback, and why async functions synchronously
+      // execute code before the first await. Since we implement simple
+      // async functions in terms of async generators, it is especially
+      // important to get this right, even though it requires care.
+      previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, // Avoid propagating failures to Promises returned by later
+      // invocations of the iterator.
+      callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    } // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+
+
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+    return this;
+  });
+  exports.AsyncIterator = AsyncIterator; // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+
+  exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
+    return exports.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
+    : iter.next().then(function (result) {
+      return result.done ? result.value : iter.next();
+    });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        } // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+
+
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+        var record = tryCatch(innerFn, self, context);
+
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done ? GenStateCompleted : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        } else if (record.type === "throw") {
+          state = GenStateCompleted; // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  } // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+
+
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError("The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (!info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value; // Resume execution at the desired location (see delegateYield).
+
+      context.next = delegate.nextLoc; // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    } // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+
+
+    context.delegate = null;
+    return ContinueSentinel;
+  } // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+
+
+  defineIteratorMethods(Gp);
+  define(Gp, toStringTagSymbol, "Generator"); // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+
+  define(Gp, iteratorSymbol, function () {
+    return this;
+  });
+  define(Gp, "toString", function () {
+    return "[object Generator]";
+  });
+
+  function pushTryEntry(locs) {
+    var entry = {
+      tryLoc: locs[0]
+    };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{
+      tryLoc: "root"
+    }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function (object) {
+    var keys = [];
+
+    for (var key in object) {
+      keys.push(key);
+    }
+
+    keys.reverse(); // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      } // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+
+
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1,
+            next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+          return next;
+        };
+
+        return next.next = next;
+      }
+    } // Return an iterator with no values.
+
+
+    return {
+      next: doneResult
+    };
+  }
+
+  exports.values = values;
+
+  function doneResult() {
+    return {
+      value: undefined,
+      done: true
+    };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+    reset: function reset(skipTempReset) {
+      this.prev = 0;
+      this.next = 0; // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+      this.method = "next";
+      this.arg = undefined;
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" && hasOwn.call(this, name) && !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+    stop: function stop() {
+      this.done = true;
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+    dispatchException: function dispatchException(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !!caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+    abrupt: function abrupt(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+
+        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry && (type === "break" || type === "continue") && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+    complete: function complete(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" || record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+    finish: function finish(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+    "catch": function _catch(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+
+          return thrown;
+        }
+      } // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+
+
+      throw new Error("illegal catch attempt");
+    },
+    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  }; // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+
+  return exports;
+}( // If this script is executing as a CommonJS module, use module.exports
+// as the regeneratorRuntime namespace. Otherwise create a new empty
+// object. Either way, the resulting object will be used to initialize
+// the regeneratorRuntime variable at the top of this file.
+( false ? undefined : _typeof(module)) === "object" ? module.exports : {});
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, in modern engines
+  // we can explicitly access globalThis. In older engines we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  if ((typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("62e4")(module)))
+
+/***/ }),
+
+/***/ "a34a":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("98b8");
 
 /***/ }),
 
@@ -5294,27 +6396,622 @@ module.exports = require("vue");
 
 /***/ }),
 
-/***/ "d23e":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "c72d":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, ".cropper[data-v-57b2d660] .el-dialog__body{padding:0}.cropper_main[data-v-57b2d660]{height:50vh;min-height:500px}.cropper_actions[data-v-57b2d660]{padding:.5em}.cropper_actions[data-v-57b2d660] .el-button-group{margin-right:10px}", ""]);
-// Exports
-module.exports = exports;
+"use strict";
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_13f9cba2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6de1");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_13f9cba2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_13f9cba2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
 
-/***/ "f87f":
+/***/ "c8ba":
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ "d842":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (factory) {
+   true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) :
+  undefined;
+}((function () { 'use strict';
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
+  }
+
+  function _isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return self;
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
+
+    return _assertThisInitialized(self);
+  }
+
+  function _createSuper(Derived) {
+    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+    return function _createSuperInternal() {
+      var Super = _getPrototypeOf(Derived),
+          result;
+
+      if (hasNativeReflectConstruct) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+
+  function _superPropBase(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf(object);
+      if (object === null) break;
+    }
+
+    return object;
+  }
+
+  function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
+
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+
+    return _get(target, property, receiver || target);
+  }
+
+  var Emitter = /*#__PURE__*/function () {
+    function Emitter() {
+      _classCallCheck(this, Emitter);
+
+      Object.defineProperty(this, 'listeners', {
+        value: {},
+        writable: true,
+        configurable: true
+      });
+    }
+
+    _createClass(Emitter, [{
+      key: "addEventListener",
+      value: function addEventListener(type, callback, options) {
+        if (!(type in this.listeners)) {
+          this.listeners[type] = [];
+        }
+
+        this.listeners[type].push({
+          callback: callback,
+          options: options
+        });
+      }
+    }, {
+      key: "removeEventListener",
+      value: function removeEventListener(type, callback) {
+        if (!(type in this.listeners)) {
+          return;
+        }
+
+        var stack = this.listeners[type];
+
+        for (var i = 0, l = stack.length; i < l; i++) {
+          if (stack[i].callback === callback) {
+            stack.splice(i, 1);
+            return;
+          }
+        }
+      }
+    }, {
+      key: "dispatchEvent",
+      value: function dispatchEvent(event) {
+        if (!(event.type in this.listeners)) {
+          return;
+        }
+
+        var stack = this.listeners[event.type];
+        var stackToCall = stack.slice();
+
+        for (var i = 0, l = stackToCall.length; i < l; i++) {
+          var listener = stackToCall[i];
+
+          try {
+            listener.callback.call(this, event);
+          } catch (e) {
+            Promise.resolve().then(function () {
+              throw e;
+            });
+          }
+
+          if (listener.options && listener.options.once) {
+            this.removeEventListener(event.type, listener.callback);
+          }
+        }
+
+        return !event.defaultPrevented;
+      }
+    }]);
+
+    return Emitter;
+  }();
+
+  var AbortSignal = /*#__PURE__*/function (_Emitter) {
+    _inherits(AbortSignal, _Emitter);
+
+    var _super = _createSuper(AbortSignal);
+
+    function AbortSignal() {
+      var _this;
+
+      _classCallCheck(this, AbortSignal);
+
+      _this = _super.call(this); // Some versions of babel does not transpile super() correctly for IE <= 10, if the parent
+      // constructor has failed to run, then "this.listeners" will still be undefined and then we call
+      // the parent constructor directly instead as a workaround. For general details, see babel bug:
+      // https://github.com/babel/babel/issues/3041
+      // This hack was added as a fix for the issue described here:
+      // https://github.com/Financial-Times/polyfill-library/pull/59#issuecomment-477558042
+
+      if (!_this.listeners) {
+        Emitter.call(_assertThisInitialized(_this));
+      } // Compared to assignment, Object.defineProperty makes properties non-enumerable by default and
+      // we want Object.keys(new AbortController().signal) to be [] for compat with the native impl
+
+
+      Object.defineProperty(_assertThisInitialized(_this), 'aborted', {
+        value: false,
+        writable: true,
+        configurable: true
+      });
+      Object.defineProperty(_assertThisInitialized(_this), 'onabort', {
+        value: null,
+        writable: true,
+        configurable: true
+      });
+      return _this;
+    }
+
+    _createClass(AbortSignal, [{
+      key: "toString",
+      value: function toString() {
+        return '[object AbortSignal]';
+      }
+    }, {
+      key: "dispatchEvent",
+      value: function dispatchEvent(event) {
+        if (event.type === 'abort') {
+          this.aborted = true;
+
+          if (typeof this.onabort === 'function') {
+            this.onabort.call(this, event);
+          }
+        }
+
+        _get(_getPrototypeOf(AbortSignal.prototype), "dispatchEvent", this).call(this, event);
+      }
+    }]);
+
+    return AbortSignal;
+  }(Emitter);
+  var AbortController = /*#__PURE__*/function () {
+    function AbortController() {
+      _classCallCheck(this, AbortController);
+
+      // Compared to assignment, Object.defineProperty makes properties non-enumerable by default and
+      // we want Object.keys(new AbortController()) to be [] for compat with the native impl
+      Object.defineProperty(this, 'signal', {
+        value: new AbortSignal(),
+        writable: true,
+        configurable: true
+      });
+    }
+
+    _createClass(AbortController, [{
+      key: "abort",
+      value: function abort() {
+        var event;
+
+        try {
+          event = new Event('abort');
+        } catch (e) {
+          if (typeof document !== 'undefined') {
+            if (!document.createEvent) {
+              // For Internet Explorer 8:
+              event = document.createEventObject();
+              event.type = 'abort';
+            } else {
+              // For Internet Explorer 11:
+              event = document.createEvent('Event');
+              event.initEvent('abort', false, false);
+            }
+          } else {
+            // Fallback where document isn't available:
+            event = {
+              type: 'abort',
+              bubbles: false,
+              cancelable: false
+            };
+          }
+        }
+
+        this.signal.dispatchEvent(event);
+      }
+    }, {
+      key: "toString",
+      value: function toString() {
+        return '[object AbortController]';
+      }
+    }]);
+
+    return AbortController;
+  }();
+
+  if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+    // These are necessary to make sure that we get correct output for:
+    // Object.prototype.toString.call(new AbortController())
+    AbortController.prototype[Symbol.toStringTag] = 'AbortController';
+    AbortSignal.prototype[Symbol.toStringTag] = 'AbortSignal';
+  }
+
+  function polyfillNeeded(self) {
+    if (self.__FORCE_INSTALL_ABORTCONTROLLER_POLYFILL) {
+      console.log('__FORCE_INSTALL_ABORTCONTROLLER_POLYFILL=true is set, will force install polyfill');
+      return true;
+    } // Note that the "unfetch" minimal fetch polyfill defines fetch() without
+    // defining window.Request, and this polyfill need to work on top of unfetch
+    // so the below feature detection needs the !self.AbortController part.
+    // The Request.prototype check is also needed because Safari versions 11.1.2
+    // up to and including 12.1.x has a window.AbortController present but still
+    // does NOT correctly implement abortable fetch:
+    // https://bugs.webkit.org/show_bug.cgi?id=174980#c2
+
+
+    return typeof self.Request === 'function' && !self.Request.prototype.hasOwnProperty('signal') || !self.AbortController;
+  }
+
+  /**
+   * Note: the "fetch.Request" default value is available for fetch imported from
+   * the "node-fetch" package and not in browsers. This is OK since browsers
+   * will be importing umd-polyfill.js from that path "self" is passed the
+   * decorator so the default value will not be used (because browsers that define
+   * fetch also has Request). One quirky setup where self.fetch exists but
+   * self.Request does not is when the "unfetch" minimal fetch polyfill is used
+   * on top of IE11; for this case the browser will try to use the fetch.Request
+   * default value which in turn will be undefined but then then "if (Request)"
+   * will ensure that you get a patched fetch but still no Request (as expected).
+   * @param {fetch, Request = fetch.Request}
+   * @returns {fetch: abortableFetch, Request: AbortableRequest}
+   */
+
+  function abortableFetchDecorator(patchTargets) {
+    if ('function' === typeof patchTargets) {
+      patchTargets = {
+        fetch: patchTargets
+      };
+    }
+
+    var _patchTargets = patchTargets,
+        fetch = _patchTargets.fetch,
+        _patchTargets$Request = _patchTargets.Request,
+        NativeRequest = _patchTargets$Request === void 0 ? fetch.Request : _patchTargets$Request,
+        NativeAbortController = _patchTargets.AbortController,
+        _patchTargets$__FORCE = _patchTargets.__FORCE_INSTALL_ABORTCONTROLLER_POLYFILL,
+        __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL = _patchTargets$__FORCE === void 0 ? false : _patchTargets$__FORCE;
+
+    if (!polyfillNeeded({
+      fetch: fetch,
+      Request: NativeRequest,
+      AbortController: NativeAbortController,
+      __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL: __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL
+    })) {
+      return {
+        fetch: fetch,
+        Request: Request
+      };
+    }
+
+    var Request = NativeRequest; // Note that the "unfetch" minimal fetch polyfill defines fetch() without
+    // defining window.Request, and this polyfill need to work on top of unfetch
+    // hence we only patch it if it's available. Also we don't patch it if signal
+    // is already available on the Request prototype because in this case support
+    // is present and the patching below can cause a crash since it assigns to
+    // request.signal which is technically a read-only property. This latter error
+    // happens when you run the main5.js node-fetch example in the repo
+    // "abortcontroller-polyfill-examples". The exact error is:
+    //   request.signal = init.signal;
+    //   ^
+    // TypeError: Cannot set property signal of #<Request> which has only a getter
+
+    if (Request && !Request.prototype.hasOwnProperty('signal') || __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL) {
+      Request = function Request(input, init) {
+        var signal;
+
+        if (init && init.signal) {
+          signal = init.signal; // Never pass init.signal to the native Request implementation when the polyfill has
+          // been installed because if we're running on top of a browser with a
+          // working native AbortController (i.e. the polyfill was installed due to
+          // __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL being set), then passing our
+          // fake AbortSignal to the native fetch will trigger:
+          // TypeError: Failed to construct 'Request': member signal is not of type AbortSignal.
+
+          delete init.signal;
+        }
+
+        var request = new NativeRequest(input, init);
+
+        if (signal) {
+          Object.defineProperty(request, 'signal', {
+            writable: false,
+            enumerable: false,
+            configurable: true,
+            value: signal
+          });
+        }
+
+        return request;
+      };
+
+      Request.prototype = NativeRequest.prototype;
+    }
+
+    var realFetch = fetch;
+
+    var abortableFetch = function abortableFetch(input, init) {
+      var signal = Request && Request.prototype.isPrototypeOf(input) ? input.signal : init ? init.signal : undefined;
+
+      if (signal) {
+        var abortError;
+
+        try {
+          abortError = new DOMException('Aborted', 'AbortError');
+        } catch (err) {
+          // IE 11 does not support calling the DOMException constructor, use a
+          // regular error object on it instead.
+          abortError = new Error('Aborted');
+          abortError.name = 'AbortError';
+        } // Return early if already aborted, thus avoiding making an HTTP request
+
+
+        if (signal.aborted) {
+          return Promise.reject(abortError);
+        } // Turn an event into a promise, reject it once `abort` is dispatched
+
+
+        var cancellation = new Promise(function (_, reject) {
+          signal.addEventListener('abort', function () {
+            return reject(abortError);
+          }, {
+            once: true
+          });
+        });
+
+        if (init && init.signal) {
+          // Never pass .signal to the native implementation when the polyfill has
+          // been installed because if we're running on top of a browser with a
+          // working native AbortController (i.e. the polyfill was installed due to
+          // __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL being set), then passing our
+          // fake AbortSignal to the native fetch will trigger:
+          // TypeError: Failed to execute 'fetch' on 'Window': member signal is not of type AbortSignal.
+          delete init.signal;
+        } // Return the fastest promise (don't need to wait for request to finish)
+
+
+        return Promise.race([cancellation, realFetch(input, init)]);
+      }
+
+      return realFetch(input, init);
+    };
+
+    return {
+      fetch: abortableFetch,
+      Request: Request
+    };
+  }
+
+  (function (self) {
+
+    if (!polyfillNeeded(self)) {
+      return;
+    }
+
+    if (!self.fetch) {
+      console.warn('fetch() is not available, cannot install abortcontroller-polyfill');
+      return;
+    }
+
+    var _abortableFetch = abortableFetchDecorator(self),
+        fetch = _abortableFetch.fetch,
+        Request = _abortableFetch.Request;
+
+    self.fetch = fetch;
+    self.Request = Request;
+    Object.defineProperty(self, 'AbortController', {
+      writable: true,
+      enumerable: false,
+      configurable: true,
+      value: AbortController
+    });
+    Object.defineProperty(self, 'AbortSignal', {
+      writable: true,
+      enumerable: false,
+      configurable: true,
+      value: AbortSignal
+    });
+  })(typeof self !== 'undefined' ? self : global);
+
+})));
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba")))
+
+/***/ }),
+
+/***/ "f8d9":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_57b2d660_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1d7d");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_57b2d660_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_57b2d660_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
+function allSettled(arr) {
+  var P = this;
+  return new P(function(resolve, reject) {
+    if (!(arr && typeof arr.length !== 'undefined')) {
+      return reject(
+        new TypeError(
+          typeof arr +
+            ' ' +
+            arr +
+            ' is not iterable(cannot read property Symbol(Symbol.iterator))'
+        )
+      );
+    }
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
+      if (val && (typeof val === 'object' || typeof val === 'function')) {
+        var then = val.then;
+        if (typeof then === 'function') {
+          then.call(
+            val,
+            function(val) {
+              res(i, val);
+            },
+            function(e) {
+              args[i] = { status: 'rejected', reason: e };
+              if (--remaining === 0) {
+                resolve(args);
+              }
+            }
+          );
+          return;
+        }
+      }
+      args[i] = { status: 'fulfilled', value: val };
+      if (--remaining === 0) {
+        resolve(args);
+      }
+    }
+
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (allSettled);
 
 
 /***/ }),
@@ -5350,12 +7047,16 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7cab9d84-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/uploader.vue?vue&type=template&id=57b2d660&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6f4b9c65-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/uploader.vue?vue&type=template&id=13f9cba2&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","fileList":_vm.fileListFinnal,"accept":_vm.acceptFinnal,"before-upload":_vm.handleBeforeUpload,"on-exceed":_vm.handleonExceed,"on-change":_vm.handleChange,"on-remove":_vm.handleRemove,"http-request":_vm.customUpload}},'el-upload',_vm.$attrs,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',[_vm._v("点击上传")])]}),_vm._t("trigger"),_vm._t("tip")],2),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","top":"10vh","close-on-click-modal":false,"close-on-press-escape":false},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"}),_vm._v(" 左旋 ")]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"}),_vm._v(" 右旋 ")])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}}),_vm._v(" 水平镜像 ")]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"}),_vm._v(" 垂直镜像 ")])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"}),_vm._v(" 重置 ")])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary","plain":""},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_c('i',{staticClass:"el-icon-crop"}),_vm._v(" 确定 ")])],1)])],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=template&id=57b2d660&scoped=true&
+// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=template&id=13f9cba2&scoped=true&
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
+var regenerator = __webpack_require__("a34a");
+var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
@@ -5367,289 +7068,325 @@ var exif = __webpack_require__("6f45");
 // CONCATENATED MODULE: ./node_modules/ios-photo-repair/dist/module.js
 
 
+var $5b02762f359a5b4d$var$getURLBase64 = function $5b02762f359a5b4d$var$getURLBase64(url) {
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.responseType = 'blob';
 
-const $5b02762f359a5b4d$var$getURLBase64 = function(url) {
-    return new Promise((resolve, reject)=>{
-        let xhr = new XMLHttpRequest();
-        xhr.open('get', url, true);
-        xhr.responseType = 'blob';
-        xhr.onload = function() {
-            if (this.status === 200) {
-                let blob = this.response;
-                let fileReader = new FileReader();
-                fileReader.onloadend = function(e) {
-                    let result = e.target.result;
-                    resolve(result);
-                };
-                fileReader.readAsDataURL(blob);
-            }
+    xhr.onload = function () {
+      if (this.status === 200) {
+        var blob = this.response;
+        var fileReader = new FileReader();
+
+        fileReader.onloadend = function (e) {
+          var result = e.target.result;
+          resolve(result);
         };
-        xhr.onerror = function(err) {
-            reject(err);
-        };
-        xhr.send();
-    });
-};
-const $5b02762f359a5b4d$var$getOri = function(file) {
-    return new Promise((resolve)=>{
-        Object(exif["getData"])(file, function() {
-            let orientation = Object(exif["getTag"])(this, "Orientation");
-            resolve(orientation);
-        });
-    });
-};
-const $5b02762f359a5b4d$var$imgToCanvas = function(img, orientation) {
-    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), targetWidth = img.targetWidth || img.width, targetHeight = img.targetHeight || img.height;
-    if (orientation === 6) {
-        canvas.width = targetHeight;
-        canvas.height = targetWidth;
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(Math.PI / 180 * 90);
-        ctx.drawImage(img, -targetWidth / 2, -targetHeight / 2, canvas.height, canvas.width);
-    } else {
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-    return new Promise((resolve)=>{
-        resolve(canvas);
-    });
-};
-const $5b02762f359a5b4d$export$333f7af172343a1 = function(selector) {
-    const fixImg = function(img) {
-        if (!img.dataset.iosfixed) $5b02762f359a5b4d$var$getOri(img).then((orientation)=>{
-            if (orientation == 6) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas1)=>{
-                try {
-                    img.src = canvas1.toDataURL();
-                    img.dataset.iosfixed = true;
-                } catch (e) {
-                    $5b02762f359a5b4d$var$getURLBase64(img.src).then((base64)=>{
-                        img.onload = function() {
-                            if (!img.dataset.iosfixed) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas)=>{
-                                img.src = canvas.toDataURL();
-                                img.dataset.iosfixed = true;
-                            });
-                        };
-                        img.src = base64;
-                    });
-                }
-            });
-        });
+
+        fileReader.readAsDataURL(blob);
+      }
     };
-    let imgs = document.querySelectorAll(selector);
-    if (imgs.length) for(let i = 0; i < imgs.length; i++){
-        let img = imgs[i];
-        if (img.tagName.toLowerCase() === 'img') {
-            img.crossOrigin = "Anonymous";
-            if (img.complete) fixImg(img);
-            else img.onload = function() {
-                fixImg(img);
+
+    xhr.onerror = function (err) {
+      reject(err);
+    };
+
+    xhr.send();
+  });
+};
+
+var module_$5b02762f359a5b4d$var$getOri = function $5b02762f359a5b4d$var$getOri(file) {
+  return new Promise(function (resolve) {
+    Object(exif["getData"])(file, function () {
+      var orientation = Object(exif["getTag"])(this, "Orientation");
+      resolve(orientation);
+    });
+  });
+};
+
+var $5b02762f359a5b4d$var$imgToCanvas = function $5b02762f359a5b4d$var$imgToCanvas(img, orientation) {
+  var canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d'),
+      targetWidth = img.targetWidth || img.width,
+      targetHeight = img.targetHeight || img.height;
+
+  if (orientation === 6) {
+    canvas.width = targetHeight;
+    canvas.height = targetWidth;
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(Math.PI / 180 * 90);
+    ctx.drawImage(img, -targetWidth / 2, -targetHeight / 2, canvas.height, canvas.width);
+  } else {
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  }
+
+  return new Promise(function (resolve) {
+    resolve(canvas);
+  });
+};
+
+var $5b02762f359a5b4d$export$333f7af172343a1 = function $5b02762f359a5b4d$export$333f7af172343a1(selector) {
+  var fixImg = function fixImg(img) {
+    if (!img.dataset.iosfixed) module_$5b02762f359a5b4d$var$getOri(img).then(function (orientation) {
+      if (orientation == 6) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then(function (canvas1) {
+        try {
+          img.src = canvas1.toDataURL();
+          img.dataset.iosfixed = true;
+        } catch (e) {
+          $5b02762f359a5b4d$var$getURLBase64(img.src).then(function (base64) {
+            img.onload = function () {
+              if (!img.dataset.iosfixed) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then(function (canvas) {
+                img.src = canvas.toDataURL();
+                img.dataset.iosfixed = true;
+              });
             };
+
+            img.src = base64;
+          });
         }
-    }
-    else console.log('fixer WARN no files:' + selector);
-};
-const $5b02762f359a5b4d$var$computeSize = function(originWidth, originHeight, maxWidth, maxHeight) {
-    let targetWidth = originWidth, targetHeight = originHeight;
-    const setWidth = function() {
-        targetWidth = maxWidth;
-        targetHeight = Math.round(maxWidth * (originHeight / originWidth));
-    }, setHeight = function() {
-        targetHeight = maxHeight;
-        targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+      });
+    });
+  };
+
+  var imgs = document.querySelectorAll(selector);
+
+  if (imgs.length) {
+    var _loop = function _loop(i) {
+      var img = imgs[i];
+
+      if (img.tagName.toLowerCase() === 'img') {
+        img.crossOrigin = "Anonymous";
+        if (img.complete) fixImg(img);else img.onload = function () {
+          fixImg(img);
+        };
+      }
     };
-    if (maxWidth && maxHeight) //限定区间
+
+    for (var i = 0; i < imgs.length; i++) {
+      _loop(i);
+    }
+  } else console.log('fixer WARN no files:' + selector);
+};
+
+var $5b02762f359a5b4d$var$computeSize = function $5b02762f359a5b4d$var$computeSize(originWidth, originHeight, maxWidth, maxHeight) {
+  var targetWidth = originWidth,
+      targetHeight = originHeight;
+
+  var setWidth = function setWidth() {
+    targetWidth = maxWidth;
+    targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+  },
+      setHeight = function setHeight() {
+    targetHeight = maxHeight;
+    targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+  };
+
+  if (maxWidth && maxHeight) //限定区间
     {
-        if (originWidth > maxWidth || originHeight > maxHeight) {
-            if (originWidth / originHeight > maxWidth / maxHeight) // 更宽
-            setWidth();
-            else // 更高
-            setHeight();
-        }
+      if (originWidth > maxWidth || originHeight > maxHeight) {
+        if (originWidth / originHeight > maxWidth / maxHeight) // 更宽
+          setWidth();else // 更高
+          setHeight();
+      }
     } else if (maxWidth) //限定宽度
-    setWidth();
-    else if (maxHeight) //限定高度
+    setWidth();else if (maxHeight) //限定高度
     setHeight();
-    return {
-        width: targetWidth,
-        height: targetHeight
-    };
-};
-const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
-    const opt = Object.assign({
-        maxWidth: null,
-        maxHeight: null,
-        ratio: 2,
-        outType: 'base64' // base64 | blob
-    }, option || {
-    });
-    return new Promise((resolve, reject)=>{
-        if (file.type.indexOf('image/') === 0) $5b02762f359a5b4d$var$getOri(file).then((orientation)=>{
-            let oReader = new FileReader();
-            oReader.onload = function(e) {
-                let base64 = e.target.result;
-                let img = document.createElement('img');
-                img.onload = function() {
-                    if (opt.maxWidth || opt.maxHeight) {
-                        let compressSize;
-                        if (orientation === 6) {
-                            compressSize = $5b02762f359a5b4d$var$computeSize(img.height, img.width, opt.maxWidth, opt.maxHeight);
-                            img.targetWidth = compressSize.height;
-                            img.targetHeight = compressSize.width;
-                        } else {
-                            compressSize = $5b02762f359a5b4d$var$computeSize(img.width, img.height, opt.maxWidth, opt.maxHeight);
-                            img.targetWidth = compressSize.width;
-                            img.targetHeight = compressSize.height;
-                        }
-                    }
-                    $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas)=>{
-                        if (opt.outType === 'blob') canvas.toBlob(resolve, 'image/jpeg', opt.ratio);
-                        else resolve(canvas.toDataURL('image/jpeg', opt.ratio));
-                    });
-                };
-                img.src = base64;
-            };
-            oReader.readAsDataURL(file);
-        }).catch((err)=>{
-            reject(err);
-        });
-        else reject('非图片文件不支持压缩');
-    });
+
+  return {
+    width: targetWidth,
+    height: targetHeight
+  };
 };
 
+var $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function $5b02762f359a5b4d$export$9fe3fb24d050ce98(file, option) {
+  var opt = Object.assign({
+    maxWidth: null,
+    maxHeight: null,
+    ratio: 2,
+    outType: 'base64' // base64 | blob
 
+  }, option || {});
+  return new Promise(function (resolve, reject) {
+    if (file.type.indexOf('image/') === 0) module_$5b02762f359a5b4d$var$getOri(file).then(function (orientation) {
+      var oReader = new FileReader();
 
-//# sourceMappingURL=module.js.map
+      oReader.onload = function (e) {
+        var base64 = e.target.result;
+        var img = document.createElement('img');
 
-// EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.css
-var cropper = __webpack_require__("6107");
+        img.onload = function () {
+          if (opt.maxWidth || opt.maxHeight) {
+            var compressSize;
+
+            if (orientation === 6) {
+              compressSize = $5b02762f359a5b4d$var$computeSize(img.height, img.width, opt.maxWidth, opt.maxHeight);
+              img.targetWidth = compressSize.height;
+              img.targetHeight = compressSize.width;
+            } else {
+              compressSize = $5b02762f359a5b4d$var$computeSize(img.width, img.height, opt.maxWidth, opt.maxHeight);
+              img.targetWidth = compressSize.width;
+              img.targetHeight = compressSize.height;
+            }
+          }
+
+          $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then(function (canvas) {
+            if (opt.outType === 'blob') canvas.toBlob(resolve, 'image/jpeg', opt.ratio);else resolve(canvas.toDataURL('image/jpeg', opt.ratio));
+          });
+        };
+
+        img.src = base64;
+      };
+
+      oReader.readAsDataURL(file);
+    }).catch(function (err) {
+      reject(err);
+    });else reject('非图片文件不支持压缩');
+  });
+};
+
 
 // EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.js
-var dist_cropper = __webpack_require__("bab4");
-var dist_cropper_default = /*#__PURE__*/__webpack_require__.n(dist_cropper);
+var cropper = __webpack_require__("bab4");
+var cropper_default = /*#__PURE__*/__webpack_require__.n(cropper);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/uploader.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+// EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.css
+var dist_cropper = __webpack_require__("6107");
+
+// EXTERNAL MODULE: ./node_modules/promise-polyfill/src/polyfill.js
+var polyfill = __webpack_require__("684e");
+
+// EXTERNAL MODULE: ./node_modules/unfetch/polyfill/index.js
+var unfetch_polyfill = __webpack_require__("79e7");
+
+// EXTERNAL MODULE: ./node_modules/abortcontroller-polyfill/dist/umd-polyfill.js
+var umd_polyfill = __webpack_require__("d842");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/uploader.vue?vue&type=script&lang=js&
 
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
+var cropperInstance; // 调试开关
 
+var DEBUG = "production" === "development"; // 图片压缩成jpg格式
 
-let cropperInstance;
-
-// 调试开关
-const DEBUG = "production" === "development";
-
-// 图片压缩成jpg格式
-const fixJpgFileName = function (fileName) {
+var fixJpgFileName = function fixJpgFileName(fileName) {
   if (fileName.match(/\.jpg|\.jpeg$/)) {
     return fileName;
   }
-  return fileName + ".jpg";
-};
 
-// 文件类型集合
-const FileTypeMap = {
+  return fileName + ".jpg";
+}; // 文件类型集合
+
+
+var FileTypeMap = {
   "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
   "t-video": [".mp4", ".rmvb", ".avi", ".mov", ".3gp", ".webm"],
   "t-audio": [".wav", ".mp3", ".ogg", ".acc"],
@@ -5657,35 +7394,34 @@ const FileTypeMap = {
   "t-excel": [".xlsx", ".xls"],
   "t-ppt": [".ppt", ".pptx"],
   "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
-  "t-zip": [".zip", ".rar"],
+  "t-zip": [".zip", ".rar"]
 };
-
 /**
  * 通过文件类型获取扩展名列表
  * @param type[String] FileTypeMap 中约定的类型名
  * return[Array] 目标类型的扩展名数组
  * */
-const getExtByType = (type) => {
-  const quickType = Object.assign(
-    {},
-    FileTypeMap,
-    external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.quickType || {}
-  );
+
+var uploadervue_type_script_lang_js_getExtByType = function getExtByType(type) {
+  var quickType = Object.assign({}, FileTypeMap, external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.quickType || {});
+
   if (type && Array.isArray(quickType[type])) {
-    let classList = [];
-    let extList = [];
-    quickType[type].forEach((e) => {
+    var classList = [];
+    var extList = [];
+    quickType[type].forEach(function (e) {
       if (e.indexOf("t-") === 0) {
         classList.push(e);
       } else {
         extList.push(e);
       }
     });
+
     if (classList.length) {
-      classList.forEach((classType) => {
+      classList.forEach(function (classType) {
         extList = extList.concat(getExtByType(classType));
       });
     }
+
     return extList;
   } else if (type && type.split) {
     return [type.toLowerCase()];
@@ -5697,399 +7433,444 @@ const getExtByType = (type) => {
  * @param defaultValue[Any] 组件内置默认值
  * return[Any] props.key的最终默认值
  */
-const getDefaultValue = function (key, defaultValue) {
-  const globalOption = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption;
+
+var uploadervue_type_script_lang_js_getDefaultValue = function getDefaultValue(key, defaultValue) {
+  var globalOption = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption;
+
   if (Object.keys(globalOption).indexOf(key) !== -1) {
     return globalOption[key];
   }
+
   return defaultValue;
-};
+}; //兼容IE11
+
+
+
+
+
+
+if (!HTMLCanvasElement.prototype.toBlob) {
+  Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
+    value: function value(callback, type, quality) {
+      var canvas = this;
+      setTimeout(function () {
+        var binStr = atob(canvas.toDataURL(type, quality).split(",")[1]);
+        var len = binStr.length;
+        var arr = new Uint8Array(len);
+
+        for (var i = 0; i < len; i++) {
+          arr[i] = binStr.charCodeAt(i);
+        }
+
+        callback(new Blob([arr], {
+          type: type || "image/png"
+        }));
+      });
+    }
+  });
+}
 
 /* harmony default export */ var uploadervue_type_script_lang_js_ = ({
   model: {
     prop: "value",
-    event: "change",
+    event: "change"
   },
   props: {
     value: {
       type: Array,
       required: false,
-      default() {
-        return getDefaultValue("value", []);
-      },
+      default: function _default() {
+        return uploadervue_type_script_lang_js_getDefaultValue("value", []);
+      }
     },
     triggerId: {
       // 配合实现富文本插件上传功能
       type: String,
       required: false,
-      default: "upload_image_trigger" + parseInt(Math.random() * 1e8),
+      default: "upload_image_trigger" + parseInt(Math.random() * 1e8)
     },
     limitSize: {
       // 文件尺寸限制
       type: Number,
       required: false,
-      default() {
-        return getDefaultValue("limitSize", 100 * 1024 * 1024);
-      },
+      default: function _default() {
+        return uploadervue_type_script_lang_js_getDefaultValue("limitSize", 100 * 1024 * 1024);
+      }
     },
     imgCompress: {
       // 开启图片压缩
       type: Boolean,
       required: false,
-      default() {
-        return getDefaultValue("imgCompress", true);
-      },
+      default: function _default() {
+        return uploadervue_type_script_lang_js_getDefaultValue("imgCompress", true);
+      }
     },
     imgCompressOption: {
       // 图片压缩配置
       type: Object,
       required: false,
-      default() {
-        return getDefaultValue("imgCompressOption", {
+      default: function _default() {
+        return uploadervue_type_script_lang_js_getDefaultValue("imgCompressOption", {
           maxWidth: 1000,
-          maxHeight: 1000,
+          maxHeight: 1000
         });
-      },
+      }
     },
     imgCrop: {
       // 开启图片剪裁
       type: Boolean,
       required: false,
-      default() {
-        return getDefaultValue("imgCrop", false);
-      },
+      default: function _default() {
+        return uploadervue_type_script_lang_js_getDefaultValue("imgCrop", false);
+      }
     },
     imgCropOption: {
       // 图片剪裁配置
       type: Object,
       required: false,
-      default() {
-        return getDefaultValue("imgCropOption", {
+      default: function _default() {
+        return uploadervue_type_script_lang_js_getDefaultValue("imgCropOption", {
           ratio: 1,
           minWidth: 0,
           minHeight: 0,
           maxWidth: 1000,
-          maxHeight: 1000,
+          maxHeight: 1000
         });
-      },
+      }
     },
     uploadMethod: {
       // 自定义上传方法，参数（file/blob, fileName）
       type: Function,
-      required: false,
+      required: false
     },
     responseTransfer: {
       // 接口返回数据 与 fileList 数据格式转换函数
       type: Function,
       required: false,
-      default(response) {
-        if (
-          external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption &&
-          typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.responseTransfer === "function"
-        ) {
+      default: function _default(response) {
+        if (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.responseTransfer === "function") {
           return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.responseTransfer(response);
         } else {
           return response;
         }
-      },
-    },
+      }
+    }
   },
-  data() {
+  data: function data() {
     return {
       dialogVisible: false,
       cropResult: null,
       fileListFinnal: [],
-      controller: null,
+      controller: null
     };
   },
   computed: {
-    acceptFinnal() {
+    acceptFinnal: function acceptFinnal() {
       if (this.$attrs.accept && this.$attrs.accept.indexOf("t-") !== -1) {
-        const typeArray = this.$attrs.accept.split(",");
-        let result = [];
-        typeArray.forEach((type) => {
-          result = result.concat(getExtByType(type));
+        var typeArray = this.$attrs.accept.split(",");
+        var result = [];
+        typeArray.forEach(function (type) {
+          result = result.concat(uploadervue_type_script_lang_js_getExtByType(type));
         });
         return result.join(",");
       } else {
         return this.$attrs.accept || "*";
       }
-    },
+    }
   },
   watch: {
     value: {
-      handler() {
-        this.fileListFinnal = this.$attrs.fileList || this.value || [];
+      handler: function handler(newValue) {
+        this.fileListFinnal = this.$attrs.fileList || newValue || [];
+
+        if (this.$refs.myupload) {
+          this.$refs.myupload.uploadFiles = newValue.filter(function (ef) {
+            return newValue.findIndex(function (f) {
+              return f.uid === ef.uid;
+            }) !== -1;
+          });
+        }
       },
       deep: true,
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
-    handleBeforeUpload: function (file) {
+    handleBeforeUpload: function handleBeforeUpload(file) {
       // 尺寸校验
       if (file.size > this.limitSize) {
         external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$message.warning("文件大小超出限制");
         return false;
-      }
-      // 格式校验
-      if (
-        this.acceptFinnal !== "*" &&
-        this.acceptFinnal.indexOf(
-          file.name.substring(file.name.lastIndexOf(".")).toLowerCase()
-        ) === -1
-      ) {
+      } // 格式校验
+
+
+      if (this.acceptFinnal !== "*" && this.acceptFinnal.indexOf(file.name.substring(file.name.lastIndexOf(".")).toLowerCase()) === -1) {
         external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$message.warning("文件格式不正确");
         return false;
       }
 
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
-      } else if (
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption &&
-        typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.beforeUpload === "function"
-      ) {
+      } else if (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.beforeUpload === "function") {
         return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.beforeUpload(file);
       } else {
         return true;
       }
     },
-    handleonExceed: function (file, fileList) {
+    handleonExceed: function handleonExceed(file, fileList) {
       if (typeof this.$attrs["on-exceed"] === "function") {
         this.$attrs["on-exceed"](file, fileList);
-      } else if (
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption &&
-        typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.onExceed === "function"
-      ) {
+      } else if (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.onExceed === "function") {
         external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.onExceed(file, fileList);
       }
     },
-    handleChange: function (file, fileList) {
-      const doneFiles = fileList.filter((e) => e.status === "success");
+    handleChange: function handleChange(file, fileList) {
+      var _this = this;
+
+      var doneFiles = fileList.filter(function (e) {
+        return e.status === "success";
+      });
+
       if (doneFiles.length === fileList.length) {
-        this.$emit(
-          "change",
-          doneFiles.map((e) => {
-            let data = e.response ? this.responseTransfer(e.response) : e;
-            // 扩展字段
-            data.uid = e.uid;
-            data.status = e.status;
-            return data;
-          })
-        );
+        this.$emit("change", doneFiles.map(function (e) {
+          var data = e.response ? _this.responseTransfer(e.response) : e; // 扩展字段
+
+          data.uid = e.uid;
+          data.status = e.status;
+          return data;
+        }));
       }
 
       if (typeof this.$attrs["on-change"] === "function") {
         this.$attrs["on-change"](file, fileList);
       }
     },
-    handleProgress(e) {
+    handleProgress: function handleProgress(e) {
       if (typeof this.$attrs["on-progress"] === "function") {
         if (e.total > 0) {
-          e.percent = (e.loaded / e.total) * 100;
+          e.percent = e.loaded / e.total * 100;
         }
+
         this.$attrs["on-progress"](e);
       }
     },
-    handleRemove: function (file, fileList) {
-      this.$emit(
-        "change",
-        fileList.map((e) => {
-          let data = e.response ? this.responseTransfer(e.response) : e;
-          data.uid = e.uid;
-          return data;
-        })
-      );
+    handleRemove: function handleRemove(file, fileList) {
+      var _this2 = this;
+
+      this.$emit("change", fileList.map(function (e) {
+        var data = e.response ? _this2.responseTransfer(e.response) : e;
+        data.uid = e.uid;
+        return data;
+      }));
 
       if (typeof this.$attrs["on-remove"] === "function") {
         this.$attrs["on-remove"](file, fileList);
       }
     },
-    customUpload: async function (params) {
-      if (
-        !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption &&
-        !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.uploadMethod &&
-        !this.uploadMethod
-      ) {
-        return console.warn(
-          "Uploader: The required configuration [uploadMethod] is missing!"
-        );
-      }
+    customUpload: function () {
+      var _customUpload = _asyncToGenerator( /*#__PURE__*/regenerator_default.a.mark(function _callee(params) {
+        var _this3 = this;
 
-      const theUploadRequest =
-        this.uploadMethod || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.uploadMethod;
-      if (typeof theUploadRequest !== "function") {
-        return console.warn("Uploader: [uploadMethod] must be a Function!");
-      }
+        var theUploadRequest, uploadedFileType, formDataFileObj, formDataFileName, imgBlob, _imgBlob;
 
-      const uploadedFileType = params.file.type;
-      DEBUG && console.log("uploadedFileType", uploadedFileType);
+        return regenerator_default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(!external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.uploadMethod && !this.uploadMethod)) {
+                  _context.next = 2;
+                  break;
+                }
 
-      let formDataFileObj = params.file;
-      let formDataFileName = params.file.name;
+                return _context.abrupt("return", console.warn("Uploader: The required configuration [uploadMethod] is missing!"));
 
-      if (uploadedFileType.indexOf("image/") === 0) {
-        if (this.imgCrop) {
-          // 图片剪裁
-          this.cropResult = null;
-          this.dialogVisible = true;
+              case 2:
+                theUploadRequest = this.uploadMethod || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.uploadMethod;
 
-          const imgBlob = await new Promise((resolve) => {
-            let oReader = new FileReader();
-            oReader.onload = (e) => {
-              let base64 = e.target.result;
-              let img = this.$refs.CropperImg;
-              img.src = base64;
-              //
-              if (cropperInstance) {
-                cropperInstance.destroy();
-              }
+                if (!(typeof theUploadRequest !== "function")) {
+                  _context.next = 5;
+                  break;
+                }
 
-              cropperInstance = new dist_cropper_default.a(img, {
-                viewMode: 1,
-                dragMode: "none",
-                movable: false,
-                zoomOnTouch: false,
-                zoomOnWheel: false,
-                toggleDragModeOnDblclick: false,
-                aspectRatio: this.imgCropOption.ratio,
-              });
-            };
-            oReader.readAsDataURL(params.file);
+                return _context.abrupt("return", console.warn("Uploader: [uploadMethod] must be a Function!"));
 
-            this.$watch("cropResult", resolve);
-          });
+              case 5:
+                uploadedFileType = params.file.type;
+                DEBUG && console.log("uploadedFileType", uploadedFileType);
+                formDataFileObj = params.file;
+                formDataFileName = params.file.name;
 
-          if (imgBlob) {
-            DEBUG && console.log("imgCrop", imgBlob);
-            formDataFileObj = imgBlob;
-            formDataFileName = fixJpgFileName(formDataFileName);
-            this.cropperMethod("close");
+                if (!(uploadedFileType.indexOf("image/") === 0)) {
+                  _context.next = 26;
+                  break;
+                }
+
+                if (!this.imgCrop) {
+                  _context.next = 19;
+                  break;
+                }
+
+                // 图片剪裁
+                this.cropResult = null;
+                this.dialogVisible = true;
+                _context.next = 15;
+                return new Promise(function (resolve) {
+                  var oReader = new FileReader();
+
+                  oReader.onload = function (e) {
+                    var base64 = e.target.result;
+                    var img = _this3.$refs.CropperImg;
+                    img.src = base64; //
+
+                    //
+                    if (cropperInstance) {
+                      cropperInstance.destroy();
+                    }
+
+                    cropperInstance = new cropper_default.a(img, {
+                      viewMode: 1,
+                      dragMode: "none",
+                      movable: false,
+                      zoomOnTouch: false,
+                      zoomOnWheel: false,
+                      toggleDragModeOnDblclick: false,
+                      aspectRatio: _this3.imgCropOption.ratio
+                    });
+                  };
+
+                  oReader.readAsDataURL(params.file);
+
+                  _this3.$watch("cropResult", resolve);
+                });
+
+              case 15:
+                imgBlob = _context.sent;
+
+                if (imgBlob) {
+                  DEBUG && console.log("imgCrop", imgBlob);
+                  formDataFileObj = imgBlob;
+                  formDataFileName = fixJpgFileName(formDataFileName);
+                  this.cropperMethod("close");
+                }
+
+                _context.next = 26;
+                break;
+
+              case 19:
+                if (!this.imgCompress) {
+                  _context.next = 26;
+                  break;
+                }
+
+                _context.next = 22;
+                return $5b02762f359a5b4d$export$9fe3fb24d050ce98(params.file, Object.assign({}, this.imgCompressOption, {
+                  outType: "blob"
+                }));
+
+              case 22:
+                _imgBlob = _context.sent;
+                DEBUG && console.log("imgCompress", _imgBlob);
+                formDataFileObj = _imgBlob;
+                formDataFileName = fixJpgFileName(formDataFileName);
+
+              case 26:
+                // 上传
+                DEBUG && console.log("upload params", formDataFileName, formDataFileObj);
+                this.controller = new AbortController();
+                return _context.abrupt("return", theUploadRequest(formDataFileObj, formDataFileName, {
+                  onUploadProgress: this.handleProgress,
+                  signal: this.controller.signal
+                }).then(function (res) {
+                  return res.data;
+                }));
+
+              case 29:
+              case "end":
+                return _context.stop();
+            }
           }
-        } else if (this.imgCompress) {
-          // 图片压缩
-          const imgBlob = await $5b02762f359a5b4d$export$9fe3fb24d050ce98(
-            params.file,
-            Object.assign({}, this.imgCompressOption, {
-              outType: "blob",
-            })
-          );
+        }, _callee, this);
+      }));
 
-          DEBUG && console.log("imgCompress", imgBlob);
-          formDataFileObj = imgBlob;
-          formDataFileName = fixJpgFileName(formDataFileName);
-        }
+      function customUpload(_x) {
+        return _customUpload.apply(this, arguments);
       }
 
-      // 上传
-      DEBUG && console.log("upload params", formDataFileName, formDataFileObj);
-      this.controller = new AbortController();
-      return theUploadRequest(formDataFileObj, formDataFileName, {
-        onUploadProgress: this.handleProgress,
-        signal: this.controller.signal,
-      }).then((res) => {
-        return res.data;
-      });
-    },
-    cropperMethod(action) {
+      return customUpload;
+    }(),
+    cropperMethod: function cropperMethod(action) {
+      var _this4 = this;
+
       // 剪裁相关处理方法
       switch (action) {
         case "save":
-          //兼容IE
-          if (!HTMLCanvasElement.prototype.toBlob) {
-            Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
-              value: function (callback, type, quality) {
-                var canvas = this;
-                setTimeout(function () {
-                  var binStr = atob(
-                    canvas.toDataURL(type, quality).split(",")[1]
-                  );
-                  var len = binStr.length;
-                  var arr = new Uint8Array(len);
-
-                  for (var i = 0; i < len; i++) {
-                    arr[i] = binStr.charCodeAt(i);
-                  }
-
-                  callback(new Blob([arr], { type: type || "image/png" }));
-                });
-              },
-            });
-          }
-
-          cropperInstance
-            .getCroppedCanvas({
-              minWidth: this.imgCropOption.minWidth,
-              minHeight: this.imgCropOption.minHeight,
-              maxWidth: this.imgCropOption.maxWidth || 1000,
-              maxHeight: this.imgCropOption.maxHeight || 1000,
-              imageSmoothingQuality: "medium",
-            })
-            .toBlob((blob) => {
-              this.cropResult = blob;
-            }, "image/jpeg");
+          cropperInstance.getCroppedCanvas({
+            minWidth: this.imgCropOption.minWidth,
+            minHeight: this.imgCropOption.minHeight,
+            maxWidth: this.imgCropOption.maxWidth || 1000,
+            maxHeight: this.imgCropOption.maxHeight || 1000,
+            imageSmoothingQuality: "medium"
+          }).toBlob(function (blob) {
+            _this4.cropResult = blob;
+          }, "image/jpeg");
           break;
+
         case "close":
           this.dialogVisible = false;
+
           if (cropperInstance) {
             cropperInstance.destroy();
           }
+
           if (!this.cropResult) {
-            const newValue = this.value.pop();
+            var newValue = [].concat(this.value);
+            newValue.pop();
             this.$emit("change", newValue);
           }
+
           break;
+
         case "rotateLeft":
           cropperInstance.rotate(-90);
           break;
+
         case "rotateRight":
           cropperInstance.rotate(90);
           break;
+
         case "scaleX":
           cropperInstance.scaleX(-1);
           break;
+
         case "scaleY":
           cropperInstance.scaleY(-1);
           break;
+
         case "reset":
           cropperInstance.reset();
           break;
+
         default:
           console.warn("cropperMethod 参数错误: ", action);
       }
     },
-    clearFiles() {
+    clearFiles: function clearFiles() {
       // el-upload 方法
       this.$refs.myupload.clearFiles();
     },
-    abort() {
+    abort: function abort() {
       this.controller.abort();
     },
-    submit() {
+    submit: function submit() {
       // el-upload 方法
       this.$refs.myupload.submit();
-    },
-  },
-  mounted() {
-    // 外部数据变更同步给 el-upload
-    this.$watch(
-      "value",
-      (newValue) => {
-        this.$refs.myupload.uploadFiles = newValue.filter((ef) => {
-          return newValue.findIndex((f) => f.uid === ef.uid) !== -1;
-        });
-      },
-      {
-        deep: true,
-      }
-    );
-  },
+    }
+  }
 });
-
 // CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_uploadervue_type_script_lang_js_ = (uploadervue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/uploader.vue?vue&type=style&index=0&id=57b2d660&scoped=true&lang=css&
-var uploadervue_type_style_index_0_id_57b2d660_scoped_true_lang_css_ = __webpack_require__("f87f");
+// EXTERNAL MODULE: ./src/components/uploader.vue?vue&type=style&index=0&id=13f9cba2&scoped=true&lang=css&
+var uploadervue_type_style_index_0_id_13f9cba2_scoped_true_lang_css_ = __webpack_require__("c72d");
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 /* globals __VUE_SSR_CONTEXT__ */
@@ -6206,7 +7987,7 @@ var component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "57b2d660",
+  "13f9cba2",
   null
   
 )
@@ -6216,21 +7997,50 @@ var component = normalizeComponent(
 /**
  * @cutting-mat/uploader
  * 
- * */ 
-
+ * */
 
 /* harmony default export */ var src_0 = ({
-    install: function (Vue, option) {
-        Vue.$UploaderOption = option || {}
-
-        Vue.component('uploader', uploader)
-    }
+  install: function install(Vue, option) {
+    Vue.$UploaderOption = option || {};
+    Vue.component('uploader', uploader);
+  }
 });
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
 
 /* harmony default export */ var entry_lib = __webpack_exports__["default"] = (src_0);
 
+
+
+/***/ }),
+
+/***/ "fe91":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * @this {Promise}
+ */
+function finallyConstructor(callback) {
+  var constructor = this.constructor;
+  return this.then(
+    function(value) {
+      // @ts-ignore
+      return constructor.resolve(callback()).then(function() {
+        return value;
+      });
+    },
+    function(reason) {
+      // @ts-ignore
+      return constructor.resolve(callback()).then(function() {
+        // @ts-ignore
+        return constructor.reject(reason);
+      });
+    }
+  );
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (finallyConstructor);
 
 
 /***/ })

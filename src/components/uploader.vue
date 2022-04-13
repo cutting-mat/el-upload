@@ -100,9 +100,8 @@
 import Vue from "vue";
 
 import { fixImgFile } from "ios-photo-repair";
-
-import "cropperjs/dist/cropper.css";
 import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css";
 
 let cropperInstance;
 
@@ -173,6 +172,29 @@ const getDefaultValue = function (key, defaultValue) {
   }
   return defaultValue;
 };
+//兼容IE11
+import "promise-polyfill/src/polyfill";
+import "unfetch/polyfill";
+import "abortcontroller-polyfill";
+
+if (!HTMLCanvasElement.prototype.toBlob) {
+  Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
+    value: function (callback, type, quality) {
+      var canvas = this;
+      setTimeout(function () {
+        var binStr = atob(canvas.toDataURL(type, quality).split(",")[1]);
+        var len = binStr.length;
+        var arr = new Uint8Array(len);
+
+        for (var i = 0; i < len; i++) {
+          arr[i] = binStr.charCodeAt(i);
+        }
+
+        callback(new Blob([arr], { type: type || "image/png" }));
+      });
+    },
+  });
+}
 
 export default {
   model: {
@@ -287,8 +309,13 @@ export default {
   },
   watch: {
     value: {
-      handler() {
-        this.fileListFinnal = this.$attrs.fileList || this.value || [];
+      handler(newValue) {
+        this.fileListFinnal = this.$attrs.fileList || newValue || [];
+        if (this.$refs.myupload) {
+          this.$refs.myupload.uploadFiles = newValue.filter((ef) => {
+            return newValue.findIndex((f) => f.uid === ef.uid) !== -1;
+          });
+        }
       },
       deep: true,
       immediate: true,
@@ -464,28 +491,6 @@ export default {
       // 剪裁相关处理方法
       switch (action) {
         case "save":
-          //兼容IE
-          if (!HTMLCanvasElement.prototype.toBlob) {
-            Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
-              value: function (callback, type, quality) {
-                var canvas = this;
-                setTimeout(function () {
-                  var binStr = atob(
-                    canvas.toDataURL(type, quality).split(",")[1]
-                  );
-                  var len = binStr.length;
-                  var arr = new Uint8Array(len);
-
-                  for (var i = 0; i < len; i++) {
-                    arr[i] = binStr.charCodeAt(i);
-                  }
-
-                  callback(new Blob([arr], { type: type || "image/png" }));
-                });
-              },
-            });
-          }
-
           cropperInstance
             .getCroppedCanvas({
               minWidth: this.imgCropOption.minWidth,
@@ -504,7 +509,8 @@ export default {
             cropperInstance.destroy();
           }
           if (!this.cropResult) {
-            const newValue = this.value.pop();
+            const newValue = [].concat(this.value);
+            newValue.pop();
             this.$emit("change", newValue);
           }
           break;
@@ -538,20 +544,6 @@ export default {
       // el-upload 方法
       this.$refs.myupload.submit();
     },
-  },
-  mounted() {
-    // 外部数据变更同步给 el-upload
-    this.$watch(
-      "value",
-      (newValue) => {
-        this.$refs.myupload.uploadFiles = newValue.filter((ef) => {
-          return newValue.findIndex((f) => f.uid === ef.uid) !== -1;
-        });
-      },
-      {
-        deep: true,
-      }
-    );
   },
 };
 </script>
