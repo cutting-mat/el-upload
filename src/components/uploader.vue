@@ -305,7 +305,7 @@ export default {
       if (
         this.acceptFinnal !== "*" &&
         this.acceptFinnal.indexOf(
-          file.name.substring(file.name.lastIndexOf("."))
+          file.name.substring(file.name.lastIndexOf(".")).toLowerCase()
         ) === -1
       ) {
         Vue.prototype.$message.warning("文件格式不正确");
