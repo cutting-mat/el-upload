@@ -464,6 +464,28 @@ export default {
       // 剪裁相关处理方法
       switch (action) {
         case "save":
+          //兼容IE
+          if (!HTMLCanvasElement.prototype.toBlob) {
+            Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
+              value: function (callback, type, quality) {
+                var canvas = this;
+                setTimeout(function () {
+                  var binStr = atob(
+                    canvas.toDataURL(type, quality).split(",")[1]
+                  );
+                  var len = binStr.length;
+                  var arr = new Uint8Array(len);
+
+                  for (var i = 0; i < len; i++) {
+                    arr[i] = binStr.charCodeAt(i);
+                  }
+
+                  callback(new Blob([arr], { type: type || "image/png" }));
+                });
+              },
+            });
+          }
+
           cropperInstance
             .getCroppedCanvas({
               minWidth: this.imgCropOption.minWidth,
