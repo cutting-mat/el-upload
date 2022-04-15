@@ -107,38 +107,6 @@ const getDefaultValue = function (key) {
   }
   return internalInstance.props[key];
 };
-
-/**
- * 通过文件类型获取扩展名列表
- * @param type[String] FileTypeMap 中约定的类型名
- * return[Array] 目标类型的扩展名数组
- * */
-const getExtByType = (type) => {
-  const quickType = Object.assign(
-    {},
-    FileTypeMap,
-    globalOption.quickType || {}
-  );
-  if (type && Array.isArray(quickType[type])) {
-    let classList = [];
-    let extList = [];
-    quickType[type].forEach((e) => {
-      if (e.indexOf("t-") === 0) {
-        classList.push(e);
-      } else {
-        extList.push(e);
-      }
-    });
-    if (classList.length) {
-      classList.forEach((classType) => {
-        extList = extList.concat(getExtByType(classType));
-      });
-    }
-    return extList;
-  } else if (type && type.split) {
-    return [type.toLowerCase()];
-  }
-};
 </script>
 
 <script>
@@ -170,13 +138,6 @@ const FileTypeMap = {
   "t-document": [".pdf", "t-word", "t-excel", "t-ppt"],
   "t-zip": [".zip", ".rar"],
 };
-
-/**
- * 预先从全局用户配置中获取props默认值
- * @param key[String] prop的key
- * @param defaultValue[Any] 组件内置默认值
- * return[Any] props.key的最终默认值
- */
 
 export default {
   props: {
@@ -300,6 +261,32 @@ export default {
     },
   },
   methods: {
+    getExtByType(type) {
+      const quickType = Object.assign(
+        {},
+        FileTypeMap,
+        this.globalOption.quickType || {}
+      );
+      if (type && Array.isArray(quickType[type])) {
+        let classList = [];
+        let extList = [];
+        quickType[type].forEach((e) => {
+          if (e.indexOf("t-") === 0) {
+            classList.push(e);
+          } else {
+            extList.push(e);
+          }
+        });
+        if (classList.length) {
+          classList.forEach((classType) => {
+            extList = extList.concat(this.getExtByType(classType));
+          });
+        }
+        return extList;
+      } else if (type && type.split) {
+        return [type.toLowerCase()];
+      }
+    },
     handleBeforeUpload: function (file) {
       // 尺寸校验
       if (file.size > this.propsFinnal.limitSize) {
