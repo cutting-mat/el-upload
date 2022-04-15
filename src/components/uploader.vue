@@ -20,11 +20,11 @@
     </div>
     <!-- edit dialog -->
     <el-dialog
-      :visible="dialogVisible"
+      v-model="dialogVisible"
       append-to-body
       title="图像剪裁"
       top="10vh"
-      class="cropper"
+      custom-class="cropper"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       @close="cropperMethod('close')"
@@ -95,10 +95,53 @@
     </el-dialog>
   </el-upload>
 </template>
+<script setup>
+import { getCurrentInstance, defineProps } from "vue";
+const internalInstance = getCurrentInstance();
+
+const globalOption =
+  internalInstance.appContext.config.globalProperties.$UploaderOption || {};
+const getDefaultValue = function (key) {
+  if (Object.keys(globalOption).indexOf(key) !== -1) {
+    return globalOption[key];
+  }
+  return internalInstance.props[key];
+};
+
+/**
+ * 通过文件类型获取扩展名列表
+ * @param type[String] FileTypeMap 中约定的类型名
+ * return[Array] 目标类型的扩展名数组
+ * */
+const getExtByType = (type) => {
+  const quickType = Object.assign(
+    {},
+    FileTypeMap,
+    globalOption.quickType || {}
+  );
+  if (type && Array.isArray(quickType[type])) {
+    let classList = [];
+    let extList = [];
+    quickType[type].forEach((e) => {
+      if (e.indexOf("t-") === 0) {
+        classList.push(e);
+      } else {
+        extList.push(e);
+      }
+    });
+    if (classList.length) {
+      classList.forEach((classType) => {
+        extList = extList.concat(getExtByType(classType));
+      });
+    }
+    return extList;
+  } else if (type && type.split) {
+    return [type.toLowerCase()];
+  }
+};
+</script>
 
 <script>
-import Vue from "vue";
-
 import { fixImgFile } from "ios-photo-repair";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -129,84 +172,19 @@ const FileTypeMap = {
 };
 
 /**
- * 通过文件类型获取扩展名列表
- * @param type[String] FileTypeMap 中约定的类型名
- * return[Array] 目标类型的扩展名数组
- * */
-export const getExtByType = (type) => {
-  const quickType = Object.assign(
-    {},
-    FileTypeMap,
-    Vue.$UploaderOption.quickType || {}
-  );
-  if (type && Array.isArray(quickType[type])) {
-    let classList = [];
-    let extList = [];
-    quickType[type].forEach((e) => {
-      if (e.indexOf("t-") === 0) {
-        classList.push(e);
-      } else {
-        extList.push(e);
-      }
-    });
-    if (classList.length) {
-      classList.forEach((classType) => {
-        extList = extList.concat(getExtByType(classType));
-      });
-    }
-    return extList;
-  } else if (type && type.split) {
-    return [type.toLowerCase()];
-  }
-};
-/**
  * 预先从全局用户配置中获取props默认值
  * @param key[String] prop的key
  * @param defaultValue[Any] 组件内置默认值
  * return[Any] props.key的最终默认值
  */
-const getDefaultValue = function (key, defaultValue) {
-  const globalOption = Vue.$UploaderOption;
-  if (Object.keys(globalOption).indexOf(key) !== -1) {
-    return globalOption[key];
-  }
-  return defaultValue;
-};
-//兼容IE11
-import "promise-polyfill/src/polyfill";
-import "unfetch/polyfill";
-import "abortcontroller-polyfill";
-
-if (!HTMLCanvasElement.prototype.toBlob) {
-  Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
-    value: function (callback, type, quality) {
-      var canvas = this;
-      setTimeout(function () {
-        var binStr = atob(canvas.toDataURL(type, quality).split(",")[1]);
-        var len = binStr.length;
-        var arr = new Uint8Array(len);
-
-        for (var i = 0; i < len; i++) {
-          arr[i] = binStr.charCodeAt(i);
-        }
-
-        callback(new Blob([arr], { type: type || "image/png" }));
-      });
-    },
-  });
-}
 
 export default {
-  model: {
-    prop: "value",
-    event: "change",
-  },
   props: {
-    value: {
+    modelValue: {
       type: Array,
       required: false,
       default() {
-        return getDefaultValue("value", []);
+        return [];
       },
     },
     triggerId: {
@@ -220,7 +198,7 @@ export default {
       type: Number,
       required: false,
       default() {
-        return getDefaultValue("limitSize", 100 * 1024 * 1024);
+        return 100 * 1024 * 1024;
       },
     },
     imgCompress: {
@@ -228,7 +206,7 @@ export default {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("imgCompress", true);
+        return true;
       },
     },
     imgCompressOption: {
@@ -236,10 +214,10 @@ export default {
       type: Object,
       required: false,
       default() {
-        return getDefaultValue("imgCompressOption", {
+        return {
           maxWidth: 1000,
           maxHeight: 1000,
-        });
+        };
       },
     },
     imgCrop: {
@@ -247,7 +225,7 @@ export default {
       type: Boolean,
       required: false,
       default() {
-        return getDefaultValue("imgCrop", false);
+        return false;
       },
     },
     imgCropOption: {
@@ -255,13 +233,13 @@ export default {
       type: Object,
       required: false,
       default() {
-        return getDefaultValue("imgCropOption", {
+        return {
           ratio: 1,
           minWidth: 0,
           minHeight: 0,
           maxWidth: 1000,
           maxHeight: 1000,
-        });
+        };
       },
     },
     uploadMethod: {
@@ -274,14 +252,7 @@ export default {
       type: Function,
       required: false,
       default(response) {
-        if (
-          Vue.$UploaderOption &&
-          typeof Vue.$UploaderOption.responseTransfer === "function"
-        ) {
-          return Vue.$UploaderOption.responseTransfer(response);
-        } else {
-          return response;
-        }
+        return response;
       },
     },
   },
@@ -299,16 +270,23 @@ export default {
         const typeArray = this.$attrs.accept.split(",");
         let result = [];
         typeArray.forEach((type) => {
-          result = result.concat(getExtByType(type));
+          result = result.concat(this.getExtByType(type));
         });
         return result.join(",");
       } else {
         return this.$attrs.accept || "*";
       }
     },
+    propsFinnal() {
+      let result = {};
+      Object.keys(this.$props).forEach((prop) => {
+        result[prop] = this.getDefaultValue(prop);
+      });
+      return result;
+    },
   },
   watch: {
-    value: {
+    modelValue: {
       handler(newValue) {
         this.fileListFinnal = this.$attrs.fileList || newValue || [];
         if (this.$refs.myupload) {
@@ -324,7 +302,7 @@ export default {
   methods: {
     handleBeforeUpload: function (file) {
       // 尺寸校验
-      if (file.size > this.limitSize) {
+      if (file.size > this.propsFinnal.limitSize) {
         Vue.prototype.$message.warning("文件大小超出限制");
         return false;
       }
@@ -342,10 +320,10 @@ export default {
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
       } else if (
-        Vue.$UploaderOption &&
-        typeof Vue.$UploaderOption.beforeUpload === "function"
+        this.globalOption &&
+        typeof this.globalOption.beforeUpload === "function"
       ) {
-        return Vue.$UploaderOption.beforeUpload(file);
+        return this.globalOption.beforeUpload(file);
       } else {
         return true;
       }
@@ -354,19 +332,21 @@ export default {
       if (typeof this.$attrs["on-exceed"] === "function") {
         this.$attrs["on-exceed"](file, fileList);
       } else if (
-        Vue.$UploaderOption &&
-        typeof Vue.$UploaderOption.onExceed === "function"
+        this.globalOption &&
+        typeof this.globalOption.onExceed === "function"
       ) {
-        Vue.$UploaderOption.onExceed(file, fileList);
+        this.globalOption.onExceed(file, fileList);
       }
     },
     handleChange: function (file, fileList) {
       const doneFiles = fileList.filter((e) => e.status === "success");
       if (doneFiles.length === fileList.length) {
         this.$emit(
-          "change",
+          "update:modelValue",
           doneFiles.map((e) => {
-            let data = e.response ? this.responseTransfer(e.response) : e;
+            let data = e.response
+              ? this.propsFinnal.responseTransfer(e.response)
+              : e;
             // 扩展字段
             data.uid = e.uid;
             data.status = e.status;
@@ -389,9 +369,11 @@ export default {
     },
     handleRemove: function (file, fileList) {
       this.$emit(
-        "change",
+        "update:modelValue",
         fileList.map((e) => {
-          let data = e.response ? this.responseTransfer(e.response) : e;
+          let data = e.response
+            ? this.propsFinnal.responseTransfer(e.response)
+            : e;
           data.uid = e.uid;
           return data;
         })
@@ -403,9 +385,9 @@ export default {
     },
     customUpload: async function (params) {
       if (
-        !Vue.$UploaderOption &&
-        !Vue.$UploaderOption.uploadMethod &&
-        !this.uploadMethod
+        !this.globalOption &&
+        !this.globalOption.uploadMethod &&
+        !this.propsFinnal.uploadMethod
       ) {
         return console.warn(
           "Uploader: The required configuration [uploadMethod] is missing!"
@@ -413,7 +395,7 @@ export default {
       }
 
       const theUploadRequest =
-        this.uploadMethod || Vue.$UploaderOption.uploadMethod;
+        this.propsFinnal.uploadMethod || this.globalOption.uploadMethod;
       if (typeof theUploadRequest !== "function") {
         return console.warn("Uploader: [uploadMethod] must be a Function!");
       }
@@ -425,7 +407,7 @@ export default {
       let formDataFileName = params.file.name;
 
       if (uploadedFileType.indexOf("image/") === 0) {
-        if (this.imgCrop) {
+        if (this.propsFinnal.imgCrop) {
           // 图片剪裁
           this.cropResult = null;
           this.dialogVisible = true;
@@ -448,7 +430,7 @@ export default {
                 zoomOnTouch: false,
                 zoomOnWheel: false,
                 toggleDragModeOnDblclick: false,
-                aspectRatio: this.imgCropOption.ratio,
+                aspectRatio: this.propsFinnal.imgCropOption.ratio,
               });
             };
             oReader.readAsDataURL(params.file);
@@ -462,11 +444,11 @@ export default {
             formDataFileName = fixJpgFileName(formDataFileName);
             this.cropperMethod("close");
           }
-        } else if (this.imgCompress) {
+        } else if (this.propsFinnal.imgCompress) {
           // 图片压缩
           const imgBlob = await fixImgFile(
             params.file,
-            Object.assign({}, this.imgCompressOption, {
+            Object.assign({}, this.propsFinnal.imgCompressOption, {
               outType: "blob",
             })
           );
@@ -493,10 +475,10 @@ export default {
         case "save":
           cropperInstance
             .getCroppedCanvas({
-              minWidth: this.imgCropOption.minWidth,
-              minHeight: this.imgCropOption.minHeight,
-              maxWidth: this.imgCropOption.maxWidth || 1000,
-              maxHeight: this.imgCropOption.maxHeight || 1000,
+              minWidth: this.propsFinnal.imgCropOption.minWidth,
+              minHeight: this.propsFinnal.imgCropOption.minHeight,
+              maxWidth: this.propsFinnal.imgCropOption.maxWidth || 1000,
+              maxHeight: this.propsFinnal.imgCropOption.maxHeight || 1000,
               imageSmoothingQuality: "medium",
             })
             .toBlob((blob) => {
@@ -509,9 +491,9 @@ export default {
             cropperInstance.destroy();
           }
           if (!this.cropResult) {
-            const newValue = [].concat(this.value);
+            const newValue = [].concat(this.modelValue);
             newValue.pop();
-            this.$emit("change", newValue);
+            this.$emit("update:modelValue", newValue);
           }
           break;
         case "rotateLeft":
@@ -550,7 +532,7 @@ export default {
 
 <style scoped>
 /* 图片剪裁弹窗 */
-.cropper >>> .el-dialog__body {
+.cropper :deep(.el-dialog__body) {
   padding: 0;
 }
 
@@ -563,7 +545,7 @@ export default {
   padding: 0.5em;
 }
 
-.cropper_actions >>> .el-button-group {
+.cropper_actions :deep(.el-button-group) {
   margin-right: 10px;
 }
 </style>

@@ -7,1938 +7,12 @@
 		exports["index"] = factory(require("vue"));
 	else
 		root["index"] = factory(root["Vue"]);
-})((typeof self !== 'undefined' ? self : this), function(__WEBPACK_EXTERNAL_MODULE__8bbf__) {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "fb15");
-/******/ })
-/************************************************************************/
-/******/ ({
-
-/***/ "004a":
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, ".cropper[data-v-13f9cba2] .el-dialog__body{padding:0}.cropper_main[data-v-13f9cba2]{height:50vh;min-height:500px}.cropper_actions[data-v-13f9cba2]{padding:.5em}.cropper_actions[data-v-13f9cba2] .el-button-group{margin-right:10px}", ""]);
-// Exports
-module.exports = exports;
-
-
-/***/ }),
-
-/***/ "07f7":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _finally__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("fe91");
-/* harmony import */ var _allSettled__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("f8d9");
-
-
-
-// Store setTimeout reference so promise-polyfill will be unaffected by
-// other code modifying setTimeout (like sinon.useFakeTimers())
-var setTimeoutFunc = setTimeout;
-
-function isArray(x) {
-  return Boolean(x && typeof x.length !== 'undefined');
-}
-
-function noop() {}
-
-// Polyfill for Function.prototype.bind
-function bind(fn, thisArg) {
-  return function() {
-    fn.apply(thisArg, arguments);
-  };
-}
-
-/**
- * @constructor
- * @param {Function} fn
- */
-function Promise(fn) {
-  if (!(this instanceof Promise))
-    throw new TypeError('Promises must be constructed via new');
-  if (typeof fn !== 'function') throw new TypeError('not a function');
-  /** @type {!number} */
-  this._state = 0;
-  /** @type {!boolean} */
-  this._handled = false;
-  /** @type {Promise|undefined} */
-  this._value = undefined;
-  /** @type {!Array<!Function>} */
-  this._deferreds = [];
-
-  doResolve(fn, this);
-}
-
-function handle(self, deferred) {
-  while (self._state === 3) {
-    self = self._value;
-  }
-  if (self._state === 0) {
-    self._deferreds.push(deferred);
-    return;
-  }
-  self._handled = true;
-  Promise._immediateFn(function() {
-    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
-    if (cb === null) {
-      (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
-      return;
-    }
-    var ret;
-    try {
-      ret = cb(self._value);
-    } catch (e) {
-      reject(deferred.promise, e);
-      return;
-    }
-    resolve(deferred.promise, ret);
-  });
-}
-
-function resolve(self, newValue) {
-  try {
-    // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-    if (newValue === self)
-      throw new TypeError('A promise cannot be resolved with itself.');
-    if (
-      newValue &&
-      (typeof newValue === 'object' || typeof newValue === 'function')
-    ) {
-      var then = newValue.then;
-      if (newValue instanceof Promise) {
-        self._state = 3;
-        self._value = newValue;
-        finale(self);
-        return;
-      } else if (typeof then === 'function') {
-        doResolve(bind(then, newValue), self);
-        return;
-      }
-    }
-    self._state = 1;
-    self._value = newValue;
-    finale(self);
-  } catch (e) {
-    reject(self, e);
-  }
-}
-
-function reject(self, newValue) {
-  self._state = 2;
-  self._value = newValue;
-  finale(self);
-}
-
-function finale(self) {
-  if (self._state === 2 && self._deferreds.length === 0) {
-    Promise._immediateFn(function() {
-      if (!self._handled) {
-        Promise._unhandledRejectionFn(self._value);
-      }
-    });
-  }
-
-  for (var i = 0, len = self._deferreds.length; i < len; i++) {
-    handle(self, self._deferreds[i]);
-  }
-  self._deferreds = null;
-}
-
-/**
- * @constructor
- */
-function Handler(onFulfilled, onRejected, promise) {
-  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
-  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
-  this.promise = promise;
-}
-
-/**
- * Take a potentially misbehaving resolver function and make sure
- * onFulfilled and onRejected are only called once.
- *
- * Makes no guarantees about asynchrony.
- */
-function doResolve(fn, self) {
-  var done = false;
-  try {
-    fn(
-      function(value) {
-        if (done) return;
-        done = true;
-        resolve(self, value);
-      },
-      function(reason) {
-        if (done) return;
-        done = true;
-        reject(self, reason);
-      }
-    );
-  } catch (ex) {
-    if (done) return;
-    done = true;
-    reject(self, ex);
-  }
-}
-
-Promise.prototype['catch'] = function(onRejected) {
-  return this.then(null, onRejected);
-};
-
-Promise.prototype.then = function(onFulfilled, onRejected) {
-  // @ts-ignore
-  var prom = new this.constructor(noop);
-
-  handle(this, new Handler(onFulfilled, onRejected, prom));
-  return prom;
-};
-
-Promise.prototype['finally'] = _finally__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"];
-
-Promise.all = function(arr) {
-  return new Promise(function(resolve, reject) {
-    if (!isArray(arr)) {
-      return reject(new TypeError('Promise.all accepts an array'));
-    }
-
-    var args = Array.prototype.slice.call(arr);
-    if (args.length === 0) return resolve([]);
-    var remaining = args.length;
-
-    function res(i, val) {
-      try {
-        if (val && (typeof val === 'object' || typeof val === 'function')) {
-          var then = val.then;
-          if (typeof then === 'function') {
-            then.call(
-              val,
-              function(val) {
-                res(i, val);
-              },
-              reject
-            );
-            return;
-          }
-        }
-        args[i] = val;
-        if (--remaining === 0) {
-          resolve(args);
-        }
-      } catch (ex) {
-        reject(ex);
-      }
-    }
-
-    for (var i = 0; i < args.length; i++) {
-      res(i, args[i]);
-    }
-  });
-};
-
-Promise.allSettled = _allSettled__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"];
-
-Promise.resolve = function(value) {
-  if (value && typeof value === 'object' && value.constructor === Promise) {
-    return value;
-  }
-
-  return new Promise(function(resolve) {
-    resolve(value);
-  });
-};
-
-Promise.reject = function(value) {
-  return new Promise(function(resolve, reject) {
-    reject(value);
-  });
-};
-
-Promise.race = function(arr) {
-  return new Promise(function(resolve, reject) {
-    if (!isArray(arr)) {
-      return reject(new TypeError('Promise.race accepts an array'));
-    }
-
-    for (var i = 0, len = arr.length; i < len; i++) {
-      Promise.resolve(arr[i]).then(resolve, reject);
-    }
-  });
-};
-
-// Use polyfill for setImmediate for performance gains
-Promise._immediateFn =
-  // @ts-ignore
-  (typeof setImmediate === 'function' &&
-    function(fn) {
-      // @ts-ignore
-      setImmediate(fn);
-    }) ||
-  function(fn) {
-    setTimeoutFunc(fn, 0);
-  };
-
-Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
-  if (typeof console !== 'undefined' && console) {
-    console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
-  }
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Promise);
-
-
-/***/ }),
-
-/***/ "0ee6":
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__("24fb");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, "/*!\n * Cropper.js v1.5.12\n * https://fengyuanchen.github.io/cropperjs\n *\n * Copyright 2015-present Chen Fengyuan\n * Released under the MIT license\n *\n * Date: 2021-06-12T08:00:11.623Z\n */.cropper-container{direction:ltr;font-size:0;line-height:0;position:relative;-ms-touch-action:none;touch-action:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.cropper-container img{display:block;height:100%;image-orientation:0deg;max-height:none!important;max-width:none!important;min-height:0!important;min-width:0!important;width:100%}.cropper-canvas,.cropper-crop-box,.cropper-drag-box,.cropper-modal,.cropper-wrap-box{bottom:0;left:0;position:absolute;right:0;top:0}.cropper-canvas,.cropper-wrap-box{overflow:hidden}.cropper-drag-box{background-color:#fff;opacity:0}.cropper-modal{background-color:#000;opacity:.5}.cropper-view-box{display:block;height:100%;outline:1px solid #39f;outline-color:rgba(51,153,255,.75);overflow:hidden;width:100%}.cropper-dashed{border:0 dashed #eee;display:block;opacity:.5;position:absolute}.cropper-dashed.dashed-h{border-bottom-width:1px;border-top-width:1px;height:33.33333%;left:0;top:33.33333%;width:100%}.cropper-dashed.dashed-v{border-left-width:1px;border-right-width:1px;height:100%;left:33.33333%;top:0;width:33.33333%}.cropper-center{display:block;height:0;left:50%;opacity:.75;position:absolute;top:50%;width:0}.cropper-center:after,.cropper-center:before{background-color:#eee;content:\" \";display:block;position:absolute}.cropper-center:before{height:1px;left:-3px;top:0;width:7px}.cropper-center:after{height:7px;left:0;top:-3px;width:1px}.cropper-face,.cropper-line,.cropper-point{display:block;height:100%;opacity:.1;position:absolute;width:100%}.cropper-face{background-color:#fff;left:0;top:0}.cropper-line{background-color:#39f}.cropper-line.line-e{cursor:ew-resize;right:-3px;top:0;width:5px}.cropper-line.line-n{cursor:ns-resize;height:5px;left:0;top:-3px}.cropper-line.line-w{cursor:ew-resize;left:-3px;top:0;width:5px}.cropper-line.line-s{bottom:-3px;cursor:ns-resize;height:5px;left:0}.cropper-point{background-color:#39f;height:5px;opacity:.75;width:5px}.cropper-point.point-e{cursor:ew-resize;margin-top:-3px;right:-3px;top:50%}.cropper-point.point-n{cursor:ns-resize;left:50%;margin-left:-3px;top:-3px}.cropper-point.point-w{cursor:ew-resize;left:-3px;margin-top:-3px;top:50%}.cropper-point.point-s{bottom:-3px;cursor:s-resize;left:50%;margin-left:-3px}.cropper-point.point-ne{cursor:nesw-resize;right:-3px;top:-3px}.cropper-point.point-nw{cursor:nwse-resize;left:-3px;top:-3px}.cropper-point.point-sw{bottom:-3px;cursor:nesw-resize;left:-3px}.cropper-point.point-se{bottom:-3px;cursor:nwse-resize;height:20px;opacity:1;right:-3px;width:20px}@media (min-width:768px){.cropper-point.point-se{height:15px;width:15px}}@media (min-width:992px){.cropper-point.point-se{height:10px;width:10px}}@media (min-width:1200px){.cropper-point.point-se{height:5px;opacity:.75;width:5px}}.cropper-point.point-se:before{background-color:#39f;bottom:-50%;content:\" \";display:block;height:200%;opacity:0;position:absolute;right:-50%;width:200%}.cropper-invisible{opacity:0}.cropper-bg{background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC\")}.cropper-hide{display:block;height:0;position:absolute;width:0}.cropper-hidden{display:none!important}.cropper-move{cursor:move}.cropper-crop{cursor:crosshair}.cropper-disabled .cropper-drag-box,.cropper-disabled .cropper-face,.cropper-disabled .cropper-line,.cropper-disabled .cropper-point{cursor:not-allowed}", ""]);
-// Exports
-module.exports = exports;
-
-
-/***/ }),
-
-/***/ "24fb":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-// eslint-disable-next-line func-names
-module.exports = function (useSourceMap) {
-  var list = []; // return the list of modules as css string
-
-  list.toString = function toString() {
-    return this.map(function (item) {
-      var content = cssWithMappingToString(item, useSourceMap);
-
-      if (item[2]) {
-        return "@media ".concat(item[2], " {").concat(content, "}");
-      }
-
-      return content;
-    }).join('');
-  }; // import a list of modules into the list
-  // eslint-disable-next-line func-names
-
-
-  list.i = function (modules, mediaQuery, dedupe) {
-    if (typeof modules === 'string') {
-      // eslint-disable-next-line no-param-reassign
-      modules = [[null, modules, '']];
-    }
-
-    var alreadyImportedModules = {};
-
-    if (dedupe) {
-      for (var i = 0; i < this.length; i++) {
-        // eslint-disable-next-line prefer-destructuring
-        var id = this[i][0];
-
-        if (id != null) {
-          alreadyImportedModules[id] = true;
-        }
-      }
-    }
-
-    for (var _i = 0; _i < modules.length; _i++) {
-      var item = [].concat(modules[_i]);
-
-      if (dedupe && alreadyImportedModules[item[0]]) {
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
-      if (mediaQuery) {
-        if (!item[2]) {
-          item[2] = mediaQuery;
-        } else {
-          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
-        }
-      }
-
-      list.push(item);
-    }
-  };
-
-  return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-  var content = item[1] || ''; // eslint-disable-next-line prefer-destructuring
-
-  var cssMapping = item[3];
-
-  if (!cssMapping) {
-    return content;
-  }
-
-  if (useSourceMap && typeof btoa === 'function') {
-    var sourceMapping = toComment(cssMapping);
-    var sourceURLs = cssMapping.sources.map(function (source) {
-      return "/*# sourceURL=".concat(cssMapping.sourceRoot || '').concat(source, " */");
-    });
-    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-  }
-
-  return [content].join('\n');
-} // Adapted from convert-source-map (MIT)
-
-
-function toComment(sourceMap) {
-  // eslint-disable-next-line no-undef
-  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-  var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
-  return "/*# ".concat(data, " */");
-}
-
-/***/ }),
-
-/***/ "499e":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ addStylesClient; });
-
-// CONCATENATED MODULE: ./node_modules/vue-style-loader/lib/listToStyles.js
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-// CONCATENATED MODULE: ./node_modules/vue-style-loader/lib/addStylesClient.js
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-var options = null
-var ssrIdKey = 'data-vue-ssr-id'
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-function addStylesClient (parentId, list, _isProduction, _options) {
-  isProduction = _isProduction
-
-  options = _options || {}
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-  if (options.ssrId) {
-    styleElement.setAttribute(ssrIdKey, obj.id)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-
-/***/ "6107":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("0ee6");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = __webpack_require__("499e").default
-var update = add("3dee760c", content, true, {"sourceMap":false,"shadowMode":false});
-
-/***/ }),
-
-/***/ "62e4":
+})((typeof self !== 'undefined' ? self : this), (__WEBPACK_EXTERNAL_MODULE__203__) => {
+return /******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 679:
 /***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-
-/***/ "684e":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("07f7");
-/* harmony import */ var _finally__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("fe91");
-/* harmony import */ var _allSettled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("f8d9");
-
-
-
-
-/** @suppress {undefinedVars} */
-var globalNS = (function() {
-  // the only reliable means to get the global object is
-  // `Function('return this')()`
-  // However, this causes CSP violations in Chrome apps.
-  if (typeof self !== 'undefined') {
-    return self;
-  }
-  if (typeof window !== 'undefined') {
-    return window;
-  }
-  if (typeof global !== 'undefined') {
-    return global;
-  }
-  throw new Error('unable to locate global object');
-})();
-
-// Expose the polyfill if Promise is undefined or set to a
-// non-function value. The latter can be due to a named HTMLElement
-// being exposed by browsers for legacy reasons.
-// https://github.com/taylorhakes/promise-polyfill/issues/114
-if (typeof globalNS['Promise'] !== 'function') {
-  globalNS['Promise'] = _index__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"];
-} else {
-  if (!globalNS.Promise.prototype['finally']) {
-    globalNS.Promise.prototype['finally'] = _finally__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"];
-  } 
-  if (!globalNS.Promise.allSettled) {
-    globalNS.Promise.allSettled = _allSettled__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"];
-  }
-}
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba")))
-
-/***/ }),
-
-/***/ "6de1":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("004a");
-if(content.__esModule) content = content.default;
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var add = __webpack_require__("499e").default
-var update = add("4490f7d4", content, true, {"sourceMap":false,"shadowMode":false});
-
-/***/ }),
-
-/***/ "6f45":
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function() {
-
-    var debug = false;
-
-    var root = this;
-
-    var EXIF = function(obj) {
-        if (obj instanceof EXIF) return obj;
-        if (!(this instanceof EXIF)) return new EXIF(obj);
-        this.EXIFwrapped = obj;
-    };
-
-    if (true) {
-        if ( true && module.exports) {
-            exports = module.exports = EXIF;
-        }
-        exports.EXIF = EXIF;
-    } else {}
-
-    var ExifTags = EXIF.Tags = {
-
-        // version tags
-        0x9000 : "ExifVersion",             // EXIF version
-        0xA000 : "FlashpixVersion",         // Flashpix format version
-
-        // colorspace tags
-        0xA001 : "ColorSpace",              // Color space information tag
-
-        // image configuration
-        0xA002 : "PixelXDimension",         // Valid width of meaningful image
-        0xA003 : "PixelYDimension",         // Valid height of meaningful image
-        0x9101 : "ComponentsConfiguration", // Information about channels
-        0x9102 : "CompressedBitsPerPixel",  // Compressed bits per pixel
-
-        // user information
-        0x927C : "MakerNote",               // Any desired information written by the manufacturer
-        0x9286 : "UserComment",             // Comments by user
-
-        // related file
-        0xA004 : "RelatedSoundFile",        // Name of related sound file
-
-        // date and time
-        0x9003 : "DateTimeOriginal",        // Date and time when the original image was generated
-        0x9004 : "DateTimeDigitized",       // Date and time when the image was stored digitally
-        0x9290 : "SubsecTime",              // Fractions of seconds for DateTime
-        0x9291 : "SubsecTimeOriginal",      // Fractions of seconds for DateTimeOriginal
-        0x9292 : "SubsecTimeDigitized",     // Fractions of seconds for DateTimeDigitized
-
-        // picture-taking conditions
-        0x829A : "ExposureTime",            // Exposure time (in seconds)
-        0x829D : "FNumber",                 // F number
-        0x8822 : "ExposureProgram",         // Exposure program
-        0x8824 : "SpectralSensitivity",     // Spectral sensitivity
-        0x8827 : "ISOSpeedRatings",         // ISO speed rating
-        0x8828 : "OECF",                    // Optoelectric conversion factor
-        0x9201 : "ShutterSpeedValue",       // Shutter speed
-        0x9202 : "ApertureValue",           // Lens aperture
-        0x9203 : "BrightnessValue",         // Value of brightness
-        0x9204 : "ExposureBias",            // Exposure bias
-        0x9205 : "MaxApertureValue",        // Smallest F number of lens
-        0x9206 : "SubjectDistance",         // Distance to subject in meters
-        0x9207 : "MeteringMode",            // Metering mode
-        0x9208 : "LightSource",             // Kind of light source
-        0x9209 : "Flash",                   // Flash status
-        0x9214 : "SubjectArea",             // Location and area of main subject
-        0x920A : "FocalLength",             // Focal length of the lens in mm
-        0xA20B : "FlashEnergy",             // Strobe energy in BCPS
-        0xA20C : "SpatialFrequencyResponse",    //
-        0xA20E : "FocalPlaneXResolution",   // Number of pixels in width direction per FocalPlaneResolutionUnit
-        0xA20F : "FocalPlaneYResolution",   // Number of pixels in height direction per FocalPlaneResolutionUnit
-        0xA210 : "FocalPlaneResolutionUnit",    // Unit for measuring FocalPlaneXResolution and FocalPlaneYResolution
-        0xA214 : "SubjectLocation",         // Location of subject in image
-        0xA215 : "ExposureIndex",           // Exposure index selected on camera
-        0xA217 : "SensingMethod",           // Image sensor type
-        0xA300 : "FileSource",              // Image source (3 == DSC)
-        0xA301 : "SceneType",               // Scene type (1 == directly photographed)
-        0xA302 : "CFAPattern",              // Color filter array geometric pattern
-        0xA401 : "CustomRendered",          // Special processing
-        0xA402 : "ExposureMode",            // Exposure mode
-        0xA403 : "WhiteBalance",            // 1 = auto white balance, 2 = manual
-        0xA404 : "DigitalZoomRation",       // Digital zoom ratio
-        0xA405 : "FocalLengthIn35mmFilm",   // Equivalent foacl length assuming 35mm film camera (in mm)
-        0xA406 : "SceneCaptureType",        // Type of scene
-        0xA407 : "GainControl",             // Degree of overall image gain adjustment
-        0xA408 : "Contrast",                // Direction of contrast processing applied by camera
-        0xA409 : "Saturation",              // Direction of saturation processing applied by camera
-        0xA40A : "Sharpness",               // Direction of sharpness processing applied by camera
-        0xA40B : "DeviceSettingDescription",    //
-        0xA40C : "SubjectDistanceRange",    // Distance to subject
-
-        // other tags
-        0xA005 : "InteroperabilityIFDPointer",
-        0xA420 : "ImageUniqueID"            // Identifier assigned uniquely to each image
-    };
-
-    var TiffTags = EXIF.TiffTags = {
-        0x0100 : "ImageWidth",
-        0x0101 : "ImageHeight",
-        0x8769 : "ExifIFDPointer",
-        0x8825 : "GPSInfoIFDPointer",
-        0xA005 : "InteroperabilityIFDPointer",
-        0x0102 : "BitsPerSample",
-        0x0103 : "Compression",
-        0x0106 : "PhotometricInterpretation",
-        0x0112 : "Orientation",
-        0x0115 : "SamplesPerPixel",
-        0x011C : "PlanarConfiguration",
-        0x0212 : "YCbCrSubSampling",
-        0x0213 : "YCbCrPositioning",
-        0x011A : "XResolution",
-        0x011B : "YResolution",
-        0x0128 : "ResolutionUnit",
-        0x0111 : "StripOffsets",
-        0x0116 : "RowsPerStrip",
-        0x0117 : "StripByteCounts",
-        0x0201 : "JPEGInterchangeFormat",
-        0x0202 : "JPEGInterchangeFormatLength",
-        0x012D : "TransferFunction",
-        0x013E : "WhitePoint",
-        0x013F : "PrimaryChromaticities",
-        0x0211 : "YCbCrCoefficients",
-        0x0214 : "ReferenceBlackWhite",
-        0x0132 : "DateTime",
-        0x010E : "ImageDescription",
-        0x010F : "Make",
-        0x0110 : "Model",
-        0x0131 : "Software",
-        0x013B : "Artist",
-        0x8298 : "Copyright"
-    };
-
-    var GPSTags = EXIF.GPSTags = {
-        0x0000 : "GPSVersionID",
-        0x0001 : "GPSLatitudeRef",
-        0x0002 : "GPSLatitude",
-        0x0003 : "GPSLongitudeRef",
-        0x0004 : "GPSLongitude",
-        0x0005 : "GPSAltitudeRef",
-        0x0006 : "GPSAltitude",
-        0x0007 : "GPSTimeStamp",
-        0x0008 : "GPSSatellites",
-        0x0009 : "GPSStatus",
-        0x000A : "GPSMeasureMode",
-        0x000B : "GPSDOP",
-        0x000C : "GPSSpeedRef",
-        0x000D : "GPSSpeed",
-        0x000E : "GPSTrackRef",
-        0x000F : "GPSTrack",
-        0x0010 : "GPSImgDirectionRef",
-        0x0011 : "GPSImgDirection",
-        0x0012 : "GPSMapDatum",
-        0x0013 : "GPSDestLatitudeRef",
-        0x0014 : "GPSDestLatitude",
-        0x0015 : "GPSDestLongitudeRef",
-        0x0016 : "GPSDestLongitude",
-        0x0017 : "GPSDestBearingRef",
-        0x0018 : "GPSDestBearing",
-        0x0019 : "GPSDestDistanceRef",
-        0x001A : "GPSDestDistance",
-        0x001B : "GPSProcessingMethod",
-        0x001C : "GPSAreaInformation",
-        0x001D : "GPSDateStamp",
-        0x001E : "GPSDifferential"
-    };
-
-     // EXIF 2.3 Spec
-    var IFD1Tags = EXIF.IFD1Tags = {
-        0x0100: "ImageWidth",
-        0x0101: "ImageHeight",
-        0x0102: "BitsPerSample",
-        0x0103: "Compression",
-        0x0106: "PhotometricInterpretation",
-        0x0111: "StripOffsets",
-        0x0112: "Orientation",
-        0x0115: "SamplesPerPixel",
-        0x0116: "RowsPerStrip",
-        0x0117: "StripByteCounts",
-        0x011A: "XResolution",
-        0x011B: "YResolution",
-        0x011C: "PlanarConfiguration",
-        0x0128: "ResolutionUnit",
-        0x0201: "JpegIFOffset",    // When image format is JPEG, this value show offset to JPEG data stored.(aka "ThumbnailOffset" or "JPEGInterchangeFormat")
-        0x0202: "JpegIFByteCount", // When image format is JPEG, this value shows data size of JPEG image (aka "ThumbnailLength" or "JPEGInterchangeFormatLength")
-        0x0211: "YCbCrCoefficients",
-        0x0212: "YCbCrSubSampling",
-        0x0213: "YCbCrPositioning",
-        0x0214: "ReferenceBlackWhite"
-    };
-
-    var StringValues = EXIF.StringValues = {
-        ExposureProgram : {
-            0 : "Not defined",
-            1 : "Manual",
-            2 : "Normal program",
-            3 : "Aperture priority",
-            4 : "Shutter priority",
-            5 : "Creative program",
-            6 : "Action program",
-            7 : "Portrait mode",
-            8 : "Landscape mode"
-        },
-        MeteringMode : {
-            0 : "Unknown",
-            1 : "Average",
-            2 : "CenterWeightedAverage",
-            3 : "Spot",
-            4 : "MultiSpot",
-            5 : "Pattern",
-            6 : "Partial",
-            255 : "Other"
-        },
-        LightSource : {
-            0 : "Unknown",
-            1 : "Daylight",
-            2 : "Fluorescent",
-            3 : "Tungsten (incandescent light)",
-            4 : "Flash",
-            9 : "Fine weather",
-            10 : "Cloudy weather",
-            11 : "Shade",
-            12 : "Daylight fluorescent (D 5700 - 7100K)",
-            13 : "Day white fluorescent (N 4600 - 5400K)",
-            14 : "Cool white fluorescent (W 3900 - 4500K)",
-            15 : "White fluorescent (WW 3200 - 3700K)",
-            17 : "Standard light A",
-            18 : "Standard light B",
-            19 : "Standard light C",
-            20 : "D55",
-            21 : "D65",
-            22 : "D75",
-            23 : "D50",
-            24 : "ISO studio tungsten",
-            255 : "Other"
-        },
-        Flash : {
-            0x0000 : "Flash did not fire",
-            0x0001 : "Flash fired",
-            0x0005 : "Strobe return light not detected",
-            0x0007 : "Strobe return light detected",
-            0x0009 : "Flash fired, compulsory flash mode",
-            0x000D : "Flash fired, compulsory flash mode, return light not detected",
-            0x000F : "Flash fired, compulsory flash mode, return light detected",
-            0x0010 : "Flash did not fire, compulsory flash mode",
-            0x0018 : "Flash did not fire, auto mode",
-            0x0019 : "Flash fired, auto mode",
-            0x001D : "Flash fired, auto mode, return light not detected",
-            0x001F : "Flash fired, auto mode, return light detected",
-            0x0020 : "No flash function",
-            0x0041 : "Flash fired, red-eye reduction mode",
-            0x0045 : "Flash fired, red-eye reduction mode, return light not detected",
-            0x0047 : "Flash fired, red-eye reduction mode, return light detected",
-            0x0049 : "Flash fired, compulsory flash mode, red-eye reduction mode",
-            0x004D : "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
-            0x004F : "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
-            0x0059 : "Flash fired, auto mode, red-eye reduction mode",
-            0x005D : "Flash fired, auto mode, return light not detected, red-eye reduction mode",
-            0x005F : "Flash fired, auto mode, return light detected, red-eye reduction mode"
-        },
-        SensingMethod : {
-            1 : "Not defined",
-            2 : "One-chip color area sensor",
-            3 : "Two-chip color area sensor",
-            4 : "Three-chip color area sensor",
-            5 : "Color sequential area sensor",
-            7 : "Trilinear sensor",
-            8 : "Color sequential linear sensor"
-        },
-        SceneCaptureType : {
-            0 : "Standard",
-            1 : "Landscape",
-            2 : "Portrait",
-            3 : "Night scene"
-        },
-        SceneType : {
-            1 : "Directly photographed"
-        },
-        CustomRendered : {
-            0 : "Normal process",
-            1 : "Custom process"
-        },
-        WhiteBalance : {
-            0 : "Auto white balance",
-            1 : "Manual white balance"
-        },
-        GainControl : {
-            0 : "None",
-            1 : "Low gain up",
-            2 : "High gain up",
-            3 : "Low gain down",
-            4 : "High gain down"
-        },
-        Contrast : {
-            0 : "Normal",
-            1 : "Soft",
-            2 : "Hard"
-        },
-        Saturation : {
-            0 : "Normal",
-            1 : "Low saturation",
-            2 : "High saturation"
-        },
-        Sharpness : {
-            0 : "Normal",
-            1 : "Soft",
-            2 : "Hard"
-        },
-        SubjectDistanceRange : {
-            0 : "Unknown",
-            1 : "Macro",
-            2 : "Close view",
-            3 : "Distant view"
-        },
-        FileSource : {
-            3 : "DSC"
-        },
-
-        Components : {
-            0 : "",
-            1 : "Y",
-            2 : "Cb",
-            3 : "Cr",
-            4 : "R",
-            5 : "G",
-            6 : "B"
-        }
-    };
-
-    function addEvent(element, event, handler) {
-        if (element.addEventListener) {
-            element.addEventListener(event, handler, false);
-        } else if (element.attachEvent) {
-            element.attachEvent("on" + event, handler);
-        }
-    }
-
-    function imageHasData(img) {
-        return !!(img.exifdata);
-    }
-
-
-    function base64ToArrayBuffer(base64, contentType) {
-        contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
-        base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
-        var binary = atob(base64);
-        var len = binary.length;
-        var buffer = new ArrayBuffer(len);
-        var view = new Uint8Array(buffer);
-        for (var i = 0; i < len; i++) {
-            view[i] = binary.charCodeAt(i);
-        }
-        return buffer;
-    }
-
-    function objectURLToBlob(url, callback) {
-        var http = new XMLHttpRequest();
-        http.open("GET", url, true);
-        http.responseType = "blob";
-        http.onload = function(e) {
-            if (this.status == 200 || this.status === 0) {
-                callback(this.response);
-            }
-        };
-        http.send();
-    }
-
-    function getImageData(img, callback) {
-        function handleBinaryFile(binFile) {
-            var data = findEXIFinJPEG(binFile);
-            img.exifdata = data || {};
-            var iptcdata = findIPTCinJPEG(binFile);
-            img.iptcdata = iptcdata || {};
-            if (EXIF.isXmpEnabled) {
-               var xmpdata= findXMPinJPEG(binFile);
-               img.xmpdata = xmpdata || {};               
-            }
-            if (callback) {
-                callback.call(img);
-            }
-        }
-
-        if (img.src) {
-            if (/^data\:/i.test(img.src)) { // Data URI
-                var arrayBuffer = base64ToArrayBuffer(img.src);
-                handleBinaryFile(arrayBuffer);
-
-            } else if (/^blob\:/i.test(img.src)) { // Object URL
-                var fileReader = new FileReader();
-                fileReader.onload = function(e) {
-                    handleBinaryFile(e.target.result);
-                };
-                objectURLToBlob(img.src, function (blob) {
-                    fileReader.readAsArrayBuffer(blob);
-                });
-            } else {
-                var http = new XMLHttpRequest();
-                http.onload = function() {
-                    if (this.status == 200 || this.status === 0) {
-                        handleBinaryFile(http.response);
-                    } else {
-                        throw "Could not load image";
-                    }
-                    http = null;
-                };
-                http.open("GET", img.src, true);
-                http.responseType = "arraybuffer";
-                http.send(null);
-            }
-        } else if (self.FileReader && (img instanceof self.Blob || img instanceof self.File)) {
-            var fileReader = new FileReader();
-            fileReader.onload = function(e) {
-                if (debug) console.log("Got file of length " + e.target.result.byteLength);
-                handleBinaryFile(e.target.result);
-            };
-
-            fileReader.readAsArrayBuffer(img);
-        }
-    }
-
-    function findEXIFinJPEG(file) {
-        var dataView = new DataView(file);
-
-        if (debug) console.log("Got file of length " + file.byteLength);
-        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
-            return false; // not a valid jpeg
-        }
-
-        var offset = 2,
-            length = file.byteLength,
-            marker;
-
-        while (offset < length) {
-            if (dataView.getUint8(offset) != 0xFF) {
-                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
-                return false; // not a valid marker, something is wrong
-            }
-
-            marker = dataView.getUint8(offset + 1);
-            if (debug) console.log(marker);
-
-            // we could implement handling for other markers here,
-            // but we're only looking for 0xFFE1 for EXIF data
-
-            if (marker == 225) {
-                if (debug) console.log("Found 0xFFE1 marker");
-
-                return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
-
-                // offset += 2 + file.getShortAt(offset+2, true);
-
-            } else {
-                offset += 2 + dataView.getUint16(offset+2);
-            }
-
-        }
-
-    }
-
-    function findIPTCinJPEG(file) {
-        var dataView = new DataView(file);
-
-        if (debug) console.log("Got file of length " + file.byteLength);
-        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-            if (debug) console.log("Not a valid JPEG");
-            return false; // not a valid jpeg
-        }
-
-        var offset = 2,
-            length = file.byteLength;
-
-
-        var isFieldSegmentStart = function(dataView, offset){
-            return (
-                dataView.getUint8(offset) === 0x38 &&
-                dataView.getUint8(offset+1) === 0x42 &&
-                dataView.getUint8(offset+2) === 0x49 &&
-                dataView.getUint8(offset+3) === 0x4D &&
-                dataView.getUint8(offset+4) === 0x04 &&
-                dataView.getUint8(offset+5) === 0x04
-            );
-        };
-
-        while (offset < length) {
-
-            if ( isFieldSegmentStart(dataView, offset )){
-
-                // Get the length of the name header (which is padded to an even number of bytes)
-                var nameHeaderLength = dataView.getUint8(offset+7);
-                if(nameHeaderLength % 2 !== 0) nameHeaderLength += 1;
-                // Check for pre photoshop 6 format
-                if(nameHeaderLength === 0) {
-                    // Always 4
-                    nameHeaderLength = 4;
-                }
-
-                var startOffset = offset + 8 + nameHeaderLength;
-                var sectionLength = dataView.getUint16(offset + 6 + nameHeaderLength);
-
-                return readIPTCData(file, startOffset, sectionLength);
-
-                break;
-
-            }
-
-
-            // Not the marker, continue searching
-            offset++;
-
-        }
-
-    }
-    var IptcFieldMap = {
-        0x78 : 'caption',
-        0x6E : 'credit',
-        0x19 : 'keywords',
-        0x37 : 'dateCreated',
-        0x50 : 'byline',
-        0x55 : 'bylineTitle',
-        0x7A : 'captionWriter',
-        0x69 : 'headline',
-        0x74 : 'copyright',
-        0x0F : 'category'
-    };
-    function readIPTCData(file, startOffset, sectionLength){
-        var dataView = new DataView(file);
-        var data = {};
-        var fieldValue, fieldName, dataSize, segmentType, segmentSize;
-        var segmentStartPos = startOffset;
-        while(segmentStartPos < startOffset+sectionLength) {
-            if(dataView.getUint8(segmentStartPos) === 0x1C && dataView.getUint8(segmentStartPos+1) === 0x02){
-                segmentType = dataView.getUint8(segmentStartPos+2);
-                if(segmentType in IptcFieldMap) {
-                    dataSize = dataView.getInt16(segmentStartPos+3);
-                    segmentSize = dataSize + 5;
-                    fieldName = IptcFieldMap[segmentType];
-                    fieldValue = getStringFromDB(dataView, segmentStartPos+5, dataSize);
-                    // Check if we already stored a value with this name
-                    if(data.hasOwnProperty(fieldName)) {
-                        // Value already stored with this name, create multivalue field
-                        if(data[fieldName] instanceof Array) {
-                            data[fieldName].push(fieldValue);
-                        }
-                        else {
-                            data[fieldName] = [data[fieldName], fieldValue];
-                        }
-                    }
-                    else {
-                        data[fieldName] = fieldValue;
-                    }
-                }
-
-            }
-            segmentStartPos++;
-        }
-        return data;
-    }
-
-
-
-    function readTags(file, tiffStart, dirStart, strings, bigEnd) {
-        var entries = file.getUint16(dirStart, !bigEnd),
-            tags = {},
-            entryOffset, tag,
-            i;
-
-        for (i=0;i<entries;i++) {
-            entryOffset = dirStart + i*12 + 2;
-            tag = strings[file.getUint16(entryOffset, !bigEnd)];
-            if (!tag && debug) console.log("Unknown tag: " + file.getUint16(entryOffset, !bigEnd));
-            tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
-        }
-        return tags;
-    }
-
-
-    function readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd) {
-        var type = file.getUint16(entryOffset+2, !bigEnd),
-            numValues = file.getUint32(entryOffset+4, !bigEnd),
-            valueOffset = file.getUint32(entryOffset+8, !bigEnd) + tiffStart,
-            offset,
-            vals, val, n,
-            numerator, denominator;
-
-        switch (type) {
-            case 1: // byte, 8-bit unsigned int
-            case 7: // undefined, 8-bit byte, value depending on field
-                if (numValues == 1) {
-                    return file.getUint8(entryOffset + 8, !bigEnd);
-                } else {
-                    offset = numValues > 4 ? valueOffset : (entryOffset + 8);
-                    vals = [];
-                    for (n=0;n<numValues;n++) {
-                        vals[n] = file.getUint8(offset + n);
-                    }
-                    return vals;
-                }
-
-            case 2: // ascii, 8-bit byte
-                offset = numValues > 4 ? valueOffset : (entryOffset + 8);
-                return getStringFromDB(file, offset, numValues-1);
-
-            case 3: // short, 16 bit int
-                if (numValues == 1) {
-                    return file.getUint16(entryOffset + 8, !bigEnd);
-                } else {
-                    offset = numValues > 2 ? valueOffset : (entryOffset + 8);
-                    vals = [];
-                    for (n=0;n<numValues;n++) {
-                        vals[n] = file.getUint16(offset + 2*n, !bigEnd);
-                    }
-                    return vals;
-                }
-
-            case 4: // long, 32 bit int
-                if (numValues == 1) {
-                    return file.getUint32(entryOffset + 8, !bigEnd);
-                } else {
-                    vals = [];
-                    for (n=0;n<numValues;n++) {
-                        vals[n] = file.getUint32(valueOffset + 4*n, !bigEnd);
-                    }
-                    return vals;
-                }
-
-            case 5:    // rational = two long values, first is numerator, second is denominator
-                if (numValues == 1) {
-                    numerator = file.getUint32(valueOffset, !bigEnd);
-                    denominator = file.getUint32(valueOffset+4, !bigEnd);
-                    val = new Number(numerator / denominator);
-                    val.numerator = numerator;
-                    val.denominator = denominator;
-                    return val;
-                } else {
-                    vals = [];
-                    for (n=0;n<numValues;n++) {
-                        numerator = file.getUint32(valueOffset + 8*n, !bigEnd);
-                        denominator = file.getUint32(valueOffset+4 + 8*n, !bigEnd);
-                        vals[n] = new Number(numerator / denominator);
-                        vals[n].numerator = numerator;
-                        vals[n].denominator = denominator;
-                    }
-                    return vals;
-                }
-
-            case 9: // slong, 32 bit signed int
-                if (numValues == 1) {
-                    return file.getInt32(entryOffset + 8, !bigEnd);
-                } else {
-                    vals = [];
-                    for (n=0;n<numValues;n++) {
-                        vals[n] = file.getInt32(valueOffset + 4*n, !bigEnd);
-                    }
-                    return vals;
-                }
-
-            case 10: // signed rational, two slongs, first is numerator, second is denominator
-                if (numValues == 1) {
-                    return file.getInt32(valueOffset, !bigEnd) / file.getInt32(valueOffset+4, !bigEnd);
-                } else {
-                    vals = [];
-                    for (n=0;n<numValues;n++) {
-                        vals[n] = file.getInt32(valueOffset + 8*n, !bigEnd) / file.getInt32(valueOffset+4 + 8*n, !bigEnd);
-                    }
-                    return vals;
-                }
-        }
-    }
-
-    /**
-    * Given an IFD (Image File Directory) start offset
-    * returns an offset to next IFD or 0 if it's the last IFD.
-    */
-    function getNextIFDOffset(dataView, dirStart, bigEnd){
-        //the first 2bytes means the number of directory entries contains in this IFD
-        var entries = dataView.getUint16(dirStart, !bigEnd);
-
-        // After last directory entry, there is a 4bytes of data,
-        // it means an offset to next IFD.
-        // If its value is '0x00000000', it means this is the last IFD and there is no linked IFD.
-
-        return dataView.getUint32(dirStart + 2 + entries * 12, !bigEnd); // each entry is 12 bytes long
-    }
-
-    function readThumbnailImage(dataView, tiffStart, firstIFDOffset, bigEnd){
-        // get the IFD1 offset
-        var IFD1OffsetPointer = getNextIFDOffset(dataView, tiffStart+firstIFDOffset, bigEnd);
-
-        if (!IFD1OffsetPointer) {
-            // console.log('******** IFD1Offset is empty, image thumb not found ********');
-            return {};
-        }
-        else if (IFD1OffsetPointer > dataView.byteLength) { // this should not happen
-            // console.log('******** IFD1Offset is outside the bounds of the DataView ********');
-            return {};
-        }
-        // console.log('*******  thumbnail IFD offset (IFD1) is: %s', IFD1OffsetPointer);
-
-        var thumbTags = readTags(dataView, tiffStart, tiffStart + IFD1OffsetPointer, IFD1Tags, bigEnd)
-
-        // EXIF 2.3 specification for JPEG format thumbnail
-
-        // If the value of Compression(0x0103) Tag in IFD1 is '6', thumbnail image format is JPEG.
-        // Most of Exif image uses JPEG format for thumbnail. In that case, you can get offset of thumbnail
-        // by JpegIFOffset(0x0201) Tag in IFD1, size of thumbnail by JpegIFByteCount(0x0202) Tag.
-        // Data format is ordinary JPEG format, starts from 0xFFD8 and ends by 0xFFD9. It seems that
-        // JPEG format and 160x120pixels of size are recommended thumbnail format for Exif2.1 or later.
-
-        if (thumbTags['Compression']) {
-            // console.log('Thumbnail image found!');
-
-            switch (thumbTags['Compression']) {
-                case 6:
-                    // console.log('Thumbnail image format is JPEG');
-                    if (thumbTags.JpegIFOffset && thumbTags.JpegIFByteCount) {
-                    // extract the thumbnail
-                        var tOffset = tiffStart + thumbTags.JpegIFOffset;
-                        var tLength = thumbTags.JpegIFByteCount;
-                        thumbTags['blob'] = new Blob([new Uint8Array(dataView.buffer, tOffset, tLength)], {
-                            type: 'image/jpeg'
-                        });
-                    }
-                break;
-
-            case 1:
-                console.log("Thumbnail image format is TIFF, which is not implemented.");
-                break;
-            default:
-                console.log("Unknown thumbnail image format '%s'", thumbTags['Compression']);
-            }
-        }
-        else if (thumbTags['PhotometricInterpretation'] == 2) {
-            console.log("Thumbnail image format is RGB, which is not implemented.");
-        }
-        return thumbTags;
-    }
-
-    function getStringFromDB(buffer, start, length) {
-        var outstr = "";
-        for (n = start; n < start+length; n++) {
-            outstr += String.fromCharCode(buffer.getUint8(n));
-        }
-        return outstr;
-    }
-
-    function readEXIFData(file, start) {
-        if (getStringFromDB(file, start, 4) != "Exif") {
-            if (debug) console.log("Not valid EXIF data! " + getStringFromDB(file, start, 4));
-            return false;
-        }
-
-        var bigEnd,
-            tags, tag,
-            exifData, gpsData,
-            tiffOffset = start + 6;
-
-        // test for TIFF validity and endianness
-        if (file.getUint16(tiffOffset) == 0x4949) {
-            bigEnd = false;
-        } else if (file.getUint16(tiffOffset) == 0x4D4D) {
-            bigEnd = true;
-        } else {
-            if (debug) console.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
-            return false;
-        }
-
-        if (file.getUint16(tiffOffset+2, !bigEnd) != 0x002A) {
-            if (debug) console.log("Not valid TIFF data! (no 0x002A)");
-            return false;
-        }
-
-        var firstIFDOffset = file.getUint32(tiffOffset+4, !bigEnd);
-
-        if (firstIFDOffset < 0x00000008) {
-            if (debug) console.log("Not valid TIFF data! (First offset less than 8)", file.getUint32(tiffOffset+4, !bigEnd));
-            return false;
-        }
-
-        tags = readTags(file, tiffOffset, tiffOffset + firstIFDOffset, TiffTags, bigEnd);
-
-        if (tags.ExifIFDPointer) {
-            exifData = readTags(file, tiffOffset, tiffOffset + tags.ExifIFDPointer, ExifTags, bigEnd);
-            for (tag in exifData) {
-                switch (tag) {
-                    case "LightSource" :
-                    case "Flash" :
-                    case "MeteringMode" :
-                    case "ExposureProgram" :
-                    case "SensingMethod" :
-                    case "SceneCaptureType" :
-                    case "SceneType" :
-                    case "CustomRendered" :
-                    case "WhiteBalance" :
-                    case "GainControl" :
-                    case "Contrast" :
-                    case "Saturation" :
-                    case "Sharpness" :
-                    case "SubjectDistanceRange" :
-                    case "FileSource" :
-                        exifData[tag] = StringValues[tag][exifData[tag]];
-                        break;
-
-                    case "ExifVersion" :
-                    case "FlashpixVersion" :
-                        exifData[tag] = String.fromCharCode(exifData[tag][0], exifData[tag][1], exifData[tag][2], exifData[tag][3]);
-                        break;
-
-                    case "ComponentsConfiguration" :
-                        exifData[tag] =
-                            StringValues.Components[exifData[tag][0]] +
-                            StringValues.Components[exifData[tag][1]] +
-                            StringValues.Components[exifData[tag][2]] +
-                            StringValues.Components[exifData[tag][3]];
-                        break;
-                }
-                tags[tag] = exifData[tag];
-            }
-        }
-
-        if (tags.GPSInfoIFDPointer) {
-            gpsData = readTags(file, tiffOffset, tiffOffset + tags.GPSInfoIFDPointer, GPSTags, bigEnd);
-            for (tag in gpsData) {
-                switch (tag) {
-                    case "GPSVersionID" :
-                        gpsData[tag] = gpsData[tag][0] +
-                            "." + gpsData[tag][1] +
-                            "." + gpsData[tag][2] +
-                            "." + gpsData[tag][3];
-                        break;
-                }
-                tags[tag] = gpsData[tag];
-            }
-        }
-
-        // extract thumbnail
-        tags['thumbnail'] = readThumbnailImage(file, tiffOffset, firstIFDOffset, bigEnd);
-
-        return tags;
-    }
-
-   function findXMPinJPEG(file) {
-
-        if (!('DOMParser' in self)) {
-            // console.warn('XML parsing not supported without DOMParser');
-            return;
-        }
-        var dataView = new DataView(file);
-
-        if (debug) console.log("Got file of length " + file.byteLength);
-        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
-           if (debug) console.log("Not a valid JPEG");
-           return false; // not a valid jpeg
-        }
-
-        var offset = 2,
-            length = file.byteLength,
-            dom = new DOMParser();
-
-        while (offset < (length-4)) {
-            if (getStringFromDB(dataView, offset, 4) == "http") {
-                var startOffset = offset - 1;
-                var sectionLength = dataView.getUint16(offset - 2) - 1;
-                var xmpString = getStringFromDB(dataView, startOffset, sectionLength)
-                var xmpEndIndex = xmpString.indexOf('xmpmeta>') + 8;
-                xmpString = xmpString.substring( xmpString.indexOf( '<x:xmpmeta' ), xmpEndIndex );
-
-                var indexOfXmp = xmpString.indexOf('x:xmpmeta') + 10
-                //Many custom written programs embed xmp/xml without any namespace. Following are some of them.
-                //Without these namespaces, XML is thought to be invalid by parsers
-                xmpString = xmpString.slice(0, indexOfXmp)
-                            + 'xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" '
-                            + 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                            + 'xmlns:tiff="http://ns.adobe.com/tiff/1.0/" '
-                            + 'xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus" '
-                            + 'xmlns:ext="http://www.gettyimages.com/xsltExtension/1.0" '
-                            + 'xmlns:exif="http://ns.adobe.com/exif/1.0/" '
-                            + 'xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#" '
-                            + 'xmlns:stRef="http://ns.adobe.com/xap/1.0/sType/ResourceRef#" '
-                            + 'xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/" '
-                            + 'xmlns:xapGImg="http://ns.adobe.com/xap/1.0/g/img/" '
-                            + 'xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" '
-                            + xmpString.slice(indexOfXmp)
-
-                var domDocument = dom.parseFromString( xmpString, 'text/xml' );
-                return xml2Object(domDocument);
-            } else{
-             offset++;
-            }
-        }
-    }
-
-    function xml2json(xml) {
-        var json = {};
-      
-        if (xml.nodeType == 1) { // element node
-          if (xml.attributes.length > 0) {
-            json['@attributes'] = {};
-            for (var j = 0; j < xml.attributes.length; j++) {
-              var attribute = xml.attributes.item(j);
-              json['@attributes'][attribute.nodeName] = attribute.nodeValue;
-            }
-          }
-        } else if (xml.nodeType == 3) { // text node
-          return xml.nodeValue;
-        }
-      
-        // deal with children
-        if (xml.hasChildNodes()) {
-          for(var i = 0; i < xml.childNodes.length; i++) {
-            var child = xml.childNodes.item(i);
-            var nodeName = child.nodeName;
-            if (json[nodeName] == null) {
-              json[nodeName] = xml2json(child);
-            } else {
-              if (json[nodeName].push == null) {
-                var old = json[nodeName];
-                json[nodeName] = [];
-                json[nodeName].push(old);
-              }
-              json[nodeName].push(xml2json(child));
-            }
-          }
-        }
-        
-        return json;
-    }
-
-    function xml2Object(xml) {
-        try {
-            var obj = {};
-            if (xml.children.length > 0) {
-              for (var i = 0; i < xml.children.length; i++) {
-                var item = xml.children.item(i);
-                var attributes = item.attributes;
-                for(var idx in attributes) {
-                    var itemAtt = attributes[idx];
-                    var dataKey = itemAtt.nodeName;
-                    var dataValue = itemAtt.nodeValue;
-
-                    if(dataKey !== undefined) {
-                        obj[dataKey] = dataValue;
-                    }
-                }
-                var nodeName = item.nodeName;
-
-                if (typeof (obj[nodeName]) == "undefined") {
-                  obj[nodeName] = xml2json(item);
-                } else {
-                  if (typeof (obj[nodeName].push) == "undefined") {
-                    var old = obj[nodeName];
-
-                    obj[nodeName] = [];
-                    obj[nodeName].push(old);
-                  }
-                  obj[nodeName].push(xml2json(item));
-                }
-              }
-            } else {
-              obj = xml.textContent;
-            }
-            return obj;
-          } catch (e) {
-              console.log(e.message);
-          }
-    }
-
-    EXIF.enableXmp = function() {
-        EXIF.isXmpEnabled = true;
-    }
-
-    EXIF.disableXmp = function() {
-        EXIF.isXmpEnabled = false;
-    }
-
-    EXIF.getData = function(img, callback) {
-        if (((self.Image && img instanceof self.Image)
-            || (self.HTMLImageElement && img instanceof self.HTMLImageElement))
-            && !img.complete)
-            return false;
-
-        if (!imageHasData(img)) {
-            getImageData(img, callback);
-        } else {
-            if (callback) {
-                callback.call(img);
-            }
-        }
-        return true;
-    }
-
-    EXIF.getTag = function(img, tag) {
-        if (!imageHasData(img)) return;
-        return img.exifdata[tag];
-    }
-    
-    EXIF.getIptcTag = function(img, tag) {
-        if (!imageHasData(img)) return;
-        return img.iptcdata[tag];
-    }
-
-    EXIF.getAllTags = function(img) {
-        if (!imageHasData(img)) return {};
-        var a,
-            data = img.exifdata,
-            tags = {};
-        for (a in data) {
-            if (data.hasOwnProperty(a)) {
-                tags[a] = data[a];
-            }
-        }
-        return tags;
-    }
-    
-    EXIF.getAllIptcTags = function(img) {
-        if (!imageHasData(img)) return {};
-        var a,
-            data = img.iptcdata,
-            tags = {};
-        for (a in data) {
-            if (data.hasOwnProperty(a)) {
-                tags[a] = data[a];
-            }
-        }
-        return tags;
-    }
-
-    EXIF.pretty = function(img) {
-        if (!imageHasData(img)) return "";
-        var a,
-            data = img.exifdata,
-            strPretty = "";
-        for (a in data) {
-            if (data.hasOwnProperty(a)) {
-                if (typeof data[a] == "object") {
-                    if (data[a] instanceof Number) {
-                        strPretty += a + " : " + data[a] + " [" + data[a].numerator + "/" + data[a].denominator + "]\r\n";
-                    } else {
-                        strPretty += a + " : [" + data[a].length + " values]\r\n";
-                    }
-                } else {
-                    strPretty += a + " : " + data[a] + "\r\n";
-                }
-            }
-        }
-        return strPretty;
-    }
-
-    EXIF.readFromBinaryFile = function(file) {
-        return findEXIFinJPEG(file);
-    }
-
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
-            return EXIF;
-        }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    }
-}.call(this));
-
-
-
-/***/ }),
-
-/***/ "79e7":
-/***/ (function(module, exports) {
-
-self.fetch||(self.fetch=function(e,n){return n=n||{},new Promise(function(t,s){var r=new XMLHttpRequest,o=[],u=[],i={},a=function(){return{ok:2==(r.status/100|0),statusText:r.statusText,status:r.status,url:r.responseURL,text:function(){return Promise.resolve(r.responseText)},json:function(){return Promise.resolve(r.responseText).then(JSON.parse)},blob:function(){return Promise.resolve(new Blob([r.response]))},clone:a,headers:{keys:function(){return o},entries:function(){return u},get:function(e){return i[e.toLowerCase()]},has:function(e){return e.toLowerCase()in i}}}};for(var c in r.open(n.method||"get",e,!0),r.onload=function(){r.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm,function(e,n,t){o.push(n=n.toLowerCase()),u.push([n,t]),i[n]=i[n]?i[n]+","+t:t}),t(a())},r.onerror=s,r.withCredentials="include"==n.credentials,n.headers)r.setRequestHeader(c,n.headers[c]);r.send(n.body||null)})});
-
-
-/***/ }),
-
-/***/ "8875":
-/***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// addapted from the document.currentScript polyfill by Adam Miller
 // MIT license
@@ -1949,9 +23,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 (function (root, factory) {
   if (true) {
     !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+		(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
   } else {}
 }(typeof self !== 'undefined' ? self : this, function () {
   function getCurrentScript () {
@@ -2022,754 +96,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ "8bbf":
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
-
-/***/ }),
-
-/***/ "98b8":
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(module) {function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var runtime = function (exports) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-    return obj[key];
-  }
-
-  try {
-    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
-    define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []); // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-    return generator;
-  }
-
-  exports.wrap = wrap; // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-
-  function tryCatch(fn, obj, arg) {
-    try {
-      return {
-        type: "normal",
-        arg: fn.call(obj, arg)
-      };
-    } catch (err) {
-      return {
-        type: "throw",
-        arg: err
-      };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed"; // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-
-  var ContinueSentinel = {}; // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-
-  function Generator() {}
-
-  function GeneratorFunction() {}
-
-  function GeneratorFunctionPrototype() {} // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-
-
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
-    return this;
-  });
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-
-  if (NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = GeneratorFunctionPrototype;
-  define(Gp, "constructor", GeneratorFunctionPrototype);
-  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
-  GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"); // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-
-  exports.isGeneratorFunction = function (genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor ? ctor === GeneratorFunction || // For the native GeneratorFunction constructor, the best we can
-    // do is to check its .name property.
-    (ctor.displayName || ctor.name) === "GeneratorFunction" : false;
-  };
-
-  exports.mark = function (genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      define(genFun, toStringTagSymbol, "GeneratorFunction");
-    }
-
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  }; // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-
-
-  exports.awrap = function (arg) {
-    return {
-      __await: arg
-    };
-  };
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-
-        if (value && _typeof(value) === "object" && hasOwn.call(value, "__await")) {
-          return PromiseImpl.resolve(value.__await).then(function (value) {
-            invoke("next", value, resolve, reject);
-          }, function (err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return PromiseImpl.resolve(value).then(function (unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function (error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise = // If enqueue has been called before, then we want to wait until
-      // all previous Promises have been resolved before calling invoke,
-      // so that results are always delivered in the correct order. If
-      // enqueue has not been called before, then it is important to
-      // call invoke immediately, without waiting on a callback to fire,
-      // so that the async generator function has the opportunity to do
-      // any necessary setup in a predictable way. This predictability
-      // is why the Promise constructor synchronously invokes its
-      // executor callback, and why async functions synchronously
-      // execute code before the first await. Since we implement simple
-      // async functions in terms of async generators, it is especially
-      // important to get this right, even though it requires care.
-      previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, // Avoid propagating failures to Promises returned by later
-      // invocations of the iterator.
-      callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
-    } // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-
-
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
-    return this;
-  });
-  exports.AsyncIterator = AsyncIterator; // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-
-  exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
-    : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
-    });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        } // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-
-
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-        var record = tryCatch(innerFn, self, context);
-
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done ? GenStateCompleted : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-        } else if (record.type === "throw") {
-          state = GenStateCompleted; // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  } // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-
-
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        // Note: ["return"] must be used for ES3 parsing compatibility.
-        if (delegate.iterator["return"]) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (!info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value; // Resume execution at the desired location (see delegateYield).
-
-      context.next = delegate.nextLoc; // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    } // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-
-
-    context.delegate = null;
-    return ContinueSentinel;
-  } // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-
-
-  defineIteratorMethods(Gp);
-  define(Gp, toStringTagSymbol, "Generator"); // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-
-  define(Gp, iteratorSymbol, function () {
-    return this;
-  });
-  define(Gp, "toString", function () {
-    return "[object Generator]";
-  });
-
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
-    };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{
-      tryLoc: "root"
-    }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  exports.keys = function (object) {
-    var keys = [];
-
-    for (var key in object) {
-      keys.push(key);
-    }
-
-    keys.reverse(); // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      } // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-
-
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-            next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-          return next;
-        };
-
-        return next.next = next;
-      }
-    } // Return an iterator with no values.
-
-
-    return {
-      next: doneResult
-    };
-  }
-
-  exports.values = values;
-
-  function doneResult() {
-    return {
-      value: undefined,
-      done: true
-    };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-    reset: function reset(skipTempReset) {
-      this.prev = 0;
-      this.next = 0; // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-      this.method = "next";
-      this.arg = undefined;
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" && hasOwn.call(this, name) && !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-    stop: function stop() {
-      this.done = true;
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !!caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry && (type === "break" || type === "continue") && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-    complete: function complete(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" || record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-
-          return thrown;
-        }
-      } // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-
-
-      throw new Error("illegal catch attempt");
-    },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  }; // Regardless of whether this script is executing as a CommonJS module
-  // or not, return the runtime object so that we can declare the variable
-  // regeneratorRuntime in the outer scope, which allows this module to be
-  // injected easily by `bin/regenerator --include-runtime script.js`.
-
-  return exports;
-}( // If this script is executing as a CommonJS module, use module.exports
-// as the regeneratorRuntime namespace. Otherwise create a new empty
-// object. Either way, the resulting object will be used to initialize
-// the regeneratorRuntime variable at the top of this file.
-( false ? undefined : _typeof(module)) === "object" ? module.exports : {});
-
-try {
-  regeneratorRuntime = runtime;
-} catch (accidentalStrictMode) {
-  // This module should not be running in strict mode, so the above
-  // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, in modern engines
-  // we can explicitly access globalThis. In older engines we can escape
-  // strict mode using a global Function call. This could conceivably fail
-  // if a Content Security Policy forbids using Function, but in that case
-  // the proper solution is to fix the accidental strict mode problem. If
-  // you've misconfigured your bundler to force strict mode and applied a
-  // CSP to forbid Function, and you're not willing to fix either of those
-  // problems, please detail your unique predicament in a GitHub issue.
-  if ((typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object") {
-    globalThis.regeneratorRuntime = runtime;
-  } else {
-    Function("r", "regeneratorRuntime = r")(runtime);
-  }
-}
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("62e4")(module)))
-
-/***/ }),
-
-/***/ "a34a":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__("98b8");
-
-/***/ }),
-
-/***/ "bab4":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 129:
+/***/ (function(module) {
 
 /*!
  * Cropper.js v1.5.12
@@ -2783,7 +111,7 @@ module.exports = __webpack_require__("98b8");
 
 (function (global, factory) {
    true ? module.exports = factory() :
-  undefined;
+  0;
 }(this, (function () { 'use strict';
 
   function ownKeys(object, enumerableOnly) {
@@ -6405,640 +3733,1754 @@ module.exports = __webpack_require__("98b8");
 
 /***/ }),
 
-/***/ "c72d":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ 83:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_13f9cba2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6de1");
-/* harmony import */ var _node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_13f9cba2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_lib_index_js_vue_loader_options_uploader_vue_vue_type_style_index_0_id_13f9cba2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".cropper[data-v-642381ed] .el-dialog__body{padding:0}.cropper_main[data-v-642381ed]{height:50vh;min-height:500px}.cropper_actions[data-v-642381ed]{padding:.5em}.cropper_actions[data-v-642381ed] .el-button-group{margin-right:10px}", "",{"version":3,"sources":["webpack://./src/components/uploader.vue"],"names":[],"mappings":"AAshBA,2CACE,SACF,CAEA,+BACE,WAAY,CACZ,gBACF,CAEA,kCACE,YACF,CAEA,mDACE,iBACF","sourcesContent":["<template>\r\n  <el-upload\r\n    ref=\"myupload\"\r\n    v-bind=\"$attrs\"\r\n    action\r\n    :fileList=\"fileListFinnal\"\r\n    :accept=\"acceptFinnal\"\r\n    :before-upload=\"handleBeforeUpload\"\r\n    :on-exceed=\"handleonExceed\"\r\n    :on-change=\"handleChange\"\r\n    :on-remove=\"handleRemove\"\r\n    :http-request=\"customUpload\"\r\n  >\r\n    <div :id=\"triggerId\">\r\n      <slot name=\"default\">\r\n        <el-button>点击上传</el-button>\r\n      </slot>\r\n      <slot name=\"trigger\"></slot>\r\n      <slot name=\"tip\"></slot>\r\n    </div>\r\n    <!-- edit dialog -->\r\n    <el-dialog\r\n      v-model=\"dialogVisible\"\r\n      append-to-body\r\n      title=\"图像剪裁\"\r\n      top=\"10vh\"\r\n      custom-class=\"cropper\"\r\n      :close-on-click-modal=\"false\"\r\n      :close-on-press-escape=\"false\"\r\n      @close=\"cropperMethod('close')\"\r\n    >\r\n      <div class=\"cropper_main\">\r\n        <img src ref=\"CropperImg\" />\r\n      </div>\r\n      <div class=\"cropper_actions flex-row align-center\">\r\n        <div class=\"flex-1\">\r\n          <el-button-group>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"左旋\"\r\n              @click=\"cropperMethod('rotateLeft')\"\r\n            >\r\n              <i class=\"el-icon-refresh-left\"></i>\r\n              左旋\r\n            </el-button>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"右旋\"\r\n              @click=\"cropperMethod('rotateRight')\"\r\n            >\r\n              <i class=\"el-icon-refresh-right\"></i>\r\n              右旋\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"水平镜像\"\r\n              @click=\"cropperMethod('scaleX')\"\r\n            >\r\n              <i class=\"el-icon-sort\" style=\"transform: rotateZ(90deg)\"></i>\r\n              水平镜像\r\n            </el-button>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"垂直镜像\"\r\n              @click=\"cropperMethod('scaleY')\"\r\n            >\r\n              <i class=\"el-icon-sort\"></i>\r\n              垂直镜像\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"重置\"\r\n              @click=\"cropperMethod('reset')\"\r\n            >\r\n              <i class=\"el-icon-refresh\"></i>\r\n              重置\r\n            </el-button>\r\n          </el-button-group>\r\n        </div>\r\n\r\n        <el-button\r\n          size=\"small\"\r\n          type=\"primary\"\r\n          plain\r\n          @click=\"cropperMethod('save')\"\r\n        >\r\n          <i class=\"el-icon-crop\"></i>\r\n          确定\r\n        </el-button>\r\n      </div>\r\n    </el-dialog>\r\n  </el-upload>\r\n</template>\r\n<script setup>\r\nimport { getCurrentInstance, defineProps } from \"vue\";\r\nconst internalInstance = getCurrentInstance();\r\n\r\nconst globalOption =\r\n  internalInstance.appContext.config.globalProperties.$UploaderOption || {};\r\nconst getDefaultValue = function (key) {\r\n  if (Object.keys(globalOption).indexOf(key) !== -1) {\r\n    return globalOption[key];\r\n  }\r\n  return internalInstance.props[key];\r\n};\r\n\r\n/**\r\n * 通过文件类型获取扩展名列表\r\n * @param type[String] FileTypeMap 中约定的类型名\r\n * return[Array] 目标类型的扩展名数组\r\n * */\r\nconst getExtByType = (type) => {\r\n  const quickType = Object.assign(\r\n    {},\r\n    FileTypeMap,\r\n    globalOption.quickType || {}\r\n  );\r\n  if (type && Array.isArray(quickType[type])) {\r\n    let classList = [];\r\n    let extList = [];\r\n    quickType[type].forEach((e) => {\r\n      if (e.indexOf(\"t-\") === 0) {\r\n        classList.push(e);\r\n      } else {\r\n        extList.push(e);\r\n      }\r\n    });\r\n    if (classList.length) {\r\n      classList.forEach((classType) => {\r\n        extList = extList.concat(getExtByType(classType));\r\n      });\r\n    }\r\n    return extList;\r\n  } else if (type && type.split) {\r\n    return [type.toLowerCase()];\r\n  }\r\n};\r\n</script>\r\n\r\n<script>\r\nimport { fixImgFile } from \"ios-photo-repair\";\r\nimport Cropper from \"cropperjs\";\r\nimport \"cropperjs/dist/cropper.css\";\r\n\r\nlet cropperInstance;\r\n\r\n// 调试开关\r\nconst DEBUG = process.env.NODE_ENV === \"development\";\r\n\r\n// 图片压缩成jpg格式\r\nconst fixJpgFileName = function (fileName) {\r\n  if (fileName.match(/\\.jpg|\\.jpeg$/)) {\r\n    return fileName;\r\n  }\r\n  return fileName + \".jpg\";\r\n};\r\n\r\n// 文件类型集合\r\nconst FileTypeMap = {\r\n  \"t-image\": [\".jpg\", \".jpeg\", \".png\", \".gif\", \".bmp\", \".webp\"],\r\n  \"t-video\": [\".mp4\", \".rmvb\", \".avi\", \".mov\", \".3gp\", \".webm\"],\r\n  \"t-audio\": [\".wav\", \".mp3\", \".ogg\", \".acc\"],\r\n  \"t-word\": [\".docx\", \".doc\"],\r\n  \"t-excel\": [\".xlsx\", \".xls\"],\r\n  \"t-ppt\": [\".ppt\", \".pptx\"],\r\n  \"t-document\": [\".pdf\", \"t-word\", \"t-excel\", \"t-ppt\"],\r\n  \"t-zip\": [\".zip\", \".rar\"],\r\n};\r\n\r\n/**\r\n * 预先从全局用户配置中获取props默认值\r\n * @param key[String] prop的key\r\n * @param defaultValue[Any] 组件内置默认值\r\n * return[Any] props.key的最终默认值\r\n */\r\n\r\nexport default {\r\n  props: {\r\n    modelValue: {\r\n      type: Array,\r\n      required: false,\r\n      default() {\r\n        return [];\r\n      },\r\n    },\r\n    triggerId: {\r\n      // 配合实现富文本插件上传功能\r\n      type: String,\r\n      required: false,\r\n      default: \"upload_image_trigger\" + parseInt(Math.random() * 1e8),\r\n    },\r\n    limitSize: {\r\n      // 文件尺寸限制\r\n      type: Number,\r\n      required: false,\r\n      default() {\r\n        return 100 * 1024 * 1024;\r\n      },\r\n    },\r\n    imgCompress: {\r\n      // 开启图片压缩\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return true;\r\n      },\r\n    },\r\n    imgCompressOption: {\r\n      // 图片压缩配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    imgCrop: {\r\n      // 开启图片剪裁\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return false;\r\n      },\r\n    },\r\n    imgCropOption: {\r\n      // 图片剪裁配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          ratio: 1,\r\n          minWidth: 0,\r\n          minHeight: 0,\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    uploadMethod: {\r\n      // 自定义上传方法，参数（file/blob, fileName）\r\n      type: Function,\r\n      required: false,\r\n    },\r\n    responseTransfer: {\r\n      // 接口返回数据 与 fileList 数据格式转换函数\r\n      type: Function,\r\n      required: false,\r\n      default(response) {\r\n        return response;\r\n      },\r\n    },\r\n  },\r\n  data() {\r\n    return {\r\n      dialogVisible: false,\r\n      cropResult: null,\r\n      fileListFinnal: [],\r\n      controller: null,\r\n    };\r\n  },\r\n  computed: {\r\n    acceptFinnal() {\r\n      if (this.$attrs.accept && this.$attrs.accept.indexOf(\"t-\") !== -1) {\r\n        const typeArray = this.$attrs.accept.split(\",\");\r\n        let result = [];\r\n        typeArray.forEach((type) => {\r\n          result = result.concat(this.getExtByType(type));\r\n        });\r\n        return result.join(\",\");\r\n      } else {\r\n        return this.$attrs.accept || \"*\";\r\n      }\r\n    },\r\n    propsFinnal() {\r\n      let result = {};\r\n      Object.keys(this.$props).forEach((prop) => {\r\n        result[prop] = this.getDefaultValue(prop);\r\n      });\r\n      return result;\r\n    },\r\n  },\r\n  watch: {\r\n    modelValue: {\r\n      handler(newValue) {\r\n        this.fileListFinnal = this.$attrs.fileList || newValue || [];\r\n        if (this.$refs.myupload) {\r\n          this.$refs.myupload.uploadFiles = newValue.filter((ef) => {\r\n            return newValue.findIndex((f) => f.uid === ef.uid) !== -1;\r\n          });\r\n        }\r\n      },\r\n      deep: true,\r\n      immediate: true,\r\n    },\r\n  },\r\n  methods: {\r\n    handleBeforeUpload: function (file) {\r\n      // 尺寸校验\r\n      if (file.size > this.propsFinnal.limitSize) {\r\n        Vue.prototype.$message.warning(\"文件大小超出限制\");\r\n        return false;\r\n      }\r\n      // 格式校验\r\n      if (\r\n        this.acceptFinnal !== \"*\" &&\r\n        this.acceptFinnal.indexOf(\r\n          file.name.substring(file.name.lastIndexOf(\".\")).toLowerCase()\r\n        ) === -1\r\n      ) {\r\n        Vue.prototype.$message.warning(\"文件格式不正确\");\r\n        return false;\r\n      }\r\n\r\n      if (typeof this.$attrs[\"before-upload\"] === \"function\") {\r\n        return this.$attrs[\"before-upload\"](file);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.beforeUpload === \"function\"\r\n      ) {\r\n        return this.globalOption.beforeUpload(file);\r\n      } else {\r\n        return true;\r\n      }\r\n    },\r\n    handleonExceed: function (file, fileList) {\r\n      if (typeof this.$attrs[\"on-exceed\"] === \"function\") {\r\n        this.$attrs[\"on-exceed\"](file, fileList);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.onExceed === \"function\"\r\n      ) {\r\n        this.globalOption.onExceed(file, fileList);\r\n      }\r\n    },\r\n    handleChange: function (file, fileList) {\r\n      const doneFiles = fileList.filter((e) => e.status === \"success\");\r\n      if (doneFiles.length === fileList.length) {\r\n        this.$emit(\r\n          \"update:modelValue\",\r\n          doneFiles.map((e) => {\r\n            let data = e.response\r\n              ? this.propsFinnal.responseTransfer(e.response)\r\n              : e;\r\n            // 扩展字段\r\n            data.uid = e.uid;\r\n            data.status = e.status;\r\n            return data;\r\n          })\r\n        );\r\n      }\r\n\r\n      if (typeof this.$attrs[\"on-change\"] === \"function\") {\r\n        this.$attrs[\"on-change\"](file, fileList);\r\n      }\r\n    },\r\n    handleProgress(e) {\r\n      if (typeof this.$attrs[\"on-progress\"] === \"function\") {\r\n        if (e.total > 0) {\r\n          e.percent = (e.loaded / e.total) * 100;\r\n        }\r\n        this.$attrs[\"on-progress\"](e);\r\n      }\r\n    },\r\n    handleRemove: function (file, fileList) {\r\n      this.$emit(\r\n        \"update:modelValue\",\r\n        fileList.map((e) => {\r\n          let data = e.response\r\n            ? this.propsFinnal.responseTransfer(e.response)\r\n            : e;\r\n          data.uid = e.uid;\r\n          return data;\r\n        })\r\n      );\r\n\r\n      if (typeof this.$attrs[\"on-remove\"] === \"function\") {\r\n        this.$attrs[\"on-remove\"](file, fileList);\r\n      }\r\n    },\r\n    customUpload: async function (params) {\r\n      if (\r\n        !this.globalOption &&\r\n        !this.globalOption.uploadMethod &&\r\n        !this.propsFinnal.uploadMethod\r\n      ) {\r\n        return console.warn(\r\n          \"Uploader: The required configuration [uploadMethod] is missing!\"\r\n        );\r\n      }\r\n\r\n      const theUploadRequest =\r\n        this.propsFinnal.uploadMethod || this.globalOption.uploadMethod;\r\n      if (typeof theUploadRequest !== \"function\") {\r\n        return console.warn(\"Uploader: [uploadMethod] must be a Function!\");\r\n      }\r\n\r\n      const uploadedFileType = params.file.type;\r\n      DEBUG && console.log(\"uploadedFileType\", uploadedFileType);\r\n\r\n      let formDataFileObj = params.file;\r\n      let formDataFileName = params.file.name;\r\n\r\n      if (uploadedFileType.indexOf(\"image/\") === 0) {\r\n        if (this.propsFinnal.imgCrop) {\r\n          // 图片剪裁\r\n          this.cropResult = null;\r\n          this.dialogVisible = true;\r\n\r\n          const imgBlob = await new Promise((resolve) => {\r\n            let oReader = new FileReader();\r\n            oReader.onload = (e) => {\r\n              let base64 = e.target.result;\r\n              let img = this.$refs.CropperImg;\r\n              img.src = base64;\r\n              //\r\n              if (cropperInstance) {\r\n                cropperInstance.destroy();\r\n              }\r\n\r\n              cropperInstance = new Cropper(img, {\r\n                viewMode: 1,\r\n                dragMode: \"none\",\r\n                movable: false,\r\n                zoomOnTouch: false,\r\n                zoomOnWheel: false,\r\n                toggleDragModeOnDblclick: false,\r\n                aspectRatio: this.propsFinnal.imgCropOption.ratio,\r\n              });\r\n            };\r\n            oReader.readAsDataURL(params.file);\r\n\r\n            this.$watch(\"cropResult\", resolve);\r\n          });\r\n\r\n          if (imgBlob) {\r\n            DEBUG && console.log(\"imgCrop\", imgBlob);\r\n            formDataFileObj = imgBlob;\r\n            formDataFileName = fixJpgFileName(formDataFileName);\r\n            this.cropperMethod(\"close\");\r\n          }\r\n        } else if (this.propsFinnal.imgCompress) {\r\n          // 图片压缩\r\n          const imgBlob = await fixImgFile(\r\n            params.file,\r\n            Object.assign({}, this.propsFinnal.imgCompressOption, {\r\n              outType: \"blob\",\r\n            })\r\n          );\r\n\r\n          DEBUG && console.log(\"imgCompress\", imgBlob);\r\n          formDataFileObj = imgBlob;\r\n          formDataFileName = fixJpgFileName(formDataFileName);\r\n        }\r\n      }\r\n\r\n      // 上传\r\n      DEBUG && console.log(\"upload params\", formDataFileName, formDataFileObj);\r\n      this.controller = new AbortController();\r\n      return theUploadRequest(formDataFileObj, formDataFileName, {\r\n        onUploadProgress: this.handleProgress,\r\n        signal: this.controller.signal,\r\n      }).then((res) => {\r\n        return res.data;\r\n      });\r\n    },\r\n    cropperMethod(action) {\r\n      // 剪裁相关处理方法\r\n      switch (action) {\r\n        case \"save\":\r\n          cropperInstance\r\n            .getCroppedCanvas({\r\n              minWidth: this.propsFinnal.imgCropOption.minWidth,\r\n              minHeight: this.propsFinnal.imgCropOption.minHeight,\r\n              maxWidth: this.propsFinnal.imgCropOption.maxWidth || 1000,\r\n              maxHeight: this.propsFinnal.imgCropOption.maxHeight || 1000,\r\n              imageSmoothingQuality: \"medium\",\r\n            })\r\n            .toBlob((blob) => {\r\n              this.cropResult = blob;\r\n            }, \"image/jpeg\");\r\n          break;\r\n        case \"close\":\r\n          this.dialogVisible = false;\r\n          if (cropperInstance) {\r\n            cropperInstance.destroy();\r\n          }\r\n          if (!this.cropResult) {\r\n            const newValue = [].concat(this.modelValue);\r\n            newValue.pop();\r\n            this.$emit(\"update:modelValue\", newValue);\r\n          }\r\n          break;\r\n        case \"rotateLeft\":\r\n          cropperInstance.rotate(-90);\r\n          break;\r\n        case \"rotateRight\":\r\n          cropperInstance.rotate(90);\r\n          break;\r\n        case \"scaleX\":\r\n          cropperInstance.scaleX(-1);\r\n          break;\r\n        case \"scaleY\":\r\n          cropperInstance.scaleY(-1);\r\n          break;\r\n        case \"reset\":\r\n          cropperInstance.reset();\r\n          break;\r\n        default:\r\n          console.warn(\"cropperMethod 参数错误: \", action);\r\n      }\r\n    },\r\n    clearFiles() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.clearFiles();\r\n    },\r\n    abort() {\r\n      this.controller.abort();\r\n    },\r\n    submit() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.submit();\r\n    },\r\n  },\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n/* 图片剪裁弹窗 */\r\n.cropper :deep(.el-dialog__body) {\r\n  padding: 0;\r\n}\r\n\r\n.cropper_main {\r\n  height: 50vh;\r\n  min-height: 500px;\r\n}\r\n\r\n.cropper_actions {\r\n  padding: 0.5em;\r\n}\r\n\r\n.cropper_actions :deep(.el-button-group) {\r\n  margin-right: 10px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
 
-/***/ "c8ba":
+/***/ 355:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(667);
+/* harmony import */ var _css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__);
+// Imports
+
+
+
+var ___CSS_LOADER_URL_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(738), __webpack_require__.b);
+var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+var ___CSS_LOADER_URL_REPLACEMENT_0___ = _css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_0___);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "/*!\n * Cropper.js v1.5.12\n * https://fengyuanchen.github.io/cropperjs\n *\n * Copyright 2015-present Chen Fengyuan\n * Released under the MIT license\n *\n * Date: 2021-06-12T08:00:11.623Z\n */.cropper-container{direction:ltr;font-size:0;line-height:0;position:relative;-ms-touch-action:none;touch-action:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.cropper-container img{display:block;height:100%;image-orientation:0deg;max-height:none!important;max-width:none!important;min-height:0!important;min-width:0!important;width:100%}.cropper-canvas,.cropper-crop-box,.cropper-drag-box,.cropper-modal,.cropper-wrap-box{bottom:0;left:0;position:absolute;right:0;top:0}.cropper-canvas,.cropper-wrap-box{overflow:hidden}.cropper-drag-box{background-color:#fff;opacity:0}.cropper-modal{background-color:#000;opacity:.5}.cropper-view-box{display:block;height:100%;outline:1px solid #39f;outline-color:rgba(51,153,255,.75);overflow:hidden;width:100%}.cropper-dashed{border:0 dashed #eee;display:block;opacity:.5;position:absolute}.cropper-dashed.dashed-h{border-bottom-width:1px;border-top-width:1px;height:33.33333%;left:0;top:33.33333%;width:100%}.cropper-dashed.dashed-v{border-left-width:1px;border-right-width:1px;height:100%;left:33.33333%;top:0;width:33.33333%}.cropper-center{display:block;height:0;left:50%;opacity:.75;position:absolute;top:50%;width:0}.cropper-center:after,.cropper-center:before{background-color:#eee;content:\" \";display:block;position:absolute}.cropper-center:before{height:1px;left:-3px;top:0;width:7px}.cropper-center:after{height:7px;left:0;top:-3px;width:1px}.cropper-face,.cropper-line,.cropper-point{display:block;height:100%;opacity:.1;position:absolute;width:100%}.cropper-face{background-color:#fff;left:0;top:0}.cropper-line{background-color:#39f}.cropper-line.line-e{cursor:ew-resize;right:-3px;top:0;width:5px}.cropper-line.line-n{cursor:ns-resize;height:5px;left:0;top:-3px}.cropper-line.line-w{cursor:ew-resize;left:-3px;top:0;width:5px}.cropper-line.line-s{bottom:-3px;cursor:ns-resize;height:5px;left:0}.cropper-point{background-color:#39f;height:5px;opacity:.75;width:5px}.cropper-point.point-e{cursor:ew-resize;margin-top:-3px;right:-3px;top:50%}.cropper-point.point-n{cursor:ns-resize;left:50%;margin-left:-3px;top:-3px}.cropper-point.point-w{cursor:ew-resize;left:-3px;margin-top:-3px;top:50%}.cropper-point.point-s{bottom:-3px;cursor:s-resize;left:50%;margin-left:-3px}.cropper-point.point-ne{cursor:nesw-resize;right:-3px;top:-3px}.cropper-point.point-nw{cursor:nwse-resize;left:-3px;top:-3px}.cropper-point.point-sw{bottom:-3px;cursor:nesw-resize;left:-3px}.cropper-point.point-se{bottom:-3px;cursor:nwse-resize;height:20px;opacity:1;right:-3px;width:20px}@media (min-width:768px){.cropper-point.point-se{height:15px;width:15px}}@media (min-width:992px){.cropper-point.point-se{height:10px;width:10px}}@media (min-width:1200px){.cropper-point.point-se{height:5px;opacity:.75;width:5px}}.cropper-point.point-se:before{background-color:#39f;bottom:-50%;content:\" \";display:block;height:200%;opacity:0;position:absolute;right:-50%;width:200%}.cropper-invisible{opacity:0}.cropper-bg{background-image:url(" + ___CSS_LOADER_URL_REPLACEMENT_0___ + ")}.cropper-hide{display:block;height:0;position:absolute;width:0}.cropper-hidden{display:none!important}.cropper-move{cursor:move}.cropper-crop{cursor:crosshair}.cropper-disabled .cropper-drag-box,.cropper-disabled .cropper-face,.cropper-disabled .cropper-line,.cropper-disabled .cropper-point{cursor:not-allowed}", "",{"version":3,"sources":["webpack://./node_modules/cropperjs/dist/cropper.css"],"names":[],"mappings":"AAAA;;;;;;;;EAQE,CAEF,mBACE,aAAc,CACd,WAAY,CACZ,aAAc,CACd,iBAAkB,CAClB,qBAAsB,CACtB,iBAAkB,CAClB,wBAAyB,CACzB,qBAAsB,CACtB,oBAAqB,CACrB,gBACF,CAEA,uBACE,aAAc,CACd,WAAY,CACZ,sBAAuB,CACvB,yBAA2B,CAC3B,wBAA0B,CAC1B,sBAAwB,CACxB,qBAAuB,CACvB,UACF,CAEA,qFAKE,QAAS,CACT,MAAO,CACP,iBAAkB,CAClB,OAAQ,CACR,KACF,CAEA,kCAEE,eACF,CAEA,kBACE,qBAAsB,CACtB,SACF,CAEA,eACE,qBAAsB,CACtB,UACF,CAEA,kBACE,aAAc,CACd,WAAY,CACZ,sBAAuB,CACvB,kCAAuC,CACvC,eAAgB,CAChB,UACF,CAEA,gBACE,oBAAqB,CACrB,aAAc,CACd,UAAY,CACZ,iBACF,CAEA,yBACE,uBAAwB,CACxB,oBAAqB,CACrB,gBAAsB,CACtB,MAAO,CACP,aAAmB,CACnB,UACF,CAEA,yBACE,qBAAsB,CACtB,sBAAuB,CACvB,WAAY,CACZ,cAAoB,CACpB,KAAM,CACN,eACF,CAEA,gBACE,aAAc,CACd,QAAS,CACT,QAAS,CACT,WAAa,CACb,iBAAkB,CAClB,OAAQ,CACR,OACF,CAEA,6CAEE,qBAAsB,CACtB,WAAY,CACZ,aAAc,CACd,iBACF,CAEA,uBACE,UAAW,CACX,SAAU,CACV,KAAM,CACN,SACF,CAEA,sBACE,UAAW,CACX,MAAO,CACP,QAAS,CACT,SACF,CAEA,2CAGE,aAAc,CACd,WAAY,CACZ,UAAY,CACZ,iBAAkB,CAClB,UACF,CAEA,cACE,qBAAsB,CACtB,MAAO,CACP,KACF,CAEA,cACE,qBACF,CAEA,qBACE,gBAAiB,CACjB,UAAW,CACX,KAAM,CACN,SACF,CAEA,qBACE,gBAAiB,CACjB,UAAW,CACX,MAAO,CACP,QACF,CAEA,qBACE,gBAAiB,CACjB,SAAU,CACV,KAAM,CACN,SACF,CAEA,qBACE,WAAY,CACZ,gBAAiB,CACjB,UAAW,CACX,MACF,CAEA,eACE,qBAAsB,CACtB,UAAW,CACX,WAAa,CACb,SACF,CAEA,uBACE,gBAAiB,CACjB,eAAgB,CAChB,UAAW,CACX,OACF,CAEA,uBACE,gBAAiB,CACjB,QAAS,CACT,gBAAiB,CACjB,QACF,CAEA,uBACE,gBAAiB,CACjB,SAAU,CACV,eAAgB,CAChB,OACF,CAEA,uBACE,WAAY,CACZ,eAAgB,CAChB,QAAS,CACT,gBACF,CAEA,wBACE,kBAAmB,CACnB,UAAW,CACX,QACF,CAEA,wBACE,kBAAmB,CACnB,SAAU,CACV,QACF,CAEA,wBACE,WAAY,CACZ,kBAAmB,CACnB,SACF,CAEA,wBACE,WAAY,CACZ,kBAAmB,CACnB,WAAY,CACZ,SAAU,CACV,UAAW,CACX,UACF,CAEA,yBACE,wBACE,WAAY,CACZ,UACF,CACF,CAEA,yBACE,wBACE,WAAY,CACZ,UACF,CACF,CAEA,0BACE,wBACE,UAAW,CACX,WAAa,CACb,SACF,CACF,CAEA,+BACE,qBAAsB,CACtB,WAAY,CACZ,WAAY,CACZ,aAAc,CACd,WAAY,CACZ,SAAU,CACV,iBAAkB,CAClB,UAAW,CACX,UACF,CAEA,mBACE,SACF,CAEA,YACE,wDACF,CAEA,cACE,aAAc,CACd,QAAS,CACT,iBAAkB,CAClB,OACF,CAEA,gBACE,sBACF,CAEA,cACE,WACF,CAEA,cACE,gBACF,CAEA,qIAIE,kBACF","sourcesContent":["/*!\n * Cropper.js v1.5.12\n * https://fengyuanchen.github.io/cropperjs\n *\n * Copyright 2015-present Chen Fengyuan\n * Released under the MIT license\n *\n * Date: 2021-06-12T08:00:11.623Z\n */\n\n.cropper-container {\n  direction: ltr;\n  font-size: 0;\n  line-height: 0;\n  position: relative;\n  -ms-touch-action: none;\n  touch-action: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n.cropper-container img {\n  display: block;\n  height: 100%;\n  image-orientation: 0deg;\n  max-height: none !important;\n  max-width: none !important;\n  min-height: 0 !important;\n  min-width: 0 !important;\n  width: 100%;\n}\n\n.cropper-wrap-box,\n.cropper-canvas,\n.cropper-drag-box,\n.cropper-crop-box,\n.cropper-modal {\n  bottom: 0;\n  left: 0;\n  position: absolute;\n  right: 0;\n  top: 0;\n}\n\n.cropper-wrap-box,\n.cropper-canvas {\n  overflow: hidden;\n}\n\n.cropper-drag-box {\n  background-color: #fff;\n  opacity: 0;\n}\n\n.cropper-modal {\n  background-color: #000;\n  opacity: 0.5;\n}\n\n.cropper-view-box {\n  display: block;\n  height: 100%;\n  outline: 1px solid #39f;\n  outline-color: rgba(51, 153, 255, 0.75);\n  overflow: hidden;\n  width: 100%;\n}\n\n.cropper-dashed {\n  border: 0 dashed #eee;\n  display: block;\n  opacity: 0.5;\n  position: absolute;\n}\n\n.cropper-dashed.dashed-h {\n  border-bottom-width: 1px;\n  border-top-width: 1px;\n  height: calc(100% / 3);\n  left: 0;\n  top: calc(100% / 3);\n  width: 100%;\n}\n\n.cropper-dashed.dashed-v {\n  border-left-width: 1px;\n  border-right-width: 1px;\n  height: 100%;\n  left: calc(100% / 3);\n  top: 0;\n  width: calc(100% / 3);\n}\n\n.cropper-center {\n  display: block;\n  height: 0;\n  left: 50%;\n  opacity: 0.75;\n  position: absolute;\n  top: 50%;\n  width: 0;\n}\n\n.cropper-center::before,\n.cropper-center::after {\n  background-color: #eee;\n  content: ' ';\n  display: block;\n  position: absolute;\n}\n\n.cropper-center::before {\n  height: 1px;\n  left: -3px;\n  top: 0;\n  width: 7px;\n}\n\n.cropper-center::after {\n  height: 7px;\n  left: 0;\n  top: -3px;\n  width: 1px;\n}\n\n.cropper-face,\n.cropper-line,\n.cropper-point {\n  display: block;\n  height: 100%;\n  opacity: 0.1;\n  position: absolute;\n  width: 100%;\n}\n\n.cropper-face {\n  background-color: #fff;\n  left: 0;\n  top: 0;\n}\n\n.cropper-line {\n  background-color: #39f;\n}\n\n.cropper-line.line-e {\n  cursor: ew-resize;\n  right: -3px;\n  top: 0;\n  width: 5px;\n}\n\n.cropper-line.line-n {\n  cursor: ns-resize;\n  height: 5px;\n  left: 0;\n  top: -3px;\n}\n\n.cropper-line.line-w {\n  cursor: ew-resize;\n  left: -3px;\n  top: 0;\n  width: 5px;\n}\n\n.cropper-line.line-s {\n  bottom: -3px;\n  cursor: ns-resize;\n  height: 5px;\n  left: 0;\n}\n\n.cropper-point {\n  background-color: #39f;\n  height: 5px;\n  opacity: 0.75;\n  width: 5px;\n}\n\n.cropper-point.point-e {\n  cursor: ew-resize;\n  margin-top: -3px;\n  right: -3px;\n  top: 50%;\n}\n\n.cropper-point.point-n {\n  cursor: ns-resize;\n  left: 50%;\n  margin-left: -3px;\n  top: -3px;\n}\n\n.cropper-point.point-w {\n  cursor: ew-resize;\n  left: -3px;\n  margin-top: -3px;\n  top: 50%;\n}\n\n.cropper-point.point-s {\n  bottom: -3px;\n  cursor: s-resize;\n  left: 50%;\n  margin-left: -3px;\n}\n\n.cropper-point.point-ne {\n  cursor: nesw-resize;\n  right: -3px;\n  top: -3px;\n}\n\n.cropper-point.point-nw {\n  cursor: nwse-resize;\n  left: -3px;\n  top: -3px;\n}\n\n.cropper-point.point-sw {\n  bottom: -3px;\n  cursor: nesw-resize;\n  left: -3px;\n}\n\n.cropper-point.point-se {\n  bottom: -3px;\n  cursor: nwse-resize;\n  height: 20px;\n  opacity: 1;\n  right: -3px;\n  width: 20px;\n}\n\n@media (min-width: 768px) {\n  .cropper-point.point-se {\n    height: 15px;\n    width: 15px;\n  }\n}\n\n@media (min-width: 992px) {\n  .cropper-point.point-se {\n    height: 10px;\n    width: 10px;\n  }\n}\n\n@media (min-width: 1200px) {\n  .cropper-point.point-se {\n    height: 5px;\n    opacity: 0.75;\n    width: 5px;\n  }\n}\n\n.cropper-point.point-se::before {\n  background-color: #39f;\n  bottom: -50%;\n  content: ' ';\n  display: block;\n  height: 200%;\n  opacity: 0;\n  position: absolute;\n  right: -50%;\n  width: 200%;\n}\n\n.cropper-invisible {\n  opacity: 0;\n}\n\n.cropper-bg {\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');\n}\n\n.cropper-hide {\n  display: block;\n  height: 0;\n  position: absolute;\n  width: 0;\n}\n\n.cropper-hidden {\n  display: none !important;\n}\n\n.cropper-move {\n  cursor: move;\n}\n\n.cropper-crop {\n  cursor: crosshair;\n}\n\n.cropper-disabled .cropper-drag-box,\n.cropper-disabled .cropper-face,\n.cropper-disabled .cropper-line,\n.cropper-disabled .cropper-point {\n  cursor: not-allowed;\n}\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ 645:
+/***/ ((module) => {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+module.exports = function (cssWithMappingToString) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = "";
+      var needLayer = typeof item[5] !== "undefined";
+
+      if (item[4]) {
+        content += "@supports (".concat(item[4], ") {");
+      }
+
+      if (item[2]) {
+        content += "@media ".concat(item[2], " {");
+      }
+
+      if (needLayer) {
+        content += "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {");
+      }
+
+      content += cssWithMappingToString(item);
+
+      if (needLayer) {
+        content += "}";
+      }
+
+      if (item[2]) {
+        content += "}";
+      }
+
+      if (item[4]) {
+        content += "}";
+      }
+
+      return content;
+    }).join("");
+  }; // import a list of modules into the list
+
+
+  list.i = function i(modules, media, dedupe, supports, layer) {
+    if (typeof modules === "string") {
+      modules = [[null, modules, undefined]];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var k = 0; k < this.length; k++) {
+        var id = this[k][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _k = 0; _k < modules.length; _k++) {
+      var item = [].concat(modules[_k]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        continue;
+      }
+
+      if (typeof layer !== "undefined") {
+        if (typeof item[5] === "undefined") {
+          item[5] = layer;
+        } else {
+          item[1] = "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {").concat(item[1], "}");
+          item[5] = layer;
+        }
+      }
+
+      if (media) {
+        if (!item[2]) {
+          item[2] = media;
+        } else {
+          item[1] = "@media ".concat(item[2], " {").concat(item[1], "}");
+          item[2] = media;
+        }
+      }
+
+      if (supports) {
+        if (!item[4]) {
+          item[4] = "".concat(supports);
+        } else {
+          item[1] = "@supports (".concat(item[4], ") {").concat(item[1], "}");
+          item[4] = supports;
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
+};
+
+/***/ }),
+
+/***/ 667:
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports = function (url, options) {
+  if (!options) {
+    options = {};
+  }
+
+  if (!url) {
+    return url;
+  }
+
+  url = String(url.__esModule ? url.default : url); // If url is already wrapped in quotes, remove them
+
+  if (/^['"].*['"]$/.test(url)) {
+    url = url.slice(1, -1);
+  }
+
+  if (options.hash) {
+    url += options.hash;
+  } // Should url be wrapped?
+  // See https://drafts.csswg.org/css-values-3/#urls
+
+
+  if (/["'() \t\n]|(%20)/.test(url) || options.needQuotes) {
+    return "\"".concat(url.replace(/"/g, '\\"').replace(/\n/g, "\\n"), "\"");
+  }
+
+  return url;
+};
+
+/***/ }),
+
+/***/ 537:
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports = function (item) {
+  var content = item[1];
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (typeof btoa === "function") {
+    var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));
+    var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+    var sourceMapping = "/*# ".concat(data, " */");
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || "").concat(source, " */");
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join("\n");
+  }
+
+  return [content].join("\n");
+};
+
+/***/ }),
+
+/***/ 918:
 /***/ (function(module, exports) {
 
-var g;
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function() {
 
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
+    var debug = false;
 
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
+    var root = this;
 
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ "d842":
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (factory) {
-   true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) :
-  undefined;
-}((function () { 'use strict';
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
-  }
-
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf(subClass, superClass);
-  }
-
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
+    var EXIF = function(obj) {
+        if (obj instanceof EXIF) return obj;
+        if (!(this instanceof EXIF)) return new EXIF(obj);
+        this.EXIFwrapped = obj;
     };
 
-    return _setPrototypeOf(o, p);
-  }
+    if (true) {
+        if ( true && module.exports) {
+            exports = module.exports = EXIF;
+        }
+        exports.EXIF = EXIF;
+    } else {}
 
-  function _isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === "function") return true;
+    var ExifTags = EXIF.Tags = {
 
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+        // version tags
+        0x9000 : "ExifVersion",             // EXIF version
+        0xA000 : "FlashpixVersion",         // Flashpix format version
 
-  function _assertThisInitialized(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
+        // colorspace tags
+        0xA001 : "ColorSpace",              // Color space information tag
 
-    return self;
-  }
+        // image configuration
+        0xA002 : "PixelXDimension",         // Valid width of meaningful image
+        0xA003 : "PixelYDimension",         // Valid height of meaningful image
+        0x9101 : "ComponentsConfiguration", // Information about channels
+        0x9102 : "CompressedBitsPerPixel",  // Compressed bits per pixel
 
-  function _possibleConstructorReturn(self, call) {
-    if (call && (typeof call === "object" || typeof call === "function")) {
-      return call;
-    }
+        // user information
+        0x927C : "MakerNote",               // Any desired information written by the manufacturer
+        0x9286 : "UserComment",             // Comments by user
 
-    return _assertThisInitialized(self);
-  }
+        // related file
+        0xA004 : "RelatedSoundFile",        // Name of related sound file
 
-  function _createSuper(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct();
+        // date and time
+        0x9003 : "DateTimeOriginal",        // Date and time when the original image was generated
+        0x9004 : "DateTimeDigitized",       // Date and time when the image was stored digitally
+        0x9290 : "SubsecTime",              // Fractions of seconds for DateTime
+        0x9291 : "SubsecTimeOriginal",      // Fractions of seconds for DateTimeOriginal
+        0x9292 : "SubsecTimeDigitized",     // Fractions of seconds for DateTimeDigitized
 
-    return function _createSuperInternal() {
-      var Super = _getPrototypeOf(Derived),
-          result;
+        // picture-taking conditions
+        0x829A : "ExposureTime",            // Exposure time (in seconds)
+        0x829D : "FNumber",                 // F number
+        0x8822 : "ExposureProgram",         // Exposure program
+        0x8824 : "SpectralSensitivity",     // Spectral sensitivity
+        0x8827 : "ISOSpeedRatings",         // ISO speed rating
+        0x8828 : "OECF",                    // Optoelectric conversion factor
+        0x9201 : "ShutterSpeedValue",       // Shutter speed
+        0x9202 : "ApertureValue",           // Lens aperture
+        0x9203 : "BrightnessValue",         // Value of brightness
+        0x9204 : "ExposureBias",            // Exposure bias
+        0x9205 : "MaxApertureValue",        // Smallest F number of lens
+        0x9206 : "SubjectDistance",         // Distance to subject in meters
+        0x9207 : "MeteringMode",            // Metering mode
+        0x9208 : "LightSource",             // Kind of light source
+        0x9209 : "Flash",                   // Flash status
+        0x9214 : "SubjectArea",             // Location and area of main subject
+        0x920A : "FocalLength",             // Focal length of the lens in mm
+        0xA20B : "FlashEnergy",             // Strobe energy in BCPS
+        0xA20C : "SpatialFrequencyResponse",    //
+        0xA20E : "FocalPlaneXResolution",   // Number of pixels in width direction per FocalPlaneResolutionUnit
+        0xA20F : "FocalPlaneYResolution",   // Number of pixels in height direction per FocalPlaneResolutionUnit
+        0xA210 : "FocalPlaneResolutionUnit",    // Unit for measuring FocalPlaneXResolution and FocalPlaneYResolution
+        0xA214 : "SubjectLocation",         // Location of subject in image
+        0xA215 : "ExposureIndex",           // Exposure index selected on camera
+        0xA217 : "SensingMethod",           // Image sensor type
+        0xA300 : "FileSource",              // Image source (3 == DSC)
+        0xA301 : "SceneType",               // Scene type (1 == directly photographed)
+        0xA302 : "CFAPattern",              // Color filter array geometric pattern
+        0xA401 : "CustomRendered",          // Special processing
+        0xA402 : "ExposureMode",            // Exposure mode
+        0xA403 : "WhiteBalance",            // 1 = auto white balance, 2 = manual
+        0xA404 : "DigitalZoomRation",       // Digital zoom ratio
+        0xA405 : "FocalLengthIn35mmFilm",   // Equivalent foacl length assuming 35mm film camera (in mm)
+        0xA406 : "SceneCaptureType",        // Type of scene
+        0xA407 : "GainControl",             // Degree of overall image gain adjustment
+        0xA408 : "Contrast",                // Direction of contrast processing applied by camera
+        0xA409 : "Saturation",              // Direction of saturation processing applied by camera
+        0xA40A : "Sharpness",               // Direction of sharpness processing applied by camera
+        0xA40B : "DeviceSettingDescription",    //
+        0xA40C : "SubjectDistanceRange",    // Distance to subject
 
-      if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf(this).constructor;
-
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-
-      return _possibleConstructorReturn(this, result);
+        // other tags
+        0xA005 : "InteroperabilityIFDPointer",
+        0xA420 : "ImageUniqueID"            // Identifier assigned uniquely to each image
     };
-  }
 
-  function _superPropBase(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf(object);
-      if (object === null) break;
+    var TiffTags = EXIF.TiffTags = {
+        0x0100 : "ImageWidth",
+        0x0101 : "ImageHeight",
+        0x8769 : "ExifIFDPointer",
+        0x8825 : "GPSInfoIFDPointer",
+        0xA005 : "InteroperabilityIFDPointer",
+        0x0102 : "BitsPerSample",
+        0x0103 : "Compression",
+        0x0106 : "PhotometricInterpretation",
+        0x0112 : "Orientation",
+        0x0115 : "SamplesPerPixel",
+        0x011C : "PlanarConfiguration",
+        0x0212 : "YCbCrSubSampling",
+        0x0213 : "YCbCrPositioning",
+        0x011A : "XResolution",
+        0x011B : "YResolution",
+        0x0128 : "ResolutionUnit",
+        0x0111 : "StripOffsets",
+        0x0116 : "RowsPerStrip",
+        0x0117 : "StripByteCounts",
+        0x0201 : "JPEGInterchangeFormat",
+        0x0202 : "JPEGInterchangeFormatLength",
+        0x012D : "TransferFunction",
+        0x013E : "WhitePoint",
+        0x013F : "PrimaryChromaticities",
+        0x0211 : "YCbCrCoefficients",
+        0x0214 : "ReferenceBlackWhite",
+        0x0132 : "DateTime",
+        0x010E : "ImageDescription",
+        0x010F : "Make",
+        0x0110 : "Model",
+        0x0131 : "Software",
+        0x013B : "Artist",
+        0x8298 : "Copyright"
+    };
+
+    var GPSTags = EXIF.GPSTags = {
+        0x0000 : "GPSVersionID",
+        0x0001 : "GPSLatitudeRef",
+        0x0002 : "GPSLatitude",
+        0x0003 : "GPSLongitudeRef",
+        0x0004 : "GPSLongitude",
+        0x0005 : "GPSAltitudeRef",
+        0x0006 : "GPSAltitude",
+        0x0007 : "GPSTimeStamp",
+        0x0008 : "GPSSatellites",
+        0x0009 : "GPSStatus",
+        0x000A : "GPSMeasureMode",
+        0x000B : "GPSDOP",
+        0x000C : "GPSSpeedRef",
+        0x000D : "GPSSpeed",
+        0x000E : "GPSTrackRef",
+        0x000F : "GPSTrack",
+        0x0010 : "GPSImgDirectionRef",
+        0x0011 : "GPSImgDirection",
+        0x0012 : "GPSMapDatum",
+        0x0013 : "GPSDestLatitudeRef",
+        0x0014 : "GPSDestLatitude",
+        0x0015 : "GPSDestLongitudeRef",
+        0x0016 : "GPSDestLongitude",
+        0x0017 : "GPSDestBearingRef",
+        0x0018 : "GPSDestBearing",
+        0x0019 : "GPSDestDistanceRef",
+        0x001A : "GPSDestDistance",
+        0x001B : "GPSProcessingMethod",
+        0x001C : "GPSAreaInformation",
+        0x001D : "GPSDateStamp",
+        0x001E : "GPSDifferential"
+    };
+
+     // EXIF 2.3 Spec
+    var IFD1Tags = EXIF.IFD1Tags = {
+        0x0100: "ImageWidth",
+        0x0101: "ImageHeight",
+        0x0102: "BitsPerSample",
+        0x0103: "Compression",
+        0x0106: "PhotometricInterpretation",
+        0x0111: "StripOffsets",
+        0x0112: "Orientation",
+        0x0115: "SamplesPerPixel",
+        0x0116: "RowsPerStrip",
+        0x0117: "StripByteCounts",
+        0x011A: "XResolution",
+        0x011B: "YResolution",
+        0x011C: "PlanarConfiguration",
+        0x0128: "ResolutionUnit",
+        0x0201: "JpegIFOffset",    // When image format is JPEG, this value show offset to JPEG data stored.(aka "ThumbnailOffset" or "JPEGInterchangeFormat")
+        0x0202: "JpegIFByteCount", // When image format is JPEG, this value shows data size of JPEG image (aka "ThumbnailLength" or "JPEGInterchangeFormatLength")
+        0x0211: "YCbCrCoefficients",
+        0x0212: "YCbCrSubSampling",
+        0x0213: "YCbCrPositioning",
+        0x0214: "ReferenceBlackWhite"
+    };
+
+    var StringValues = EXIF.StringValues = {
+        ExposureProgram : {
+            0 : "Not defined",
+            1 : "Manual",
+            2 : "Normal program",
+            3 : "Aperture priority",
+            4 : "Shutter priority",
+            5 : "Creative program",
+            6 : "Action program",
+            7 : "Portrait mode",
+            8 : "Landscape mode"
+        },
+        MeteringMode : {
+            0 : "Unknown",
+            1 : "Average",
+            2 : "CenterWeightedAverage",
+            3 : "Spot",
+            4 : "MultiSpot",
+            5 : "Pattern",
+            6 : "Partial",
+            255 : "Other"
+        },
+        LightSource : {
+            0 : "Unknown",
+            1 : "Daylight",
+            2 : "Fluorescent",
+            3 : "Tungsten (incandescent light)",
+            4 : "Flash",
+            9 : "Fine weather",
+            10 : "Cloudy weather",
+            11 : "Shade",
+            12 : "Daylight fluorescent (D 5700 - 7100K)",
+            13 : "Day white fluorescent (N 4600 - 5400K)",
+            14 : "Cool white fluorescent (W 3900 - 4500K)",
+            15 : "White fluorescent (WW 3200 - 3700K)",
+            17 : "Standard light A",
+            18 : "Standard light B",
+            19 : "Standard light C",
+            20 : "D55",
+            21 : "D65",
+            22 : "D75",
+            23 : "D50",
+            24 : "ISO studio tungsten",
+            255 : "Other"
+        },
+        Flash : {
+            0x0000 : "Flash did not fire",
+            0x0001 : "Flash fired",
+            0x0005 : "Strobe return light not detected",
+            0x0007 : "Strobe return light detected",
+            0x0009 : "Flash fired, compulsory flash mode",
+            0x000D : "Flash fired, compulsory flash mode, return light not detected",
+            0x000F : "Flash fired, compulsory flash mode, return light detected",
+            0x0010 : "Flash did not fire, compulsory flash mode",
+            0x0018 : "Flash did not fire, auto mode",
+            0x0019 : "Flash fired, auto mode",
+            0x001D : "Flash fired, auto mode, return light not detected",
+            0x001F : "Flash fired, auto mode, return light detected",
+            0x0020 : "No flash function",
+            0x0041 : "Flash fired, red-eye reduction mode",
+            0x0045 : "Flash fired, red-eye reduction mode, return light not detected",
+            0x0047 : "Flash fired, red-eye reduction mode, return light detected",
+            0x0049 : "Flash fired, compulsory flash mode, red-eye reduction mode",
+            0x004D : "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected",
+            0x004F : "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected",
+            0x0059 : "Flash fired, auto mode, red-eye reduction mode",
+            0x005D : "Flash fired, auto mode, return light not detected, red-eye reduction mode",
+            0x005F : "Flash fired, auto mode, return light detected, red-eye reduction mode"
+        },
+        SensingMethod : {
+            1 : "Not defined",
+            2 : "One-chip color area sensor",
+            3 : "Two-chip color area sensor",
+            4 : "Three-chip color area sensor",
+            5 : "Color sequential area sensor",
+            7 : "Trilinear sensor",
+            8 : "Color sequential linear sensor"
+        },
+        SceneCaptureType : {
+            0 : "Standard",
+            1 : "Landscape",
+            2 : "Portrait",
+            3 : "Night scene"
+        },
+        SceneType : {
+            1 : "Directly photographed"
+        },
+        CustomRendered : {
+            0 : "Normal process",
+            1 : "Custom process"
+        },
+        WhiteBalance : {
+            0 : "Auto white balance",
+            1 : "Manual white balance"
+        },
+        GainControl : {
+            0 : "None",
+            1 : "Low gain up",
+            2 : "High gain up",
+            3 : "Low gain down",
+            4 : "High gain down"
+        },
+        Contrast : {
+            0 : "Normal",
+            1 : "Soft",
+            2 : "Hard"
+        },
+        Saturation : {
+            0 : "Normal",
+            1 : "Low saturation",
+            2 : "High saturation"
+        },
+        Sharpness : {
+            0 : "Normal",
+            1 : "Soft",
+            2 : "Hard"
+        },
+        SubjectDistanceRange : {
+            0 : "Unknown",
+            1 : "Macro",
+            2 : "Close view",
+            3 : "Distant view"
+        },
+        FileSource : {
+            3 : "DSC"
+        },
+
+        Components : {
+            0 : "",
+            1 : "Y",
+            2 : "Cb",
+            3 : "Cr",
+            4 : "R",
+            5 : "G",
+            6 : "B"
+        }
+    };
+
+    function addEvent(element, event, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(event, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + event, handler);
+        }
     }
 
-    return object;
-  }
-
-  function _get(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get = Reflect.get;
-    } else {
-      _get = function _get(target, property, receiver) {
-        var base = _superPropBase(target, property);
-
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
+    function imageHasData(img) {
+        return !!(img.exifdata);
     }
 
-    return _get(target, property, receiver || target);
-  }
 
-  var Emitter = /*#__PURE__*/function () {
-    function Emitter() {
-      _classCallCheck(this, Emitter);
-
-      Object.defineProperty(this, 'listeners', {
-        value: {},
-        writable: true,
-        configurable: true
-      });
+    function base64ToArrayBuffer(base64, contentType) {
+        contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
+        base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+        var binary = atob(base64);
+        var len = binary.length;
+        var buffer = new ArrayBuffer(len);
+        var view = new Uint8Array(buffer);
+        for (var i = 0; i < len; i++) {
+            view[i] = binary.charCodeAt(i);
+        }
+        return buffer;
     }
 
-    _createClass(Emitter, [{
-      key: "addEventListener",
-      value: function addEventListener(type, callback, options) {
-        if (!(type in this.listeners)) {
-          this.listeners[type] = [];
-        }
-
-        this.listeners[type].push({
-          callback: callback,
-          options: options
-        });
-      }
-    }, {
-      key: "removeEventListener",
-      value: function removeEventListener(type, callback) {
-        if (!(type in this.listeners)) {
-          return;
-        }
-
-        var stack = this.listeners[type];
-
-        for (var i = 0, l = stack.length; i < l; i++) {
-          if (stack[i].callback === callback) {
-            stack.splice(i, 1);
-            return;
-          }
-        }
-      }
-    }, {
-      key: "dispatchEvent",
-      value: function dispatchEvent(event) {
-        if (!(event.type in this.listeners)) {
-          return;
-        }
-
-        var stack = this.listeners[event.type];
-        var stackToCall = stack.slice();
-
-        for (var i = 0, l = stackToCall.length; i < l; i++) {
-          var listener = stackToCall[i];
-
-          try {
-            listener.callback.call(this, event);
-          } catch (e) {
-            Promise.resolve().then(function () {
-              throw e;
-            });
-          }
-
-          if (listener.options && listener.options.once) {
-            this.removeEventListener(event.type, listener.callback);
-          }
-        }
-
-        return !event.defaultPrevented;
-      }
-    }]);
-
-    return Emitter;
-  }();
-
-  var AbortSignal = /*#__PURE__*/function (_Emitter) {
-    _inherits(AbortSignal, _Emitter);
-
-    var _super = _createSuper(AbortSignal);
-
-    function AbortSignal() {
-      var _this;
-
-      _classCallCheck(this, AbortSignal);
-
-      _this = _super.call(this); // Some versions of babel does not transpile super() correctly for IE <= 10, if the parent
-      // constructor has failed to run, then "this.listeners" will still be undefined and then we call
-      // the parent constructor directly instead as a workaround. For general details, see babel bug:
-      // https://github.com/babel/babel/issues/3041
-      // This hack was added as a fix for the issue described here:
-      // https://github.com/Financial-Times/polyfill-library/pull/59#issuecomment-477558042
-
-      if (!_this.listeners) {
-        Emitter.call(_assertThisInitialized(_this));
-      } // Compared to assignment, Object.defineProperty makes properties non-enumerable by default and
-      // we want Object.keys(new AbortController().signal) to be [] for compat with the native impl
-
-
-      Object.defineProperty(_assertThisInitialized(_this), 'aborted', {
-        value: false,
-        writable: true,
-        configurable: true
-      });
-      Object.defineProperty(_assertThisInitialized(_this), 'onabort', {
-        value: null,
-        writable: true,
-        configurable: true
-      });
-      return _this;
-    }
-
-    _createClass(AbortSignal, [{
-      key: "toString",
-      value: function toString() {
-        return '[object AbortSignal]';
-      }
-    }, {
-      key: "dispatchEvent",
-      value: function dispatchEvent(event) {
-        if (event.type === 'abort') {
-          this.aborted = true;
-
-          if (typeof this.onabort === 'function') {
-            this.onabort.call(this, event);
-          }
-        }
-
-        _get(_getPrototypeOf(AbortSignal.prototype), "dispatchEvent", this).call(this, event);
-      }
-    }]);
-
-    return AbortSignal;
-  }(Emitter);
-  var AbortController = /*#__PURE__*/function () {
-    function AbortController() {
-      _classCallCheck(this, AbortController);
-
-      // Compared to assignment, Object.defineProperty makes properties non-enumerable by default and
-      // we want Object.keys(new AbortController()) to be [] for compat with the native impl
-      Object.defineProperty(this, 'signal', {
-        value: new AbortSignal(),
-        writable: true,
-        configurable: true
-      });
-    }
-
-    _createClass(AbortController, [{
-      key: "abort",
-      value: function abort() {
-        var event;
-
-        try {
-          event = new Event('abort');
-        } catch (e) {
-          if (typeof document !== 'undefined') {
-            if (!document.createEvent) {
-              // For Internet Explorer 8:
-              event = document.createEventObject();
-              event.type = 'abort';
-            } else {
-              // For Internet Explorer 11:
-              event = document.createEvent('Event');
-              event.initEvent('abort', false, false);
+    function objectURLToBlob(url, callback) {
+        var http = new XMLHttpRequest();
+        http.open("GET", url, true);
+        http.responseType = "blob";
+        http.onload = function(e) {
+            if (this.status == 200 || this.status === 0) {
+                callback(this.response);
             }
-          } else {
-            // Fallback where document isn't available:
-            event = {
-              type: 'abort',
-              bubbles: false,
-              cancelable: false
+        };
+        http.send();
+    }
+
+    function getImageData(img, callback) {
+        function handleBinaryFile(binFile) {
+            var data = findEXIFinJPEG(binFile);
+            img.exifdata = data || {};
+            var iptcdata = findIPTCinJPEG(binFile);
+            img.iptcdata = iptcdata || {};
+            if (EXIF.isXmpEnabled) {
+               var xmpdata= findXMPinJPEG(binFile);
+               img.xmpdata = xmpdata || {};               
+            }
+            if (callback) {
+                callback.call(img);
+            }
+        }
+
+        if (img.src) {
+            if (/^data\:/i.test(img.src)) { // Data URI
+                var arrayBuffer = base64ToArrayBuffer(img.src);
+                handleBinaryFile(arrayBuffer);
+
+            } else if (/^blob\:/i.test(img.src)) { // Object URL
+                var fileReader = new FileReader();
+                fileReader.onload = function(e) {
+                    handleBinaryFile(e.target.result);
+                };
+                objectURLToBlob(img.src, function (blob) {
+                    fileReader.readAsArrayBuffer(blob);
+                });
+            } else {
+                var http = new XMLHttpRequest();
+                http.onload = function() {
+                    if (this.status == 200 || this.status === 0) {
+                        handleBinaryFile(http.response);
+                    } else {
+                        throw "Could not load image";
+                    }
+                    http = null;
+                };
+                http.open("GET", img.src, true);
+                http.responseType = "arraybuffer";
+                http.send(null);
+            }
+        } else if (self.FileReader && (img instanceof self.Blob || img instanceof self.File)) {
+            var fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                if (debug) console.log("Got file of length " + e.target.result.byteLength);
+                handleBinaryFile(e.target.result);
             };
+
+            fileReader.readAsArrayBuffer(img);
+        }
+    }
+
+    function findEXIFinJPEG(file) {
+        var dataView = new DataView(file);
+
+        if (debug) console.log("Got file of length " + file.byteLength);
+        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
+            if (debug) console.log("Not a valid JPEG");
+            return false; // not a valid jpeg
+        }
+
+        var offset = 2,
+            length = file.byteLength,
+            marker;
+
+        while (offset < length) {
+            if (dataView.getUint8(offset) != 0xFF) {
+                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
+                return false; // not a valid marker, something is wrong
+            }
+
+            marker = dataView.getUint8(offset + 1);
+            if (debug) console.log(marker);
+
+            // we could implement handling for other markers here,
+            // but we're only looking for 0xFFE1 for EXIF data
+
+            if (marker == 225) {
+                if (debug) console.log("Found 0xFFE1 marker");
+
+                return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
+
+                // offset += 2 + file.getShortAt(offset+2, true);
+
+            } else {
+                offset += 2 + dataView.getUint16(offset+2);
+            }
+
+        }
+
+    }
+
+    function findIPTCinJPEG(file) {
+        var dataView = new DataView(file);
+
+        if (debug) console.log("Got file of length " + file.byteLength);
+        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
+            if (debug) console.log("Not a valid JPEG");
+            return false; // not a valid jpeg
+        }
+
+        var offset = 2,
+            length = file.byteLength;
+
+
+        var isFieldSegmentStart = function(dataView, offset){
+            return (
+                dataView.getUint8(offset) === 0x38 &&
+                dataView.getUint8(offset+1) === 0x42 &&
+                dataView.getUint8(offset+2) === 0x49 &&
+                dataView.getUint8(offset+3) === 0x4D &&
+                dataView.getUint8(offset+4) === 0x04 &&
+                dataView.getUint8(offset+5) === 0x04
+            );
+        };
+
+        while (offset < length) {
+
+            if ( isFieldSegmentStart(dataView, offset )){
+
+                // Get the length of the name header (which is padded to an even number of bytes)
+                var nameHeaderLength = dataView.getUint8(offset+7);
+                if(nameHeaderLength % 2 !== 0) nameHeaderLength += 1;
+                // Check for pre photoshop 6 format
+                if(nameHeaderLength === 0) {
+                    // Always 4
+                    nameHeaderLength = 4;
+                }
+
+                var startOffset = offset + 8 + nameHeaderLength;
+                var sectionLength = dataView.getUint16(offset + 6 + nameHeaderLength);
+
+                return readIPTCData(file, startOffset, sectionLength);
+
+                break;
+
+            }
+
+
+            // Not the marker, continue searching
+            offset++;
+
+        }
+
+    }
+    var IptcFieldMap = {
+        0x78 : 'caption',
+        0x6E : 'credit',
+        0x19 : 'keywords',
+        0x37 : 'dateCreated',
+        0x50 : 'byline',
+        0x55 : 'bylineTitle',
+        0x7A : 'captionWriter',
+        0x69 : 'headline',
+        0x74 : 'copyright',
+        0x0F : 'category'
+    };
+    function readIPTCData(file, startOffset, sectionLength){
+        var dataView = new DataView(file);
+        var data = {};
+        var fieldValue, fieldName, dataSize, segmentType, segmentSize;
+        var segmentStartPos = startOffset;
+        while(segmentStartPos < startOffset+sectionLength) {
+            if(dataView.getUint8(segmentStartPos) === 0x1C && dataView.getUint8(segmentStartPos+1) === 0x02){
+                segmentType = dataView.getUint8(segmentStartPos+2);
+                if(segmentType in IptcFieldMap) {
+                    dataSize = dataView.getInt16(segmentStartPos+3);
+                    segmentSize = dataSize + 5;
+                    fieldName = IptcFieldMap[segmentType];
+                    fieldValue = getStringFromDB(dataView, segmentStartPos+5, dataSize);
+                    // Check if we already stored a value with this name
+                    if(data.hasOwnProperty(fieldName)) {
+                        // Value already stored with this name, create multivalue field
+                        if(data[fieldName] instanceof Array) {
+                            data[fieldName].push(fieldValue);
+                        }
+                        else {
+                            data[fieldName] = [data[fieldName], fieldValue];
+                        }
+                    }
+                    else {
+                        data[fieldName] = fieldValue;
+                    }
+                }
+
+            }
+            segmentStartPos++;
+        }
+        return data;
+    }
+
+
+
+    function readTags(file, tiffStart, dirStart, strings, bigEnd) {
+        var entries = file.getUint16(dirStart, !bigEnd),
+            tags = {},
+            entryOffset, tag,
+            i;
+
+        for (i=0;i<entries;i++) {
+            entryOffset = dirStart + i*12 + 2;
+            tag = strings[file.getUint16(entryOffset, !bigEnd)];
+            if (!tag && debug) console.log("Unknown tag: " + file.getUint16(entryOffset, !bigEnd));
+            tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
+        }
+        return tags;
+    }
+
+
+    function readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd) {
+        var type = file.getUint16(entryOffset+2, !bigEnd),
+            numValues = file.getUint32(entryOffset+4, !bigEnd),
+            valueOffset = file.getUint32(entryOffset+8, !bigEnd) + tiffStart,
+            offset,
+            vals, val, n,
+            numerator, denominator;
+
+        switch (type) {
+            case 1: // byte, 8-bit unsigned int
+            case 7: // undefined, 8-bit byte, value depending on field
+                if (numValues == 1) {
+                    return file.getUint8(entryOffset + 8, !bigEnd);
+                } else {
+                    offset = numValues > 4 ? valueOffset : (entryOffset + 8);
+                    vals = [];
+                    for (n=0;n<numValues;n++) {
+                        vals[n] = file.getUint8(offset + n);
+                    }
+                    return vals;
+                }
+
+            case 2: // ascii, 8-bit byte
+                offset = numValues > 4 ? valueOffset : (entryOffset + 8);
+                return getStringFromDB(file, offset, numValues-1);
+
+            case 3: // short, 16 bit int
+                if (numValues == 1) {
+                    return file.getUint16(entryOffset + 8, !bigEnd);
+                } else {
+                    offset = numValues > 2 ? valueOffset : (entryOffset + 8);
+                    vals = [];
+                    for (n=0;n<numValues;n++) {
+                        vals[n] = file.getUint16(offset + 2*n, !bigEnd);
+                    }
+                    return vals;
+                }
+
+            case 4: // long, 32 bit int
+                if (numValues == 1) {
+                    return file.getUint32(entryOffset + 8, !bigEnd);
+                } else {
+                    vals = [];
+                    for (n=0;n<numValues;n++) {
+                        vals[n] = file.getUint32(valueOffset + 4*n, !bigEnd);
+                    }
+                    return vals;
+                }
+
+            case 5:    // rational = two long values, first is numerator, second is denominator
+                if (numValues == 1) {
+                    numerator = file.getUint32(valueOffset, !bigEnd);
+                    denominator = file.getUint32(valueOffset+4, !bigEnd);
+                    val = new Number(numerator / denominator);
+                    val.numerator = numerator;
+                    val.denominator = denominator;
+                    return val;
+                } else {
+                    vals = [];
+                    for (n=0;n<numValues;n++) {
+                        numerator = file.getUint32(valueOffset + 8*n, !bigEnd);
+                        denominator = file.getUint32(valueOffset+4 + 8*n, !bigEnd);
+                        vals[n] = new Number(numerator / denominator);
+                        vals[n].numerator = numerator;
+                        vals[n].denominator = denominator;
+                    }
+                    return vals;
+                }
+
+            case 9: // slong, 32 bit signed int
+                if (numValues == 1) {
+                    return file.getInt32(entryOffset + 8, !bigEnd);
+                } else {
+                    vals = [];
+                    for (n=0;n<numValues;n++) {
+                        vals[n] = file.getInt32(valueOffset + 4*n, !bigEnd);
+                    }
+                    return vals;
+                }
+
+            case 10: // signed rational, two slongs, first is numerator, second is denominator
+                if (numValues == 1) {
+                    return file.getInt32(valueOffset, !bigEnd) / file.getInt32(valueOffset+4, !bigEnd);
+                } else {
+                    vals = [];
+                    for (n=0;n<numValues;n++) {
+                        vals[n] = file.getInt32(valueOffset + 8*n, !bigEnd) / file.getInt32(valueOffset+4 + 8*n, !bigEnd);
+                    }
+                    return vals;
+                }
+        }
+    }
+
+    /**
+    * Given an IFD (Image File Directory) start offset
+    * returns an offset to next IFD or 0 if it's the last IFD.
+    */
+    function getNextIFDOffset(dataView, dirStart, bigEnd){
+        //the first 2bytes means the number of directory entries contains in this IFD
+        var entries = dataView.getUint16(dirStart, !bigEnd);
+
+        // After last directory entry, there is a 4bytes of data,
+        // it means an offset to next IFD.
+        // If its value is '0x00000000', it means this is the last IFD and there is no linked IFD.
+
+        return dataView.getUint32(dirStart + 2 + entries * 12, !bigEnd); // each entry is 12 bytes long
+    }
+
+    function readThumbnailImage(dataView, tiffStart, firstIFDOffset, bigEnd){
+        // get the IFD1 offset
+        var IFD1OffsetPointer = getNextIFDOffset(dataView, tiffStart+firstIFDOffset, bigEnd);
+
+        if (!IFD1OffsetPointer) {
+            // console.log('******** IFD1Offset is empty, image thumb not found ********');
+            return {};
+        }
+        else if (IFD1OffsetPointer > dataView.byteLength) { // this should not happen
+            // console.log('******** IFD1Offset is outside the bounds of the DataView ********');
+            return {};
+        }
+        // console.log('*******  thumbnail IFD offset (IFD1) is: %s', IFD1OffsetPointer);
+
+        var thumbTags = readTags(dataView, tiffStart, tiffStart + IFD1OffsetPointer, IFD1Tags, bigEnd)
+
+        // EXIF 2.3 specification for JPEG format thumbnail
+
+        // If the value of Compression(0x0103) Tag in IFD1 is '6', thumbnail image format is JPEG.
+        // Most of Exif image uses JPEG format for thumbnail. In that case, you can get offset of thumbnail
+        // by JpegIFOffset(0x0201) Tag in IFD1, size of thumbnail by JpegIFByteCount(0x0202) Tag.
+        // Data format is ordinary JPEG format, starts from 0xFFD8 and ends by 0xFFD9. It seems that
+        // JPEG format and 160x120pixels of size are recommended thumbnail format for Exif2.1 or later.
+
+        if (thumbTags['Compression']) {
+            // console.log('Thumbnail image found!');
+
+            switch (thumbTags['Compression']) {
+                case 6:
+                    // console.log('Thumbnail image format is JPEG');
+                    if (thumbTags.JpegIFOffset && thumbTags.JpegIFByteCount) {
+                    // extract the thumbnail
+                        var tOffset = tiffStart + thumbTags.JpegIFOffset;
+                        var tLength = thumbTags.JpegIFByteCount;
+                        thumbTags['blob'] = new Blob([new Uint8Array(dataView.buffer, tOffset, tLength)], {
+                            type: 'image/jpeg'
+                        });
+                    }
+                break;
+
+            case 1:
+                console.log("Thumbnail image format is TIFF, which is not implemented.");
+                break;
+            default:
+                console.log("Unknown thumbnail image format '%s'", thumbTags['Compression']);
+            }
+        }
+        else if (thumbTags['PhotometricInterpretation'] == 2) {
+            console.log("Thumbnail image format is RGB, which is not implemented.");
+        }
+        return thumbTags;
+    }
+
+    function getStringFromDB(buffer, start, length) {
+        var outstr = "";
+        for (n = start; n < start+length; n++) {
+            outstr += String.fromCharCode(buffer.getUint8(n));
+        }
+        return outstr;
+    }
+
+    function readEXIFData(file, start) {
+        if (getStringFromDB(file, start, 4) != "Exif") {
+            if (debug) console.log("Not valid EXIF data! " + getStringFromDB(file, start, 4));
+            return false;
+        }
+
+        var bigEnd,
+            tags, tag,
+            exifData, gpsData,
+            tiffOffset = start + 6;
+
+        // test for TIFF validity and endianness
+        if (file.getUint16(tiffOffset) == 0x4949) {
+            bigEnd = false;
+        } else if (file.getUint16(tiffOffset) == 0x4D4D) {
+            bigEnd = true;
+        } else {
+            if (debug) console.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
+            return false;
+        }
+
+        if (file.getUint16(tiffOffset+2, !bigEnd) != 0x002A) {
+            if (debug) console.log("Not valid TIFF data! (no 0x002A)");
+            return false;
+        }
+
+        var firstIFDOffset = file.getUint32(tiffOffset+4, !bigEnd);
+
+        if (firstIFDOffset < 0x00000008) {
+            if (debug) console.log("Not valid TIFF data! (First offset less than 8)", file.getUint32(tiffOffset+4, !bigEnd));
+            return false;
+        }
+
+        tags = readTags(file, tiffOffset, tiffOffset + firstIFDOffset, TiffTags, bigEnd);
+
+        if (tags.ExifIFDPointer) {
+            exifData = readTags(file, tiffOffset, tiffOffset + tags.ExifIFDPointer, ExifTags, bigEnd);
+            for (tag in exifData) {
+                switch (tag) {
+                    case "LightSource" :
+                    case "Flash" :
+                    case "MeteringMode" :
+                    case "ExposureProgram" :
+                    case "SensingMethod" :
+                    case "SceneCaptureType" :
+                    case "SceneType" :
+                    case "CustomRendered" :
+                    case "WhiteBalance" :
+                    case "GainControl" :
+                    case "Contrast" :
+                    case "Saturation" :
+                    case "Sharpness" :
+                    case "SubjectDistanceRange" :
+                    case "FileSource" :
+                        exifData[tag] = StringValues[tag][exifData[tag]];
+                        break;
+
+                    case "ExifVersion" :
+                    case "FlashpixVersion" :
+                        exifData[tag] = String.fromCharCode(exifData[tag][0], exifData[tag][1], exifData[tag][2], exifData[tag][3]);
+                        break;
+
+                    case "ComponentsConfiguration" :
+                        exifData[tag] =
+                            StringValues.Components[exifData[tag][0]] +
+                            StringValues.Components[exifData[tag][1]] +
+                            StringValues.Components[exifData[tag][2]] +
+                            StringValues.Components[exifData[tag][3]];
+                        break;
+                }
+                tags[tag] = exifData[tag];
+            }
+        }
+
+        if (tags.GPSInfoIFDPointer) {
+            gpsData = readTags(file, tiffOffset, tiffOffset + tags.GPSInfoIFDPointer, GPSTags, bigEnd);
+            for (tag in gpsData) {
+                switch (tag) {
+                    case "GPSVersionID" :
+                        gpsData[tag] = gpsData[tag][0] +
+                            "." + gpsData[tag][1] +
+                            "." + gpsData[tag][2] +
+                            "." + gpsData[tag][3];
+                        break;
+                }
+                tags[tag] = gpsData[tag];
+            }
+        }
+
+        // extract thumbnail
+        tags['thumbnail'] = readThumbnailImage(file, tiffOffset, firstIFDOffset, bigEnd);
+
+        return tags;
+    }
+
+   function findXMPinJPEG(file) {
+
+        if (!('DOMParser' in self)) {
+            // console.warn('XML parsing not supported without DOMParser');
+            return;
+        }
+        var dataView = new DataView(file);
+
+        if (debug) console.log("Got file of length " + file.byteLength);
+        if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
+           if (debug) console.log("Not a valid JPEG");
+           return false; // not a valid jpeg
+        }
+
+        var offset = 2,
+            length = file.byteLength,
+            dom = new DOMParser();
+
+        while (offset < (length-4)) {
+            if (getStringFromDB(dataView, offset, 4) == "http") {
+                var startOffset = offset - 1;
+                var sectionLength = dataView.getUint16(offset - 2) - 1;
+                var xmpString = getStringFromDB(dataView, startOffset, sectionLength)
+                var xmpEndIndex = xmpString.indexOf('xmpmeta>') + 8;
+                xmpString = xmpString.substring( xmpString.indexOf( '<x:xmpmeta' ), xmpEndIndex );
+
+                var indexOfXmp = xmpString.indexOf('x:xmpmeta') + 10
+                //Many custom written programs embed xmp/xml without any namespace. Following are some of them.
+                //Without these namespaces, XML is thought to be invalid by parsers
+                xmpString = xmpString.slice(0, indexOfXmp)
+                            + 'xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" '
+                            + 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                            + 'xmlns:tiff="http://ns.adobe.com/tiff/1.0/" '
+                            + 'xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus" '
+                            + 'xmlns:ext="http://www.gettyimages.com/xsltExtension/1.0" '
+                            + 'xmlns:exif="http://ns.adobe.com/exif/1.0/" '
+                            + 'xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#" '
+                            + 'xmlns:stRef="http://ns.adobe.com/xap/1.0/sType/ResourceRef#" '
+                            + 'xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/" '
+                            + 'xmlns:xapGImg="http://ns.adobe.com/xap/1.0/g/img/" '
+                            + 'xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" '
+                            + xmpString.slice(indexOfXmp)
+
+                var domDocument = dom.parseFromString( xmpString, 'text/xml' );
+                return xml2Object(domDocument);
+            } else{
+             offset++;
+            }
+        }
+    }
+
+    function xml2json(xml) {
+        var json = {};
+      
+        if (xml.nodeType == 1) { // element node
+          if (xml.attributes.length > 0) {
+            json['@attributes'] = {};
+            for (var j = 0; j < xml.attributes.length; j++) {
+              var attribute = xml.attributes.item(j);
+              json['@attributes'][attribute.nodeName] = attribute.nodeValue;
+            }
+          }
+        } else if (xml.nodeType == 3) { // text node
+          return xml.nodeValue;
+        }
+      
+        // deal with children
+        if (xml.hasChildNodes()) {
+          for(var i = 0; i < xml.childNodes.length; i++) {
+            var child = xml.childNodes.item(i);
+            var nodeName = child.nodeName;
+            if (json[nodeName] == null) {
+              json[nodeName] = xml2json(child);
+            } else {
+              if (json[nodeName].push == null) {
+                var old = json[nodeName];
+                json[nodeName] = [];
+                json[nodeName].push(old);
+              }
+              json[nodeName].push(xml2json(child));
+            }
           }
         }
-
-        this.signal.dispatchEvent(event);
-      }
-    }, {
-      key: "toString",
-      value: function toString() {
-        return '[object AbortController]';
-      }
-    }]);
-
-    return AbortController;
-  }();
-
-  if (typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-    // These are necessary to make sure that we get correct output for:
-    // Object.prototype.toString.call(new AbortController())
-    AbortController.prototype[Symbol.toStringTag] = 'AbortController';
-    AbortSignal.prototype[Symbol.toStringTag] = 'AbortSignal';
-  }
-
-  function polyfillNeeded(self) {
-    if (self.__FORCE_INSTALL_ABORTCONTROLLER_POLYFILL) {
-      console.log('__FORCE_INSTALL_ABORTCONTROLLER_POLYFILL=true is set, will force install polyfill');
-      return true;
-    } // Note that the "unfetch" minimal fetch polyfill defines fetch() without
-    // defining window.Request, and this polyfill need to work on top of unfetch
-    // so the below feature detection needs the !self.AbortController part.
-    // The Request.prototype check is also needed because Safari versions 11.1.2
-    // up to and including 12.1.x has a window.AbortController present but still
-    // does NOT correctly implement abortable fetch:
-    // https://bugs.webkit.org/show_bug.cgi?id=174980#c2
-
-
-    return typeof self.Request === 'function' && !self.Request.prototype.hasOwnProperty('signal') || !self.AbortController;
-  }
-
-  /**
-   * Note: the "fetch.Request" default value is available for fetch imported from
-   * the "node-fetch" package and not in browsers. This is OK since browsers
-   * will be importing umd-polyfill.js from that path "self" is passed the
-   * decorator so the default value will not be used (because browsers that define
-   * fetch also has Request). One quirky setup where self.fetch exists but
-   * self.Request does not is when the "unfetch" minimal fetch polyfill is used
-   * on top of IE11; for this case the browser will try to use the fetch.Request
-   * default value which in turn will be undefined but then then "if (Request)"
-   * will ensure that you get a patched fetch but still no Request (as expected).
-   * @param {fetch, Request = fetch.Request}
-   * @returns {fetch: abortableFetch, Request: AbortableRequest}
-   */
-
-  function abortableFetchDecorator(patchTargets) {
-    if ('function' === typeof patchTargets) {
-      patchTargets = {
-        fetch: patchTargets
-      };
+        
+        return json;
     }
 
-    var _patchTargets = patchTargets,
-        fetch = _patchTargets.fetch,
-        _patchTargets$Request = _patchTargets.Request,
-        NativeRequest = _patchTargets$Request === void 0 ? fetch.Request : _patchTargets$Request,
-        NativeAbortController = _patchTargets.AbortController,
-        _patchTargets$__FORCE = _patchTargets.__FORCE_INSTALL_ABORTCONTROLLER_POLYFILL,
-        __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL = _patchTargets$__FORCE === void 0 ? false : _patchTargets$__FORCE;
-
-    if (!polyfillNeeded({
-      fetch: fetch,
-      Request: NativeRequest,
-      AbortController: NativeAbortController,
-      __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL: __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL
-    })) {
-      return {
-        fetch: fetch,
-        Request: Request
-      };
-    }
-
-    var Request = NativeRequest; // Note that the "unfetch" minimal fetch polyfill defines fetch() without
-    // defining window.Request, and this polyfill need to work on top of unfetch
-    // hence we only patch it if it's available. Also we don't patch it if signal
-    // is already available on the Request prototype because in this case support
-    // is present and the patching below can cause a crash since it assigns to
-    // request.signal which is technically a read-only property. This latter error
-    // happens when you run the main5.js node-fetch example in the repo
-    // "abortcontroller-polyfill-examples". The exact error is:
-    //   request.signal = init.signal;
-    //   ^
-    // TypeError: Cannot set property signal of #<Request> which has only a getter
-
-    if (Request && !Request.prototype.hasOwnProperty('signal') || __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL) {
-      Request = function Request(input, init) {
-        var signal;
-
-        if (init && init.signal) {
-          signal = init.signal; // Never pass init.signal to the native Request implementation when the polyfill has
-          // been installed because if we're running on top of a browser with a
-          // working native AbortController (i.e. the polyfill was installed due to
-          // __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL being set), then passing our
-          // fake AbortSignal to the native fetch will trigger:
-          // TypeError: Failed to construct 'Request': member signal is not of type AbortSignal.
-
-          delete init.signal;
-        }
-
-        var request = new NativeRequest(input, init);
-
-        if (signal) {
-          Object.defineProperty(request, 'signal', {
-            writable: false,
-            enumerable: false,
-            configurable: true,
-            value: signal
-          });
-        }
-
-        return request;
-      };
-
-      Request.prototype = NativeRequest.prototype;
-    }
-
-    var realFetch = fetch;
-
-    var abortableFetch = function abortableFetch(input, init) {
-      var signal = Request && Request.prototype.isPrototypeOf(input) ? input.signal : init ? init.signal : undefined;
-
-      if (signal) {
-        var abortError;
-
+    function xml2Object(xml) {
         try {
-          abortError = new DOMException('Aborted', 'AbortError');
-        } catch (err) {
-          // IE 11 does not support calling the DOMException constructor, use a
-          // regular error object on it instead.
-          abortError = new Error('Aborted');
-          abortError.name = 'AbortError';
-        } // Return early if already aborted, thus avoiding making an HTTP request
+            var obj = {};
+            if (xml.children.length > 0) {
+              for (var i = 0; i < xml.children.length; i++) {
+                var item = xml.children.item(i);
+                var attributes = item.attributes;
+                for(var idx in attributes) {
+                    var itemAtt = attributes[idx];
+                    var dataKey = itemAtt.nodeName;
+                    var dataValue = itemAtt.nodeValue;
 
+                    if(dataKey !== undefined) {
+                        obj[dataKey] = dataValue;
+                    }
+                }
+                var nodeName = item.nodeName;
 
-        if (signal.aborted) {
-          return Promise.reject(abortError);
-        } // Turn an event into a promise, reject it once `abort` is dispatched
+                if (typeof (obj[nodeName]) == "undefined") {
+                  obj[nodeName] = xml2json(item);
+                } else {
+                  if (typeof (obj[nodeName].push) == "undefined") {
+                    var old = obj[nodeName];
 
-
-        var cancellation = new Promise(function (_, reject) {
-          signal.addEventListener('abort', function () {
-            return reject(abortError);
-          }, {
-            once: true
-          });
-        });
-
-        if (init && init.signal) {
-          // Never pass .signal to the native implementation when the polyfill has
-          // been installed because if we're running on top of a browser with a
-          // working native AbortController (i.e. the polyfill was installed due to
-          // __FORCE_INSTALL_ABORTCONTROLLER_POLYFILL being set), then passing our
-          // fake AbortSignal to the native fetch will trigger:
-          // TypeError: Failed to execute 'fetch' on 'Window': member signal is not of type AbortSignal.
-          delete init.signal;
-        } // Return the fastest promise (don't need to wait for request to finish)
-
-
-        return Promise.race([cancellation, realFetch(input, init)]);
-      }
-
-      return realFetch(input, init);
-    };
-
-    return {
-      fetch: abortableFetch,
-      Request: Request
-    };
-  }
-
-  (function (self) {
-
-    if (!polyfillNeeded(self)) {
-      return;
+                    obj[nodeName] = [];
+                    obj[nodeName].push(old);
+                  }
+                  obj[nodeName].push(xml2json(item));
+                }
+              }
+            } else {
+              obj = xml.textContent;
+            }
+            return obj;
+          } catch (e) {
+              console.log(e.message);
+          }
     }
 
-    if (!self.fetch) {
-      console.warn('fetch() is not available, cannot install abortcontroller-polyfill');
-      return;
+    EXIF.enableXmp = function() {
+        EXIF.isXmpEnabled = true;
     }
 
-    var _abortableFetch = abortableFetchDecorator(self),
-        fetch = _abortableFetch.fetch,
-        Request = _abortableFetch.Request;
+    EXIF.disableXmp = function() {
+        EXIF.isXmpEnabled = false;
+    }
 
-    self.fetch = fetch;
-    self.Request = Request;
-    Object.defineProperty(self, 'AbortController', {
-      writable: true,
-      enumerable: false,
-      configurable: true,
-      value: AbortController
-    });
-    Object.defineProperty(self, 'AbortSignal', {
-      writable: true,
-      enumerable: false,
-      configurable: true,
-      value: AbortSignal
-    });
-  })(typeof self !== 'undefined' ? self : global);
+    EXIF.getData = function(img, callback) {
+        if (((self.Image && img instanceof self.Image)
+            || (self.HTMLImageElement && img instanceof self.HTMLImageElement))
+            && !img.complete)
+            return false;
 
-})));
+        if (!imageHasData(img)) {
+            getImageData(img, callback);
+        } else {
+            if (callback) {
+                callback.call(img);
+            }
+        }
+        return true;
+    }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba")))
+    EXIF.getTag = function(img, tag) {
+        if (!imageHasData(img)) return;
+        return img.exifdata[tag];
+    }
+    
+    EXIF.getIptcTag = function(img, tag) {
+        if (!imageHasData(img)) return;
+        return img.iptcdata[tag];
+    }
+
+    EXIF.getAllTags = function(img) {
+        if (!imageHasData(img)) return {};
+        var a,
+            data = img.exifdata,
+            tags = {};
+        for (a in data) {
+            if (data.hasOwnProperty(a)) {
+                tags[a] = data[a];
+            }
+        }
+        return tags;
+    }
+    
+    EXIF.getAllIptcTags = function(img) {
+        if (!imageHasData(img)) return {};
+        var a,
+            data = img.iptcdata,
+            tags = {};
+        for (a in data) {
+            if (data.hasOwnProperty(a)) {
+                tags[a] = data[a];
+            }
+        }
+        return tags;
+    }
+
+    EXIF.pretty = function(img) {
+        if (!imageHasData(img)) return "";
+        var a,
+            data = img.exifdata,
+            strPretty = "";
+        for (a in data) {
+            if (data.hasOwnProperty(a)) {
+                if (typeof data[a] == "object") {
+                    if (data[a] instanceof Number) {
+                        strPretty += a + " : " + data[a] + " [" + data[a].numerator + "/" + data[a].denominator + "]\r\n";
+                    } else {
+                        strPretty += a + " : [" + data[a].length + " values]\r\n";
+                    }
+                } else {
+                    strPretty += a + " : " + data[a] + "\r\n";
+                }
+            }
+        }
+        return strPretty;
+    }
+
+    EXIF.readFromBinaryFile = function(file) {
+        return findEXIFinJPEG(file);
+    }
+
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
+            return EXIF;
+        }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    }
+}.call(this));
+
+
 
 /***/ }),
 
-/***/ "f8d9":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ 744:
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-function allSettled(arr) {
-  var P = this;
-  return new P(function(resolve, reject) {
-    if (!(arr && typeof arr.length !== 'undefined')) {
-      return reject(
-        new TypeError(
-          typeof arr +
-            ' ' +
-            arr +
-            ' is not iterable(cannot read property Symbol(Symbol.iterator))'
-        )
-      );
-    }
-    var args = Array.prototype.slice.call(arr);
-    if (args.length === 0) return resolve([]);
-    var remaining = args.length;
+var __webpack_unused_export__;
 
-    function res(i, val) {
-      if (val && (typeof val === 'object' || typeof val === 'function')) {
-        var then = val.then;
-        if (typeof then === 'function') {
-          then.call(
-            val,
-            function(val) {
-              res(i, val);
-            },
-            function(e) {
-              args[i] = { status: 'rejected', reason: e };
-              if (--remaining === 0) {
-                resolve(args);
-              }
-            }
-          );
-          return;
-        }
-      }
-      args[i] = { status: 'fulfilled', value: val };
-      if (--remaining === 0) {
-        resolve(args);
-      }
+__webpack_unused_export__ = ({ value: true });
+// runtime helper for setting properties on components
+// in a tree-shakable way
+exports.Z = (sfc, props) => {
+    const target = sfc.__vccOpts || sfc;
+    for (const [key, val] of props) {
+        target[key] = val;
     }
-
-    for (var i = 0; i < args.length; i++) {
-      res(i, args[i]);
-    }
-  });
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (allSettled);
+    return target;
+};
 
 
 /***/ }),
 
-/***/ "fb15":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ 27:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(83);
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = (__webpack_require__(402)/* ["default"] */ .Z)
+var update = add("0c3ba4c0", content, true, {"sourceMap":true,"shadowMode":false});
+
+/***/ }),
+
+/***/ 168:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(355);
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = (__webpack_require__(402)/* ["default"] */ .Z)
+var update = add("582127f6", content, true, {"sourceMap":true,"shadowMode":false});
+
+/***/ }),
+
+/***/ 402:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "Z": () => (/* binding */ addStylesClient)
+});
+
+;// CONCATENATED MODULE: ./node_modules/vue-style-loader/lib/listToStyles.js
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+;// CONCATENATED MODULE: ./node_modules/vue-style-loader/lib/addStylesClient.js
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+function addStylesClient (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+
+/***/ 738:
+/***/ ((module) => {
+
+"use strict";
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC";
+
+/***/ }),
+
+/***/ 203:
+/***/ ((module) => {
+
+"use strict";
+module.exports = __WEBPACK_EXTERNAL_MODULE__203__;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		__webpack_require__.p = "";
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		__webpack_require__.b = document.baseURI || self.location.href;
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			503: 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		// no on chunks loaded
+/******/ 		
+/******/ 		// no jsonp function
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (/* binding */ entry_lib)
+});
+
+;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
+/* eslint-disable no-var */
 // This file is imported into lib/wc client bundles.
 
 if (typeof window !== 'undefined') {
   var currentScript = window.document.currentScript
   if (true) {
-    var getCurrentScript = __webpack_require__("8875")
+    var getCurrentScript = __webpack_require__(679)
     currentScript = getCurrentScript()
 
     // for backward compatibility, because previously we directly included the polyfill
@@ -7054,339 +5496,244 @@ if (typeof window !== 'undefined') {
 }
 
 // Indicate to webpack that this file can be concatenated
-/* harmony default export */ var setPublicPath = (null);
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6f4b9c65-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/uploader.vue?vue&type=template&id=13f9cba2&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-upload',_vm._b({ref:"myupload",attrs:{"action":"","fileList":_vm.fileListFinnal,"accept":_vm.acceptFinnal,"before-upload":_vm.handleBeforeUpload,"on-exceed":_vm.handleonExceed,"on-change":_vm.handleChange,"on-remove":_vm.handleRemove,"http-request":_vm.customUpload}},'el-upload',_vm.$attrs,false),[_c('div',{attrs:{"id":_vm.triggerId}},[_vm._t("default",function(){return [_c('el-button',[_vm._v("点击上传")])]}),_vm._t("trigger"),_vm._t("tip")],2),_c('el-dialog',{staticClass:"cropper",attrs:{"visible":_vm.dialogVisible,"append-to-body":"","title":"图像剪裁","top":"10vh","close-on-click-modal":false,"close-on-press-escape":false},on:{"close":function($event){return _vm.cropperMethod('close')}}},[_c('div',{staticClass:"cropper_main"},[_c('img',{ref:"CropperImg",attrs:{"src":""}})]),_c('div',{staticClass:"cropper_actions flex-row align-center"},[_c('div',{staticClass:"flex-1"},[_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"左旋"},on:{"click":function($event){return _vm.cropperMethod('rotateLeft')}}},[_c('i',{staticClass:"el-icon-refresh-left"}),_vm._v(" 左旋 ")]),_c('el-button',{attrs:{"size":"small","title":"右旋"},on:{"click":function($event){return _vm.cropperMethod('rotateRight')}}},[_c('i',{staticClass:"el-icon-refresh-right"}),_vm._v(" 右旋 ")])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"水平镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleX')}}},[_c('i',{staticClass:"el-icon-sort",staticStyle:{"transform":"rotateZ(90deg)"}}),_vm._v(" 水平镜像 ")]),_c('el-button',{attrs:{"size":"small","title":"垂直镜像"},on:{"click":function($event){return _vm.cropperMethod('scaleY')}}},[_c('i',{staticClass:"el-icon-sort"}),_vm._v(" 垂直镜像 ")])],1),_c('el-button-group',[_c('el-button',{attrs:{"size":"small","title":"重置"},on:{"click":function($event){return _vm.cropperMethod('reset')}}},[_c('i',{staticClass:"el-icon-refresh"}),_vm._v(" 重置 ")])],1)],1),_c('el-button',{attrs:{"size":"small","type":"primary","plain":""},on:{"click":function($event){return _vm.cropperMethod('save')}}},[_c('i',{staticClass:"el-icon-crop"}),_vm._v(" 确定 ")])],1)])],1)}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=template&id=13f9cba2&scoped=true&
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
-var regenerator = __webpack_require__("a34a");
-var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
+/* harmony default export */ const setPublicPath = (null);
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
-var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
-var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpack_require__.n(external_commonjs_vue_commonjs2_vue_root_Vue_);
-
+var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__(203);
 // EXTERNAL MODULE: ./node_modules/exif-js/exif.js
-var exif = __webpack_require__("6f45");
+var exif = __webpack_require__(918);
+;// CONCATENATED MODULE: ./node_modules/ios-photo-repair/dist/module.js
 
-// CONCATENATED MODULE: ./node_modules/ios-photo-repair/dist/module.js
 
 
-var $5b02762f359a5b4d$var$getURLBase64 = function $5b02762f359a5b4d$var$getURLBase64(url) {
-  return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('get', url, true);
-    xhr.responseType = 'blob';
-
-    xhr.onload = function () {
-      if (this.status === 200) {
-        var blob = this.response;
-        var fileReader = new FileReader();
-
-        fileReader.onloadend = function (e) {
-          var result = e.target.result;
-          resolve(result);
-        };
-
-        fileReader.readAsDataURL(blob);
-      }
-    };
-
-    xhr.onerror = function (err) {
-      reject(err);
-    };
-
-    xhr.send();
-  });
-};
-
-var module_$5b02762f359a5b4d$var$getOri = function $5b02762f359a5b4d$var$getOri(file) {
-  return new Promise(function (resolve) {
-    Object(exif["getData"])(file, function () {
-      var orientation = Object(exif["getTag"])(this, "Orientation");
-      resolve(orientation);
-    });
-  });
-};
-
-var $5b02762f359a5b4d$var$imgToCanvas = function $5b02762f359a5b4d$var$imgToCanvas(img, orientation) {
-  var canvas = document.createElement('canvas'),
-      ctx = canvas.getContext('2d'),
-      targetWidth = img.targetWidth || img.width,
-      targetHeight = img.targetHeight || img.height;
-
-  if (orientation === 6) {
-    canvas.width = targetHeight;
-    canvas.height = targetWidth;
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(Math.PI / 180 * 90);
-    ctx.drawImage(img, -targetWidth / 2, -targetHeight / 2, canvas.height, canvas.width);
-  } else {
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  }
-
-  return new Promise(function (resolve) {
-    resolve(canvas);
-  });
-};
-
-var $5b02762f359a5b4d$export$333f7af172343a1 = function $5b02762f359a5b4d$export$333f7af172343a1(selector) {
-  var fixImg = function fixImg(img) {
-    if (!img.dataset.iosfixed) module_$5b02762f359a5b4d$var$getOri(img).then(function (orientation) {
-      if (orientation == 6) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then(function (canvas1) {
-        try {
-          img.src = canvas1.toDataURL();
-          img.dataset.iosfixed = true;
-        } catch (e) {
-          $5b02762f359a5b4d$var$getURLBase64(img.src).then(function (base64) {
-            img.onload = function () {
-              if (!img.dataset.iosfixed) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then(function (canvas) {
-                img.src = canvas.toDataURL();
-                img.dataset.iosfixed = true;
-              });
-            };
-
-            img.src = base64;
-          });
-        }
-      });
-    });
-  };
-
-  var imgs = document.querySelectorAll(selector);
-
-  if (imgs.length) {
-    var _loop = function _loop(i) {
-      var img = imgs[i];
-
-      if (img.tagName.toLowerCase() === 'img') {
-        img.crossOrigin = "Anonymous";
-        if (img.complete) fixImg(img);else img.onload = function () {
-          fixImg(img);
-        };
-      }
-    };
-
-    for (var i = 0; i < imgs.length; i++) {
-      _loop(i);
-    }
-  } else console.log('fixer WARN no files:' + selector);
-};
-
-var $5b02762f359a5b4d$var$computeSize = function $5b02762f359a5b4d$var$computeSize(originWidth, originHeight, maxWidth, maxHeight) {
-  var targetWidth = originWidth,
-      targetHeight = originHeight;
-
-  var setWidth = function setWidth() {
-    targetWidth = maxWidth;
-    targetHeight = Math.round(maxWidth * (originHeight / originWidth));
-  },
-      setHeight = function setHeight() {
-    targetHeight = maxHeight;
-    targetWidth = Math.round(maxHeight * (originWidth / originHeight));
-  };
-
-  if (maxWidth && maxHeight) //限定区间
-    {
-      if (originWidth > maxWidth || originHeight > maxHeight) {
-        if (originWidth / originHeight > maxWidth / maxHeight) // 更宽
-          setWidth();else // 更高
-          setHeight();
-      }
-    } else if (maxWidth) //限定宽度
-    setWidth();else if (maxHeight) //限定高度
-    setHeight();
-
-  return {
-    width: targetWidth,
-    height: targetHeight
-  };
-};
-
-var $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function $5b02762f359a5b4d$export$9fe3fb24d050ce98(file, option) {
-  var opt = Object.assign({
-    maxWidth: null,
-    maxHeight: null,
-    ratio: 2,
-    outType: 'base64' // base64 | blob
-
-  }, option || {});
-  return new Promise(function (resolve, reject) {
-    if (file.type.indexOf('image/') === 0) module_$5b02762f359a5b4d$var$getOri(file).then(function (orientation) {
-      var oReader = new FileReader();
-
-      oReader.onload = function (e) {
-        var base64 = e.target.result;
-        var img = document.createElement('img');
-
-        img.onload = function () {
-          if (opt.maxWidth || opt.maxHeight) {
-            var compressSize;
-
-            if (orientation === 6) {
-              compressSize = $5b02762f359a5b4d$var$computeSize(img.height, img.width, opt.maxWidth, opt.maxHeight);
-              img.targetWidth = compressSize.height;
-              img.targetHeight = compressSize.width;
-            } else {
-              compressSize = $5b02762f359a5b4d$var$computeSize(img.width, img.height, opt.maxWidth, opt.maxHeight);
-              img.targetWidth = compressSize.width;
-              img.targetHeight = compressSize.height;
+const $5b02762f359a5b4d$var$getURLBase64 = function(url) {
+    return new Promise((resolve, reject)=>{
+        let xhr = new XMLHttpRequest();
+        xhr.open('get', url, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            if (this.status === 200) {
+                let blob = this.response;
+                let fileReader = new FileReader();
+                fileReader.onloadend = function(e) {
+                    let result = e.target.result;
+                    resolve(result);
+                };
+                fileReader.readAsDataURL(blob);
             }
-          }
-
-          $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then(function (canvas) {
-            if (opt.outType === 'blob') canvas.toBlob(resolve, 'image/jpeg', opt.ratio);else resolve(canvas.toDataURL('image/jpeg', opt.ratio));
-          });
         };
-
-        img.src = base64;
-      };
-
-      oReader.readAsDataURL(file);
-    }).catch(function (err) {
-      reject(err);
-    });else reject('非图片文件不支持压缩');
-  });
+        xhr.onerror = function(err) {
+            reject(err);
+        };
+        xhr.send();
+    });
+};
+const $5b02762f359a5b4d$var$getOri = function(file) {
+    return new Promise((resolve)=>{
+        (0,exif.getData)(file, function() {
+            let orientation = (0,exif.getTag)(this, "Orientation");
+            resolve(orientation);
+        });
+    });
+};
+const $5b02762f359a5b4d$var$imgToCanvas = function(img, orientation) {
+    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d'), targetWidth = img.targetWidth || img.width, targetHeight = img.targetHeight || img.height;
+    if (orientation === 6) {
+        canvas.width = targetHeight;
+        canvas.height = targetWidth;
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(Math.PI / 180 * 90);
+        ctx.drawImage(img, -targetWidth / 2, -targetHeight / 2, canvas.height, canvas.width);
+    } else {
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+    return new Promise((resolve)=>{
+        resolve(canvas);
+    });
+};
+const $5b02762f359a5b4d$export$333f7af172343a1 = function(selector) {
+    const fixImg = function(img) {
+        if (!img.dataset.iosfixed) $5b02762f359a5b4d$var$getOri(img).then((orientation)=>{
+            if (orientation == 6) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas1)=>{
+                try {
+                    img.src = canvas1.toDataURL();
+                    img.dataset.iosfixed = true;
+                } catch (e) {
+                    $5b02762f359a5b4d$var$getURLBase64(img.src).then((base64)=>{
+                        img.onload = function() {
+                            if (!img.dataset.iosfixed) $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas)=>{
+                                img.src = canvas.toDataURL();
+                                img.dataset.iosfixed = true;
+                            });
+                        };
+                        img.src = base64;
+                    });
+                }
+            });
+        });
+    };
+    let imgs = document.querySelectorAll(selector);
+    if (imgs.length) for(let i = 0; i < imgs.length; i++){
+        let img = imgs[i];
+        if (img.tagName.toLowerCase() === 'img') {
+            img.crossOrigin = "Anonymous";
+            if (img.complete) fixImg(img);
+            else img.onload = function() {
+                fixImg(img);
+            };
+        }
+    }
+    else console.log('fixer WARN no files:' + selector);
+};
+const $5b02762f359a5b4d$var$computeSize = function(originWidth, originHeight, maxWidth, maxHeight) {
+    let targetWidth = originWidth, targetHeight = originHeight;
+    const setWidth = function() {
+        targetWidth = maxWidth;
+        targetHeight = Math.round(maxWidth * (originHeight / originWidth));
+    }, setHeight = function() {
+        targetHeight = maxHeight;
+        targetWidth = Math.round(maxHeight * (originWidth / originHeight));
+    };
+    if (maxWidth && maxHeight) //限定区间
+    {
+        if (originWidth > maxWidth || originHeight > maxHeight) {
+            if (originWidth / originHeight > maxWidth / maxHeight) // 更宽
+            setWidth();
+            else // 更高
+            setHeight();
+        }
+    } else if (maxWidth) //限定宽度
+    setWidth();
+    else if (maxHeight) //限定高度
+    setHeight();
+    return {
+        width: targetWidth,
+        height: targetHeight
+    };
+};
+const $5b02762f359a5b4d$export$9fe3fb24d050ce98 = function(file, option) {
+    const opt = Object.assign({
+        maxWidth: null,
+        maxHeight: null,
+        ratio: 2,
+        outType: 'base64' // base64 | blob
+    }, option || {
+    });
+    return new Promise((resolve, reject)=>{
+        if (file.type.indexOf('image/') === 0) $5b02762f359a5b4d$var$getOri(file).then((orientation)=>{
+            let oReader = new FileReader();
+            oReader.onload = function(e) {
+                let base64 = e.target.result;
+                let img = document.createElement('img');
+                img.onload = function() {
+                    if (opt.maxWidth || opt.maxHeight) {
+                        let compressSize;
+                        if (orientation === 6) {
+                            compressSize = $5b02762f359a5b4d$var$computeSize(img.height, img.width, opt.maxWidth, opt.maxHeight);
+                            img.targetWidth = compressSize.height;
+                            img.targetHeight = compressSize.width;
+                        } else {
+                            compressSize = $5b02762f359a5b4d$var$computeSize(img.width, img.height, opt.maxWidth, opt.maxHeight);
+                            img.targetWidth = compressSize.width;
+                            img.targetHeight = compressSize.height;
+                        }
+                    }
+                    $5b02762f359a5b4d$var$imgToCanvas(img, orientation).then((canvas)=>{
+                        if (opt.outType === 'blob') canvas.toBlob(resolve, 'image/jpeg', opt.ratio);
+                        else resolve(canvas.toDataURL('image/jpeg', opt.ratio));
+                    });
+                };
+                img.src = base64;
+            };
+            oReader.readAsDataURL(file);
+        }).catch((err)=>{
+            reject(err);
+        });
+        else reject('非图片文件不支持压缩');
+    });
 };
 
+
+
+//# sourceMappingURL=module.js.map
 
 // EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.js
-var cropper = __webpack_require__("bab4");
+var cropper = __webpack_require__(129);
 var cropper_default = /*#__PURE__*/__webpack_require__.n(cropper);
-
 // EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.css
-var dist_cropper = __webpack_require__("6107");
-
-// EXTERNAL MODULE: ./node_modules/promise-polyfill/src/polyfill.js
-var polyfill = __webpack_require__("684e");
-
-// EXTERNAL MODULE: ./node_modules/unfetch/polyfill/index.js
-var unfetch_polyfill = __webpack_require__("79e7");
-
-// EXTERNAL MODULE: ./node_modules/abortcontroller-polyfill/dist/umd-polyfill.js
-var umd_polyfill = __webpack_require__("d842");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/uploader.vue?vue&type=script&lang=js&
+var dist_cropper = __webpack_require__(168);
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js??clonedRuleSet-82.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=script&setup=true&lang=js
 
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+const _withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-642381ed"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
 
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+const _hoisted_1 = ["id"];
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+const _hoisted_2 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)("点击上传");
+
+const _hoisted_3 = {
+  class: "cropper_main"
+};
+const _hoisted_4 = {
+  src: "",
+  ref: "CropperImg"
+};
+const _hoisted_5 = {
+  class: "cropper_actions flex-row align-center"
+};
+const _hoisted_6 = {
+  class: "flex-1"
+};
+
+const _hoisted_7 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
+  class: "el-icon-refresh-left"
+}, null, -1));
+
+const _hoisted_8 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 左旋 ");
+
+const _hoisted_9 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
+  class: "el-icon-refresh-right"
+}, null, -1));
+
+const _hoisted_10 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 右旋 ");
+
+const _hoisted_11 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
+  class: "el-icon-sort",
+  style: {
+    "transform": "rotateZ(90deg)"
+  }
+}, null, -1));
+
+const _hoisted_12 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 水平镜像 ");
+
+const _hoisted_13 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
+  class: "el-icon-sort"
+}, null, -1));
+
+const _hoisted_14 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 垂直镜像 ");
+
+const _hoisted_15 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
+  class: "el-icon-refresh"
+}, null, -1));
+
+const _hoisted_16 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 重置 ");
+
+const _hoisted_17 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
+  class: "el-icon-crop"
+}, null, -1));
+
+const _hoisted_18 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 确定 ");
 
 
 
 
-var cropperInstance; // 调试开关
+let cropperInstance; // 调试开关
 
-var DEBUG = "production" === "development"; // 图片压缩成jpg格式
+const DEBUG = "production" === "development"; // 图片压缩成jpg格式
 
-var fixJpgFileName = function fixJpgFileName(fileName) {
+const fixJpgFileName = function (fileName) {
   if (fileName.match(/\.jpg|\.jpeg$/)) {
     return fileName;
   }
@@ -7395,7 +5742,7 @@ var fixJpgFileName = function fixJpgFileName(fileName) {
 }; // 文件类型集合
 
 
-var FileTypeMap = {
+const FileTypeMap = {
   "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
   "t-video": [".mp4", ".rmvb", ".avi", ".mov", ".3gp", ".webm"],
   "t-audio": [".wav", ".mp3", ".ogg", ".acc"],
@@ -7406,91 +5753,22 @@ var FileTypeMap = {
   "t-zip": [".zip", ".rar"]
 };
 /**
- * 通过文件类型获取扩展名列表
- * @param type[String] FileTypeMap 中约定的类型名
- * return[Array] 目标类型的扩展名数组
- * */
-
-var uploadervue_type_script_lang_js_getExtByType = function getExtByType(type) {
-  var quickType = Object.assign({}, FileTypeMap, external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.quickType || {});
-
-  if (type && Array.isArray(quickType[type])) {
-    var classList = [];
-    var extList = [];
-    quickType[type].forEach(function (e) {
-      if (e.indexOf("t-") === 0) {
-        classList.push(e);
-      } else {
-        extList.push(e);
-      }
-    });
-
-    if (classList.length) {
-      classList.forEach(function (classType) {
-        extList = extList.concat(getExtByType(classType));
-      });
-    }
-
-    return extList;
-  } else if (type && type.split) {
-    return [type.toLowerCase()];
-  }
-};
-/**
  * 预先从全局用户配置中获取props默认值
  * @param key[String] prop的key
  * @param defaultValue[Any] 组件内置默认值
  * return[Any] props.key的最终默认值
  */
 
-var uploadervue_type_script_lang_js_getDefaultValue = function getDefaultValue(key, defaultValue) {
-  var globalOption = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption;
-
-  if (Object.keys(globalOption).indexOf(key) !== -1) {
-    return globalOption[key];
-  }
-
-  return defaultValue;
-}; //兼容IE11
-
-
-
-
-
-
-if (!HTMLCanvasElement.prototype.toBlob) {
-  Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
-    value: function value(callback, type, quality) {
-      var canvas = this;
-      setTimeout(function () {
-        var binStr = atob(canvas.toDataURL(type, quality).split(",")[1]);
-        var len = binStr.length;
-        var arr = new Uint8Array(len);
-
-        for (var i = 0; i < len; i++) {
-          arr[i] = binStr.charCodeAt(i);
-        }
-
-        callback(new Blob([arr], {
-          type: type || "image/png"
-        }));
-      });
-    }
-  });
-}
-
-/* harmony default export */ var uploadervue_type_script_lang_js_ = ({
-  model: {
-    prop: "value",
-    event: "change"
-  },
+const __default__ = {
   props: {
-    value: {
+    modelValue: {
       type: Array,
       required: false,
-      default: function _default() {
-        return uploadervue_type_script_lang_js_getDefaultValue("value", []);
+
+      default() {
+        return [];
       }
+
     },
     triggerId: {
       // 配合实现富文本插件上传功能
@@ -7502,50 +5780,60 @@ if (!HTMLCanvasElement.prototype.toBlob) {
       // 文件尺寸限制
       type: Number,
       required: false,
-      default: function _default() {
-        return uploadervue_type_script_lang_js_getDefaultValue("limitSize", 100 * 1024 * 1024);
+
+      default() {
+        return 100 * 1024 * 1024;
       }
+
     },
     imgCompress: {
       // 开启图片压缩
       type: Boolean,
       required: false,
-      default: function _default() {
-        return uploadervue_type_script_lang_js_getDefaultValue("imgCompress", true);
+
+      default() {
+        return true;
       }
+
     },
     imgCompressOption: {
       // 图片压缩配置
       type: Object,
       required: false,
-      default: function _default() {
-        return uploadervue_type_script_lang_js_getDefaultValue("imgCompressOption", {
+
+      default() {
+        return {
           maxWidth: 1000,
           maxHeight: 1000
-        });
+        };
       }
+
     },
     imgCrop: {
       // 开启图片剪裁
       type: Boolean,
       required: false,
-      default: function _default() {
-        return uploadervue_type_script_lang_js_getDefaultValue("imgCrop", false);
+
+      default() {
+        return false;
       }
+
     },
     imgCropOption: {
       // 图片剪裁配置
       type: Object,
       required: false,
-      default: function _default() {
-        return uploadervue_type_script_lang_js_getDefaultValue("imgCropOption", {
+
+      default() {
+        return {
           ratio: 1,
           minWidth: 0,
           minHeight: 0,
           maxWidth: 1000,
           maxHeight: 1000
-        });
+        };
       }
+
     },
     uploadMethod: {
       // 自定义上传方法，参数（file/blob, fileName）
@@ -7556,16 +5844,15 @@ if (!HTMLCanvasElement.prototype.toBlob) {
       // 接口返回数据 与 fileList 数据格式转换函数
       type: Function,
       required: false,
-      default: function _default(response) {
-        if (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.responseTransfer === "function") {
-          return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.responseTransfer(response);
-        } else {
-          return response;
-        }
+
+      default(response) {
+        return response;
       }
+
     }
   },
-  data: function data() {
+
+  data() {
     return {
       dialogVisible: false,
       cropResult: null,
@@ -7573,76 +5860,81 @@ if (!HTMLCanvasElement.prototype.toBlob) {
       controller: null
     };
   },
+
   computed: {
-    acceptFinnal: function acceptFinnal() {
+    acceptFinnal() {
       if (this.$attrs.accept && this.$attrs.accept.indexOf("t-") !== -1) {
-        var typeArray = this.$attrs.accept.split(",");
-        var result = [];
-        typeArray.forEach(function (type) {
-          result = result.concat(uploadervue_type_script_lang_js_getExtByType(type));
+        const typeArray = this.$attrs.accept.split(",");
+        let result = [];
+        typeArray.forEach(type => {
+          result = result.concat(this.getExtByType(type));
         });
         return result.join(",");
       } else {
         return this.$attrs.accept || "*";
       }
+    },
+
+    propsFinnal() {
+      let result = {};
+      Object.keys(this.$props).forEach(prop => {
+        result[prop] = this.getDefaultValue(prop);
+      });
+      return result;
     }
+
   },
   watch: {
-    value: {
-      handler: function handler(newValue) {
+    modelValue: {
+      handler(newValue) {
         this.fileListFinnal = this.$attrs.fileList || newValue || [];
 
         if (this.$refs.myupload) {
-          this.$refs.myupload.uploadFiles = newValue.filter(function (ef) {
-            return newValue.findIndex(function (f) {
-              return f.uid === ef.uid;
-            }) !== -1;
+          this.$refs.myupload.uploadFiles = newValue.filter(ef => {
+            return newValue.findIndex(f => f.uid === ef.uid) !== -1;
           });
         }
       },
+
       deep: true,
       immediate: true
     }
   },
   methods: {
-    handleBeforeUpload: function handleBeforeUpload(file) {
+    handleBeforeUpload: function (file) {
       // 尺寸校验
-      if (file.size > this.limitSize) {
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$message.warning("文件大小超出限制");
+      if (file.size > this.propsFinnal.limitSize) {
+        Vue.prototype.$message.warning("文件大小超出限制");
         return false;
       } // 格式校验
 
 
       if (this.acceptFinnal !== "*" && this.acceptFinnal.indexOf(file.name.substring(file.name.lastIndexOf(".")).toLowerCase()) === -1) {
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$message.warning("文件格式不正确");
+        Vue.prototype.$message.warning("文件格式不正确");
         return false;
       }
 
       if (typeof this.$attrs["before-upload"] === "function") {
         return this.$attrs["before-upload"](file);
-      } else if (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.beforeUpload === "function") {
-        return external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.beforeUpload(file);
+      } else if (this.globalOption && typeof this.globalOption.beforeUpload === "function") {
+        return this.globalOption.beforeUpload(file);
       } else {
         return true;
       }
     },
-    handleonExceed: function handleonExceed(file, fileList) {
+    handleonExceed: function (file, fileList) {
       if (typeof this.$attrs["on-exceed"] === "function") {
         this.$attrs["on-exceed"](file, fileList);
-      } else if (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && typeof external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.onExceed === "function") {
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.onExceed(file, fileList);
+      } else if (this.globalOption && typeof this.globalOption.onExceed === "function") {
+        this.globalOption.onExceed(file, fileList);
       }
     },
-    handleChange: function handleChange(file, fileList) {
-      var _this = this;
-
-      var doneFiles = fileList.filter(function (e) {
-        return e.status === "success";
-      });
+    handleChange: function (file, fileList) {
+      const doneFiles = fileList.filter(e => e.status === "success");
 
       if (doneFiles.length === fileList.length) {
-        this.$emit("change", doneFiles.map(function (e) {
-          var data = e.response ? _this.responseTransfer(e.response) : e; // 扩展字段
+        this.$emit("update:modelValue", doneFiles.map(e => {
+          let data = e.response ? this.propsFinnal.responseTransfer(e.response) : e; // 扩展字段
 
           data.uid = e.uid;
           data.status = e.status;
@@ -7654,7 +5946,8 @@ if (!HTMLCanvasElement.prototype.toBlob) {
         this.$attrs["on-change"](file, fileList);
       }
     },
-    handleProgress: function handleProgress(e) {
+
+    handleProgress(e) {
       if (typeof this.$attrs["on-progress"] === "function") {
         if (e.total > 0) {
           e.percent = e.loaded / e.total * 100;
@@ -7663,11 +5956,10 @@ if (!HTMLCanvasElement.prototype.toBlob) {
         this.$attrs["on-progress"](e);
       }
     },
-    handleRemove: function handleRemove(file, fileList) {
-      var _this2 = this;
 
-      this.$emit("change", fileList.map(function (e) {
-        var data = e.response ? _this2.responseTransfer(e.response) : e;
+    handleRemove: function (file, fileList) {
+      this.$emit("update:modelValue", fileList.map(e => {
+        let data = e.response ? this.propsFinnal.responseTransfer(e.response) : e;
         data.uid = e.uid;
         return data;
       }));
@@ -7676,151 +5968,94 @@ if (!HTMLCanvasElement.prototype.toBlob) {
         this.$attrs["on-remove"](file, fileList);
       }
     },
-    customUpload: function () {
-      var _customUpload = _asyncToGenerator( /*#__PURE__*/regenerator_default.a.mark(function _callee(params) {
-        var _this3 = this;
-
-        var theUploadRequest, uploadedFileType, formDataFileObj, formDataFileName, imgBlob, _imgBlob;
-
-        return regenerator_default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(!external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption && !external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.uploadMethod && !this.uploadMethod)) {
-                  _context.next = 2;
-                  break;
-                }
-
-                return _context.abrupt("return", console.warn("Uploader: The required configuration [uploadMethod] is missing!"));
-
-              case 2:
-                theUploadRequest = this.uploadMethod || external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$UploaderOption.uploadMethod;
-
-                if (!(typeof theUploadRequest !== "function")) {
-                  _context.next = 5;
-                  break;
-                }
-
-                return _context.abrupt("return", console.warn("Uploader: [uploadMethod] must be a Function!"));
-
-              case 5:
-                uploadedFileType = params.file.type;
-                DEBUG && console.log("uploadedFileType", uploadedFileType);
-                formDataFileObj = params.file;
-                formDataFileName = params.file.name;
-
-                if (!(uploadedFileType.indexOf("image/") === 0)) {
-                  _context.next = 26;
-                  break;
-                }
-
-                if (!this.imgCrop) {
-                  _context.next = 19;
-                  break;
-                }
-
-                // 图片剪裁
-                this.cropResult = null;
-                this.dialogVisible = true;
-                _context.next = 15;
-                return new Promise(function (resolve) {
-                  var oReader = new FileReader();
-
-                  oReader.onload = function (e) {
-                    var base64 = e.target.result;
-                    var img = _this3.$refs.CropperImg;
-                    img.src = base64; //
-
-                    //
-                    if (cropperInstance) {
-                      cropperInstance.destroy();
-                    }
-
-                    cropperInstance = new cropper_default.a(img, {
-                      viewMode: 1,
-                      dragMode: "none",
-                      movable: false,
-                      zoomOnTouch: false,
-                      zoomOnWheel: false,
-                      toggleDragModeOnDblclick: false,
-                      aspectRatio: _this3.imgCropOption.ratio
-                    });
-                  };
-
-                  oReader.readAsDataURL(params.file);
-
-                  _this3.$watch("cropResult", resolve);
-                });
-
-              case 15:
-                imgBlob = _context.sent;
-
-                if (imgBlob) {
-                  DEBUG && console.log("imgCrop", imgBlob);
-                  formDataFileObj = imgBlob;
-                  formDataFileName = fixJpgFileName(formDataFileName);
-                  this.cropperMethod("close");
-                }
-
-                _context.next = 26;
-                break;
-
-              case 19:
-                if (!this.imgCompress) {
-                  _context.next = 26;
-                  break;
-                }
-
-                _context.next = 22;
-                return $5b02762f359a5b4d$export$9fe3fb24d050ce98(params.file, Object.assign({}, this.imgCompressOption, {
-                  outType: "blob"
-                }));
-
-              case 22:
-                _imgBlob = _context.sent;
-                DEBUG && console.log("imgCompress", _imgBlob);
-                formDataFileObj = _imgBlob;
-                formDataFileName = fixJpgFileName(formDataFileName);
-
-              case 26:
-                // 上传
-                DEBUG && console.log("upload params", formDataFileName, formDataFileObj);
-                this.controller = new AbortController();
-                return _context.abrupt("return", theUploadRequest(formDataFileObj, formDataFileName, {
-                  onUploadProgress: this.handleProgress,
-                  signal: this.controller.signal
-                }).then(function (res) {
-                  return res.data;
-                }));
-
-              case 29:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function customUpload(_x) {
-        return _customUpload.apply(this, arguments);
+    customUpload: async function (params) {
+      if (!this.globalOption && !this.globalOption.uploadMethod && !this.propsFinnal.uploadMethod) {
+        return console.warn("Uploader: The required configuration [uploadMethod] is missing!");
       }
 
-      return customUpload;
-    }(),
-    cropperMethod: function cropperMethod(action) {
-      var _this4 = this;
+      const theUploadRequest = this.propsFinnal.uploadMethod || this.globalOption.uploadMethod;
 
+      if (typeof theUploadRequest !== "function") {
+        return console.warn("Uploader: [uploadMethod] must be a Function!");
+      }
+
+      const uploadedFileType = params.file.type;
+      DEBUG && console.log("uploadedFileType", uploadedFileType);
+      let formDataFileObj = params.file;
+      let formDataFileName = params.file.name;
+
+      if (uploadedFileType.indexOf("image/") === 0) {
+        if (this.propsFinnal.imgCrop) {
+          // 图片剪裁
+          this.cropResult = null;
+          this.dialogVisible = true;
+          const imgBlob = await new Promise(resolve => {
+            let oReader = new FileReader();
+
+            oReader.onload = e => {
+              let base64 = e.target.result;
+              let img = this.$refs.CropperImg;
+              img.src = base64; //
+
+              if (cropperInstance) {
+                cropperInstance.destroy();
+              }
+
+              cropperInstance = new (cropper_default())(img, {
+                viewMode: 1,
+                dragMode: "none",
+                movable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false,
+                toggleDragModeOnDblclick: false,
+                aspectRatio: this.propsFinnal.imgCropOption.ratio
+              });
+            };
+
+            oReader.readAsDataURL(params.file);
+            this.$watch("cropResult", resolve);
+          });
+
+          if (imgBlob) {
+            DEBUG && console.log("imgCrop", imgBlob);
+            formDataFileObj = imgBlob;
+            formDataFileName = fixJpgFileName(formDataFileName);
+            this.cropperMethod("close");
+          }
+        } else if (this.propsFinnal.imgCompress) {
+          // 图片压缩
+          const imgBlob = await $5b02762f359a5b4d$export$9fe3fb24d050ce98(params.file, Object.assign({}, this.propsFinnal.imgCompressOption, {
+            outType: "blob"
+          }));
+          DEBUG && console.log("imgCompress", imgBlob);
+          formDataFileObj = imgBlob;
+          formDataFileName = fixJpgFileName(formDataFileName);
+        }
+      } // 上传
+
+
+      DEBUG && console.log("upload params", formDataFileName, formDataFileObj);
+      this.controller = new AbortController();
+      return theUploadRequest(formDataFileObj, formDataFileName, {
+        onUploadProgress: this.handleProgress,
+        signal: this.controller.signal
+      }).then(res => {
+        return res.data;
+      });
+    },
+
+    cropperMethod(action) {
       // 剪裁相关处理方法
       switch (action) {
         case "save":
           cropperInstance.getCroppedCanvas({
-            minWidth: this.imgCropOption.minWidth,
-            minHeight: this.imgCropOption.minHeight,
-            maxWidth: this.imgCropOption.maxWidth || 1000,
-            maxHeight: this.imgCropOption.maxHeight || 1000,
+            minWidth: this.propsFinnal.imgCropOption.minWidth,
+            minHeight: this.propsFinnal.imgCropOption.minHeight,
+            maxWidth: this.propsFinnal.imgCropOption.maxWidth || 1000,
+            maxHeight: this.propsFinnal.imgCropOption.maxHeight || 1000,
             imageSmoothingQuality: "medium"
-          }).toBlob(function (blob) {
-            _this4.cropResult = blob;
+          }).toBlob(blob => {
+            this.cropResult = blob;
           }, "image/jpeg");
           break;
 
@@ -7832,9 +6067,9 @@ if (!HTMLCanvasElement.prototype.toBlob) {
           }
 
           if (!this.cropResult) {
-            var newValue = [].concat(this.value);
+            const newValue = [].concat(this.modelValue);
             newValue.pop();
-            this.$emit("change", newValue);
+            this.$emit("update:modelValue", newValue);
           }
 
           break;
@@ -7863,197 +6098,207 @@ if (!HTMLCanvasElement.prototype.toBlob) {
           console.warn("cropperMethod 参数错误: ", action);
       }
     },
-    clearFiles: function clearFiles() {
+
+    clearFiles() {
       // el-upload 方法
       this.$refs.myupload.clearFiles();
     },
-    abort: function abort() {
+
+    abort() {
       this.controller.abort();
     },
-    submit: function submit() {
+
+    submit() {
       // el-upload 方法
       this.$refs.myupload.submit();
     }
+
   }
-});
-// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_uploadervue_type_script_lang_js_ = (uploadervue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/uploader.vue?vue&type=style&index=0&id=13f9cba2&scoped=true&lang=css&
-var uploadervue_type_style_index_0_id_13f9cba2_scoped_true_lang_css_ = __webpack_require__("c72d");
+};
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-/* globals __VUE_SSR_CONTEXT__ */
+/* harmony default export */ const uploadervue_type_script_setup_true_lang_js = (/*#__PURE__*/Object.assign(__default__, {
+  setup(__props) {
+    const internalInstance = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.getCurrentInstance)();
+    const globalOption = internalInstance.appContext.config.globalProperties.$UploaderOption || {};
 
-// IMPORTANT: Do NOT use ES2015 features in this file (except for modules).
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-function normalizeComponent (
-  scriptExports,
-  render,
-  staticRenderFns,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier, /* server only */
-  shadowMode /* vue-cli only */
-) {
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (render) {
-    options.render = render
-    options.staticRenderFns = staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = 'data-v-' + scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
+    const getDefaultValue = function (key) {
+      if (Object.keys(globalOption).indexOf(key) !== -1) {
+        return globalOption[key];
       }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
+
+      return internalInstance.props[key];
+    };
+    /**
+     * 通过文件类型获取扩展名列表
+     * @param type[String] FileTypeMap 中约定的类型名
+     * return[Array] 目标类型的扩展名数组
+     * */
+
+
+    const getExtByType = type => {
+      const quickType = Object.assign({}, FileTypeMap, globalOption.quickType || {});
+
+      if (type && Array.isArray(quickType[type])) {
+        let classList = [];
+        let extList = [];
+        quickType[type].forEach(e => {
+          if (e.indexOf("t-") === 0) {
+            classList.push(e);
+          } else {
+            extList.push(e);
+          }
+        });
+
+        if (classList.length) {
+          classList.forEach(classType => {
+            extList = extList.concat(getExtByType(classType));
+          });
+        }
+
+        return extList;
+      } else if (type && type.split) {
+        return [type.toLowerCase()];
       }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = shadowMode
-      ? function () {
-        injectStyles.call(
-          this,
-          (options.functional ? this.parent : this).$root.$options.shadowRoot
-        )
-      }
-      : injectStyles
+    };
+
+    return (_ctx, _cache) => {
+      const _component_el_button = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-button");
+
+      const _component_el_button_group = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-button-group");
+
+      const _component_el_dialog = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-dialog");
+
+      const _component_el_upload = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-upload");
+
+      return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createBlock)(_component_el_upload, (0,external_commonjs_vue_commonjs2_vue_root_Vue_.mergeProps)({
+        ref: "myupload"
+      }, _ctx.$attrs, {
+        action: "",
+        fileList: _ctx.fileListFinnal,
+        accept: _ctx.acceptFinnal,
+        "before-upload": _ctx.handleBeforeUpload,
+        "on-exceed": _ctx.handleonExceed,
+        "on-change": _ctx.handleChange,
+        "on-remove": _ctx.handleRemove,
+        "http-request": _ctx.customUpload
+      }), {
+        default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", {
+          id: __props.triggerId
+        }, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.renderSlot)(_ctx.$slots, "default", {}, () => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, null, {
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_2]),
+          _: 1
+        })]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.renderSlot)(_ctx.$slots, "trigger"), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.renderSlot)(_ctx.$slots, "tip")], 8, _hoisted_1), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_dialog, {
+          modelValue: _ctx.dialogVisible,
+          "onUpdate:modelValue": _cache[6] || (_cache[6] = $event => (0,external_commonjs_vue_commonjs2_vue_root_Vue_.isRef)(dialogVisible) ? dialogVisible.value = $event : null),
+          "append-to-body": "",
+          title: "图像剪裁",
+          top: "10vh",
+          "custom-class": "cropper",
+          "close-on-click-modal": false,
+          "close-on-press-escape": false,
+          onClose: _cache[7] || (_cache[7] = $event => _ctx.cropperMethod('close'))
+        }, {
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", _hoisted_3, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("img", _hoisted_4, null, 512)]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", _hoisted_5, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", _hoisted_6, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button_group, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
+              size: "small",
+              title: "左旋",
+              onClick: _cache[0] || (_cache[0] = $event => _ctx.cropperMethod('rotateLeft'))
+            }, {
+              default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_7, _hoisted_8]),
+              _: 1
+            }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
+              size: "small",
+              title: "右旋",
+              onClick: _cache[1] || (_cache[1] = $event => _ctx.cropperMethod('rotateRight'))
+            }, {
+              default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_9, _hoisted_10]),
+              _: 1
+            })]),
+            _: 1
+          }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button_group, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
+              size: "small",
+              title: "水平镜像",
+              onClick: _cache[2] || (_cache[2] = $event => _ctx.cropperMethod('scaleX'))
+            }, {
+              default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_11, _hoisted_12]),
+              _: 1
+            }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
+              size: "small",
+              title: "垂直镜像",
+              onClick: _cache[3] || (_cache[3] = $event => _ctx.cropperMethod('scaleY'))
+            }, {
+              default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_13, _hoisted_14]),
+              _: 1
+            })]),
+            _: 1
+          }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button_group, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
+              size: "small",
+              title: "重置",
+              onClick: _cache[4] || (_cache[4] = $event => _ctx.cropperMethod('reset'))
+            }, {
+              default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_15, _hoisted_16]),
+              _: 1
+            })]),
+            _: 1
+          })]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
+            size: "small",
+            type: "primary",
+            plain: "",
+            onClick: _cache[5] || (_cache[5] = $event => _ctx.cropperMethod('save'))
+          }, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_17, _hoisted_18]),
+            _: 1
+          })])]),
+          _: 1
+        }, 8, ["modelValue"])]),
+        _: 3
+      }, 16, ["fileList", "accept", "before-upload", "on-exceed", "on-change", "on-remove", "http-request"]);
+    };
   }
 
-  if (hook) {
-    if (options.functional) {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functional component in vue file
-      var originalRender = options.render
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return originalRender(h, context)
-      }
-    } else {
-      // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    }
-  }
+}));
+;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=script&setup=true&lang=js
+ 
+// EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js??clonedRuleSet-54.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-54.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[2]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=style&index=0&id=642381ed&scoped=true&lang=css
+var uploadervue_type_style_index_0_id_642381ed_scoped_true_lang_css = __webpack_require__(27);
+;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=style&index=0&id=642381ed&scoped=true&lang=css
 
-  return {
-    exports: scriptExports,
-    options: options
-  }
-}
-
-// CONCATENATED MODULE: ./src/components/uploader.vue
+// EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
+var exportHelper = __webpack_require__(744);
+;// CONCATENATED MODULE: ./src/components/uploader.vue
 
 
 
+;
 
 
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(uploadervue_type_script_setup_true_lang_js, [['__scopeId',"data-v-642381ed"]])
 
-/* normalize component */
-
-var component = normalizeComponent(
-  components_uploadervue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  "13f9cba2",
-  null
-  
-)
-
-/* harmony default export */ var uploader = (component.exports);
-// CONCATENATED MODULE: ./src/index.js
+/* harmony default export */ const uploader = (__exports__);
+;// CONCATENATED MODULE: ./src/index.js
 /**
  * @cutting-mat/uploader
  * 
  * */
 
-/* harmony default export */ var src_0 = ({
-  install: function install(Vue, option) {
-    Vue.$UploaderOption = option || {};
-    Vue.component('uploader', uploader);
+/* harmony default export */ const src_0 = ({
+  install: function (app, option) {
+    app.config.globalProperties.$UploaderOption = option || {};
+    app.component('uploader', uploader);
   }
 });
-// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
+;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
 
-/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (src_0);
+/* harmony default export */ const entry_lib = (src_0);
 
 
+})();
 
-/***/ }),
-
-/***/ "fe91":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- * @this {Promise}
- */
-function finallyConstructor(callback) {
-  var constructor = this.constructor;
-  return this.then(
-    function(value) {
-      // @ts-ignore
-      return constructor.resolve(callback()).then(function() {
-        return value;
-      });
-    },
-    function(reason) {
-      // @ts-ignore
-      return constructor.resolve(callback()).then(function() {
-        // @ts-ignore
-        return constructor.reject(reason);
-      });
-    }
-  );
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (finallyConstructor);
-
-
-/***/ })
-
-/******/ });
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
 });
 //# sourceMappingURL=index.umd.js.map

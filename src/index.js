@@ -1,13 +1,13 @@
 /**
  * @cutting-mat/uploader
  * 
- * */ 
+ * */
 import Uploader from '@/components/uploader';
 
 export default {
-    install: function (Vue, option) {
-        Vue.$UploaderOption = option || {}
+    install: function (app, option) {
+        app.config.globalProperties.$UploaderOption = option || {}
 
-        Vue.component('uploader', Uploader)
+        app.component('uploader', Uploader)
     }
 }

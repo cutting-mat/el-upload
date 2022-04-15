@@ -1,10 +1,8 @@
 <template>
-  <div id="app"
-    class="flex-col"
-  >
+  <div class="flex-col main">
     <myHeader />
 
-    <HomePage class="flex-1 scrollbar"  />
+    <HomePage class="flex-1 scrollbar" />
 
     <myFooter />
   </div>
@@ -14,12 +12,13 @@
 //import { util } from "@/core";
 import myHeader from "./components/header";
 import myFooter from "./components/footer";
+import HomePage from "./components/HomePage";
 
 export default {
   components: {
     myHeader,
     myFooter,
-    HomePage: () => import("./components/HomePage"),
+    HomePage,
   },
   data() {
     return {
@@ -29,7 +28,7 @@ export default {
   methods: {},
   created() {
     // const { width, height } = window.screen;
-    const {innerWidth, innerHeight} = window;
+    const { innerWidth, innerHeight } = window;
     this.screen = {
       width: innerWidth,
       height: innerHeight,
@@ -38,6 +37,8 @@ export default {
 };
 </script>
 
-<style >
-
+<style>
+.main {
+  height: 100%;
+}
 </style>

@@ -41,7 +41,8 @@
     }
 
  * */
-import Vue from "vue";
+import { ElMessage } from 'element-plus'
+
 import { upload as uploadMethod } from "@/test/api/common";
 
 export default {
@@ -49,14 +50,18 @@ export default {
     beforeUpload(file) {
         // 文件名不得超过500字符
         if (file.name.length > 500) {
-            Vue.prototype.$message.warning(
-                `文件名不得超过 500 字符`
-            );
+            ElMessage({
+                message: "文件名不得超过 500 字符",
+                type: 'warning'
+            })
             return false;
         }
     },
     onExceed() {
-        Vue.prototype.$message.warning("超出上传数量限制");
+        ElMessage({
+            message: "超出上传数量限制",
+            type: 'warning'
+        })
     },
     responseTransfer(res) {
         return res.data
