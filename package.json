@@ -1,9 +1,8 @@
 {
   "name": "@cutting-mat/uploader",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "",
   "main": "dist/index.common.js",
-  "module": "lib/index.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cutting-mat/uploader.git"
