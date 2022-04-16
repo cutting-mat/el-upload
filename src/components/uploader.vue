@@ -95,21 +95,8 @@
     </el-dialog>
   </el-upload>
 </template>
-<script setup>
-import { getCurrentInstance, defineProps } from "vue";
-const internalInstance = getCurrentInstance();
-
-const globalOption =
-  internalInstance.appContext.config.globalProperties.$UploaderOption || {};
-const getDefaultValue = function (key) {
-  if (Object.keys(globalOption).indexOf(key) !== -1) {
-    return globalOption[key];
-  }
-  return internalInstance.props[key];
-};
-</script>
-
 <script>
+import { ElMessage } from "element-plus";
 import { fixImgFile } from "ios-photo-repair";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -223,6 +210,7 @@ export default {
       cropResult: null,
       fileListFinnal: [],
       controller: null,
+      globalOption: {},
     };
   },
   computed: {
@@ -239,9 +227,15 @@ export default {
       }
     },
     propsFinnal() {
+      const getDefaultValue = (key) => {
+        if (Object.keys(this.globalOption).indexOf(key) !== -1) {
+          return this.globalOption[key];
+        }
+        return this.$props[key];
+      };
       let result = {};
       Object.keys(this.$props).forEach((prop) => {
-        result[prop] = this.getDefaultValue(prop);
+        result[prop] = getDefaultValue(prop);
       });
       return result;
     },
@@ -290,7 +284,7 @@ export default {
     handleBeforeUpload: function (file) {
       // 尺寸校验
       if (file.size > this.propsFinnal.limitSize) {
-        Vue.prototype.$message.warning("文件大小超出限制");
+        ElMessage({ message: "文件大小超出限制", type: "warning" });
         return false;
       }
       // 格式校验
@@ -300,7 +294,7 @@ export default {
           file.name.substring(file.name.lastIndexOf(".")).toLowerCase()
         ) === -1
       ) {
-        Vue.prototype.$message.warning("文件格式不正确");
+        ElMessage({ message: "文件格式不正确", type: "warning" });
         return false;
       }
 
@@ -513,6 +507,9 @@ export default {
       // el-upload 方法
       this.$refs.myupload.submit();
     },
+  },
+  created() {
+    this.globalOption = this.$UploaderOption || {};
   },
 };
 </script>
