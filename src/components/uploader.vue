@@ -96,7 +96,6 @@
   </el-upload>
 </template>
 <script>
-import { ElMessage } from "element-plus";
 import { fixImgFile } from "ios-photo-repair";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -203,6 +202,14 @@ export default {
         return response;
       },
     },
+    BeforeUploadError: {
+      // 上传前校验失败回调
+      type: Function,
+      required: false,
+      default(info) {
+        return console.warn(info);
+      },
+    },
   },
   data() {
     return {
@@ -284,7 +291,10 @@ export default {
     handleBeforeUpload: function (file) {
       // 尺寸校验
       if (file.size > this.propsFinnal.limitSize) {
-        ElMessage({ message: "文件大小超出限制", type: "warning" });
+        this.propsFinnal.BeforeUploadError({
+          message: "文件大小超出限制",
+          type: "warning",
+        });
         return false;
       }
       // 格式校验
@@ -294,7 +304,10 @@ export default {
           file.name.substring(file.name.lastIndexOf(".")).toLowerCase()
         ) === -1
       ) {
-        ElMessage({ message: "文件格式不正确", type: "warning" });
+        this.propsFinnal.BeforeUploadError({
+          message: "文件格式不正确",
+          type: "warning",
+        });
         return false;
       }
 

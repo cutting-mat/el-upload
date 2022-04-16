@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@cutting-mat/uploader.svg)](https://www.npmjs.com/package/@cutting-mat/uploader) [![license](https://img.shields.io/github/license/cutting-mat/uploader.svg)]()
 
-基于ElementUI，整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的 Vue 上传组件
+基于 ElementUI，整合图片上传前压缩、上传前剪裁、IOS 图片方向自动校正、自定义文件类型的 Vue 上传组件
 
 ## Feature
 
@@ -25,22 +25,19 @@ npm i @cutting-mat/uploader -S
 
 ```js
 import uploader from "@cutting-mat/uploader";
-import uploadConfig from "@/upload.config"
-Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配置
-
+import uploadConfig from "@/upload.config";
+Vue.use(uploader, uploadConfig); // 安装时传入的配置为全局配置
 ```
 
 3. 使用组件
 
 ```html
-<uploader :uploadMethod="(file, fileName) => {...}">
-点击上传
-</uploader>
+<uploader :uploadMethod="(file, fileName) => {...}"> 点击上传 </uploader>
 ```
 
 ## Config
 
-``` js
+```js
 /**
  * @cutting-mat/uploader 配置文件 
  * 支持 el-upload 除请求相关（action, headers, data, name, with-credentials, http-request）以外的所有 Prop
@@ -71,6 +68,7 @@ Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配�
     }
  * uploadMethod[Function]:      上传处理方法, 接收两个参数（file/blob, fileName），default: 无
  * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, default: (response) => return response;
+ * BeforeUploadError[Function]: 上传前校验失败回调，接受info参数：{message: "超出上传数量限制", type: 'warning' }
  * quickType[Object]:           自定义文件类型, default: 
     {
         "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
@@ -84,5 +82,4 @@ Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配�
     }
 
  * */
-
 ```

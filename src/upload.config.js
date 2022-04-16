@@ -28,6 +28,7 @@
     }
  * uploadMethod[Function]:      上传处理方法, 接收两个参数（file/blob, fileName），default: 无
  * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, default: (response) => return response;
+ * BeforeUploadError[Function]: 上传前校验失败回调，接受info参数：{message: "超出上传数量限制", type: 'warning' }
  * quickType[Object]:           自定义文件类型, default: 
     {
         "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
@@ -65,5 +66,8 @@ export default {
     },
     responseTransfer(res) {
         return res.data
+    },
+    BeforeUploadError(info) {
+        ElMessage(info)
     }
 }
