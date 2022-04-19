@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@cutting-mat/uploader.svg)](https://www.npmjs.com/package/@cutting-mat/uploader) [![license](https://img.shields.io/github/license/cutting-mat/uploader.svg)]()
 
-基于ElementUI，整合图片上传前压缩、上传前剪裁、IOS图片方向自动校正、自定义文件类型的 Vue 上传组件
+基于 ElementUI，整合图片上传前压缩、上传前剪裁、IOS 图片方向自动校正、自定义文件类型的 Vue 上传组件
 
 ## Feature
 
@@ -17,30 +17,32 @@
 
 1. NPM 安装
 
-```bash
-npm i @cutting-mat/uploader -S
+```js
+// Vue2 + Element-UI
+npm i @cutting-mat/uploader@2.0.15 -S
+
+// Vue3 + Element-Plus
+npm i @cutting-mat/uploader@3.0.5 -S
+
 ```
 
 2. 安装插件
 
 ```js
 import uploader from "@cutting-mat/uploader";
-import uploadConfig from "@/upload.config"
-Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配置
-
+import uploadConfig from "@/upload.config";
+Vue.use(uploader, uploadConfig); // 安装时传入的配置为全局配置
 ```
 
 3. 使用组件
 
 ```html
-<uploader :uploadMethod="(file, fileName) => {...}">
-点击上传
-</uploader>
+<uploader :uploadMethod="(file, fileName) => {...}"> 点击上传 </uploader>
 ```
 
 ## Config
 
-``` js
+```js
 /**
  * @cutting-mat/uploader 配置文件 
  * 支持 el-upload 除请求相关（action, headers, data, name, with-credentials, http-request）以外的所有 Prop
@@ -84,5 +86,4 @@ Vue.use(uploader, uploadConfig);        // 安装时传入的配置为全局配�
     }
 
  * */
-
 ```
