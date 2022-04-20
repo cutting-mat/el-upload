@@ -1,6 +1,6 @@
 {
   "name": "@cutting-mat/uploader",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "",
   "main": "dist/index.umd.min.js",
   "repository": {
@@ -25,6 +25,7 @@
     "vue": "^3.2.33"
   },
   "devDependencies": {
+    "@element-plus/icons-vue": "^1.1.4",
     "@vue/cli-plugin-babel": "^5.0.4",
     "@vue/cli-service": "^5.0.4",
     "axios": "^0.26.1",

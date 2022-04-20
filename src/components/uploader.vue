@@ -24,7 +24,7 @@
       append-to-body
       title="图像剪裁"
       top="10vh"
-      custom-class="cropper"
+      custom-class="uploader-cropper-dialog"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       @close="cropperMethod('close')"
@@ -35,60 +35,35 @@
       <div class="cropper_actions flex-row align-center">
         <div class="flex-1">
           <el-button-group>
-            <el-button
-              size="small"
-              title="左旋"
-              @click="cropperMethod('rotateLeft')"
-            >
-              <i class="el-icon-refresh-left"></i>
+            <el-button title="左旋" @click="cropperMethod('rotateLeft')">
+              <el-icon><refresh-left /></el-icon>
               左旋
             </el-button>
-            <el-button
-              size="small"
-              title="右旋"
-              @click="cropperMethod('rotateRight')"
-            >
-              <i class="el-icon-refresh-right"></i>
+            <el-button title="右旋" @click="cropperMethod('rotateRight')">
+              <el-icon><refresh-right /></el-icon>
               右旋
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button
-              size="small"
-              title="水平镜像"
-              @click="cropperMethod('scaleX')"
-            >
-              <i class="el-icon-sort" style="transform: rotateZ(90deg)"></i>
+            <el-button title="水平镜像" @click="cropperMethod('scaleX')">
+              <el-icon style="transform: rotateZ(90deg)"><sort /></el-icon>
               水平镜像
             </el-button>
-            <el-button
-              size="small"
-              title="垂直镜像"
-              @click="cropperMethod('scaleY')"
-            >
-              <i class="el-icon-sort"></i>
+            <el-button title="垂直镜像" @click="cropperMethod('scaleY')">
+              <el-icon><sort /></el-icon>
               垂直镜像
             </el-button>
           </el-button-group>
           <el-button-group>
-            <el-button
-              size="small"
-              title="重置"
-              @click="cropperMethod('reset')"
-            >
-              <i class="el-icon-refresh"></i>
+            <el-button title="重置" @click="cropperMethod('reset')">
+              <el-icon><refresh /></el-icon>
               重置
             </el-button>
           </el-button-group>
         </div>
 
-        <el-button
-          size="small"
-          type="primary"
-          plain
-          @click="cropperMethod('save')"
-        >
-          <i class="el-icon-crop"></i>
+        <el-button type="primary" plain @click="cropperMethod('save')">
+          <el-icon><crop /></el-icon>
           确定
         </el-button>
       </div>
@@ -99,6 +74,14 @@
 import { fixImgFile } from "ios-photo-repair";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
+
+import {
+  Crop,
+  Refresh,
+  Sort,
+  RefreshRight,
+  RefreshLeft,
+} from "@element-plus/icons-vue";
 
 let cropperInstance;
 
@@ -210,6 +193,13 @@ export default {
         return console.warn(info);
       },
     },
+  },
+  components: {
+    Crop,
+    Refresh,
+    Sort,
+    RefreshRight,
+    RefreshLeft,
   },
   data() {
     return {
@@ -526,12 +516,13 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/* 图片剪裁弹窗 */
-.cropper :deep(.el-dialog__body) {
+<style>
+.uploader-cropper-dialog .el-dialog__body {
   padding: 0;
 }
+</style>
+<style scoped>
+/* 图片剪裁弹窗 */
 
 .cropper_main {
   height: 50vh;

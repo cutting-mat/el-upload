@@ -3733,7 +3733,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ 30:
+/***/ 318:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3750,7 +3750,31 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".cropper[data-v-772ef42e] .el-dialog__body{padding:0}.cropper_main[data-v-772ef42e]{height:50vh;min-height:500px}.cropper_actions[data-v-772ef42e]{padding:.5em}.cropper_actions[data-v-772ef42e] .el-button-group{margin-right:10px}", "",{"version":3,"sources":["webpack://./src/components/uploader.vue"],"names":[],"mappings":"AAmhBA,2CACE,SACF,CAEA,+BACE,WAAY,CACZ,gBACF,CAEA,kCACE,YACF,CAEA,mDACE,iBACF","sourcesContent":["<template>\r\n  <el-upload\r\n    ref=\"myupload\"\r\n    v-bind=\"$attrs\"\r\n    action\r\n    :fileList=\"fileListFinnal\"\r\n    :accept=\"acceptFinnal\"\r\n    :before-upload=\"handleBeforeUpload\"\r\n    :on-exceed=\"handleonExceed\"\r\n    :on-change=\"handleChange\"\r\n    :on-remove=\"handleRemove\"\r\n    :http-request=\"customUpload\"\r\n  >\r\n    <div :id=\"triggerId\">\r\n      <slot name=\"default\">\r\n        <el-button>点击上传</el-button>\r\n      </slot>\r\n      <slot name=\"trigger\"></slot>\r\n      <slot name=\"tip\"></slot>\r\n    </div>\r\n    <!-- edit dialog -->\r\n    <el-dialog\r\n      v-model=\"dialogVisible\"\r\n      append-to-body\r\n      title=\"图像剪裁\"\r\n      top=\"10vh\"\r\n      custom-class=\"cropper\"\r\n      :close-on-click-modal=\"false\"\r\n      :close-on-press-escape=\"false\"\r\n      @close=\"cropperMethod('close')\"\r\n    >\r\n      <div class=\"cropper_main\">\r\n        <img src ref=\"CropperImg\" />\r\n      </div>\r\n      <div class=\"cropper_actions flex-row align-center\">\r\n        <div class=\"flex-1\">\r\n          <el-button-group>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"左旋\"\r\n              @click=\"cropperMethod('rotateLeft')\"\r\n            >\r\n              <i class=\"el-icon-refresh-left\"></i>\r\n              左旋\r\n            </el-button>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"右旋\"\r\n              @click=\"cropperMethod('rotateRight')\"\r\n            >\r\n              <i class=\"el-icon-refresh-right\"></i>\r\n              右旋\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"水平镜像\"\r\n              @click=\"cropperMethod('scaleX')\"\r\n            >\r\n              <i class=\"el-icon-sort\" style=\"transform: rotateZ(90deg)\"></i>\r\n              水平镜像\r\n            </el-button>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"垂直镜像\"\r\n              @click=\"cropperMethod('scaleY')\"\r\n            >\r\n              <i class=\"el-icon-sort\"></i>\r\n              垂直镜像\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button\r\n              size=\"small\"\r\n              title=\"重置\"\r\n              @click=\"cropperMethod('reset')\"\r\n            >\r\n              <i class=\"el-icon-refresh\"></i>\r\n              重置\r\n            </el-button>\r\n          </el-button-group>\r\n        </div>\r\n\r\n        <el-button\r\n          size=\"small\"\r\n          type=\"primary\"\r\n          plain\r\n          @click=\"cropperMethod('save')\"\r\n        >\r\n          <i class=\"el-icon-crop\"></i>\r\n          确定\r\n        </el-button>\r\n      </div>\r\n    </el-dialog>\r\n  </el-upload>\r\n</template>\r\n<script>\r\nimport { fixImgFile } from \"ios-photo-repair\";\r\nimport Cropper from \"cropperjs\";\r\nimport \"cropperjs/dist/cropper.css\";\r\n\r\nlet cropperInstance;\r\n\r\n// 调试开关\r\nconst DEBUG = process.env.NODE_ENV === \"development\";\r\n\r\n// 图片压缩成jpg格式\r\nconst fixJpgFileName = function (fileName) {\r\n  if (fileName.match(/\\.jpg|\\.jpeg$/)) {\r\n    return fileName;\r\n  }\r\n  return fileName + \".jpg\";\r\n};\r\n\r\n// 文件类型集合\r\nconst FileTypeMap = {\r\n  \"t-image\": [\".jpg\", \".jpeg\", \".png\", \".gif\", \".bmp\", \".webp\"],\r\n  \"t-video\": [\".mp4\", \".rmvb\", \".avi\", \".mov\", \".3gp\", \".webm\"],\r\n  \"t-audio\": [\".wav\", \".mp3\", \".ogg\", \".acc\"],\r\n  \"t-word\": [\".docx\", \".doc\"],\r\n  \"t-excel\": [\".xlsx\", \".xls\"],\r\n  \"t-ppt\": [\".ppt\", \".pptx\"],\r\n  \"t-document\": [\".pdf\", \"t-word\", \"t-excel\", \"t-ppt\"],\r\n  \"t-zip\": [\".zip\", \".rar\"],\r\n};\r\n\r\nexport default {\r\n  props: {\r\n    modelValue: {\r\n      type: Array,\r\n      required: false,\r\n      default() {\r\n        return [];\r\n      },\r\n    },\r\n    triggerId: {\r\n      // 配合实现富文本插件上传功能\r\n      type: String,\r\n      required: false,\r\n      default: \"upload_image_trigger\" + parseInt(Math.random() * 1e8),\r\n    },\r\n    limitSize: {\r\n      // 文件尺寸限制\r\n      type: Number,\r\n      required: false,\r\n      default() {\r\n        return 100 * 1024 * 1024;\r\n      },\r\n    },\r\n    imgCompress: {\r\n      // 开启图片压缩\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return true;\r\n      },\r\n    },\r\n    imgCompressOption: {\r\n      // 图片压缩配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    imgCrop: {\r\n      // 开启图片剪裁\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return false;\r\n      },\r\n    },\r\n    imgCropOption: {\r\n      // 图片剪裁配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          ratio: 1,\r\n          minWidth: 0,\r\n          minHeight: 0,\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    uploadMethod: {\r\n      // 自定义上传方法，参数（file/blob, fileName）\r\n      type: Function,\r\n      required: false,\r\n    },\r\n    responseTransfer: {\r\n      // 接口返回数据 与 fileList 数据格式转换函数\r\n      type: Function,\r\n      required: false,\r\n      default(response) {\r\n        return response;\r\n      },\r\n    },\r\n    BeforeUploadError: {\r\n      // 上传前校验失败回调\r\n      type: Function,\r\n      required: false,\r\n      default(info) {\r\n        return console.warn(info);\r\n      },\r\n    },\r\n  },\r\n  data() {\r\n    return {\r\n      dialogVisible: false,\r\n      cropResult: null,\r\n      fileListFinnal: [],\r\n      controller: null,\r\n      globalOption: {},\r\n    };\r\n  },\r\n  computed: {\r\n    acceptFinnal() {\r\n      if (this.$attrs.accept && this.$attrs.accept.indexOf(\"t-\") !== -1) {\r\n        const typeArray = this.$attrs.accept.split(\",\");\r\n        let result = [];\r\n        typeArray.forEach((type) => {\r\n          result = result.concat(this.getExtByType(type));\r\n        });\r\n        return result.join(\",\");\r\n      } else {\r\n        return this.$attrs.accept || \"*\";\r\n      }\r\n    },\r\n    propsFinnal() {\r\n      const getDefaultValue = (key) => {\r\n        if (Object.keys(this.globalOption).indexOf(key) !== -1) {\r\n          return this.globalOption[key];\r\n        }\r\n        return this.$props[key];\r\n      };\r\n      let result = {};\r\n      Object.keys(this.$props).forEach((prop) => {\r\n        result[prop] = getDefaultValue(prop);\r\n      });\r\n      return result;\r\n    },\r\n  },\r\n  watch: {\r\n    modelValue: {\r\n      handler(newValue) {\r\n        this.fileListFinnal = this.$attrs.fileList || newValue || [];\r\n        if (this.$refs.myupload) {\r\n          this.$refs.myupload.uploadFiles = newValue.filter((ef) => {\r\n            return newValue.findIndex((f) => f.uid === ef.uid) !== -1;\r\n          });\r\n        }\r\n      },\r\n      deep: true,\r\n      immediate: true,\r\n    },\r\n  },\r\n  methods: {\r\n    getExtByType(type) {\r\n      const quickType = Object.assign(\r\n        {},\r\n        FileTypeMap,\r\n        this.globalOption.quickType || {}\r\n      );\r\n      if (type && Array.isArray(quickType[type])) {\r\n        let classList = [];\r\n        let extList = [];\r\n        quickType[type].forEach((e) => {\r\n          if (e.indexOf(\"t-\") === 0) {\r\n            classList.push(e);\r\n          } else {\r\n            extList.push(e);\r\n          }\r\n        });\r\n        if (classList.length) {\r\n          classList.forEach((classType) => {\r\n            extList = extList.concat(this.getExtByType(classType));\r\n          });\r\n        }\r\n        return extList;\r\n      } else if (type && type.split) {\r\n        return [type.toLowerCase()];\r\n      }\r\n    },\r\n    handleBeforeUpload: function (file) {\r\n      // 尺寸校验\r\n      if (file.size > this.propsFinnal.limitSize) {\r\n        this.propsFinnal.BeforeUploadError({\r\n          message: \"文件大小超出限制\",\r\n          type: \"warning\",\r\n        });\r\n        return false;\r\n      }\r\n      // 格式校验\r\n      if (\r\n        this.acceptFinnal !== \"*\" &&\r\n        this.acceptFinnal.indexOf(\r\n          file.name.substring(file.name.lastIndexOf(\".\")).toLowerCase()\r\n        ) === -1\r\n      ) {\r\n        this.propsFinnal.BeforeUploadError({\r\n          message: \"文件格式不正确\",\r\n          type: \"warning\",\r\n        });\r\n        return false;\r\n      }\r\n\r\n      if (typeof this.$attrs[\"before-upload\"] === \"function\") {\r\n        return this.$attrs[\"before-upload\"](file);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.beforeUpload === \"function\"\r\n      ) {\r\n        return this.globalOption.beforeUpload(file);\r\n      } else {\r\n        return true;\r\n      }\r\n    },\r\n    handleonExceed: function (file, fileList) {\r\n      if (typeof this.$attrs[\"on-exceed\"] === \"function\") {\r\n        this.$attrs[\"on-exceed\"](file, fileList);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.onExceed === \"function\"\r\n      ) {\r\n        this.globalOption.onExceed(file, fileList);\r\n      }\r\n    },\r\n    handleChange: function (file, fileList) {\r\n      const doneFiles = fileList.filter((e) => e.status === \"success\");\r\n      if (doneFiles.length === fileList.length) {\r\n        this.$emit(\r\n          \"update:modelValue\",\r\n          doneFiles.map((e) => {\r\n            let data = e.response\r\n              ? this.propsFinnal.responseTransfer(e.response)\r\n              : e;\r\n            // 扩展字段\r\n            data.uid = e.uid;\r\n            data.status = e.status;\r\n            return data;\r\n          })\r\n        );\r\n      }\r\n\r\n      if (typeof this.$attrs[\"on-change\"] === \"function\") {\r\n        this.$attrs[\"on-change\"](file, fileList);\r\n      }\r\n    },\r\n    handleProgress(e) {\r\n      if (typeof this.$attrs[\"on-progress\"] === \"function\") {\r\n        if (e.total > 0) {\r\n          e.percent = (e.loaded / e.total) * 100;\r\n        }\r\n        this.$attrs[\"on-progress\"](e);\r\n      }\r\n    },\r\n    handleRemove: function (file, fileList) {\r\n      this.$emit(\r\n        \"update:modelValue\",\r\n        fileList.map((e) => {\r\n          let data = e.response\r\n            ? this.propsFinnal.responseTransfer(e.response)\r\n            : e;\r\n          data.uid = e.uid;\r\n          return data;\r\n        })\r\n      );\r\n\r\n      if (typeof this.$attrs[\"on-remove\"] === \"function\") {\r\n        this.$attrs[\"on-remove\"](file, fileList);\r\n      }\r\n    },\r\n    customUpload: async function (params) {\r\n      if (\r\n        !this.globalOption &&\r\n        !this.globalOption.uploadMethod &&\r\n        !this.propsFinnal.uploadMethod\r\n      ) {\r\n        return console.warn(\r\n          \"Uploader: The required configuration [uploadMethod] is missing!\"\r\n        );\r\n      }\r\n\r\n      const theUploadRequest =\r\n        this.propsFinnal.uploadMethod || this.globalOption.uploadMethod;\r\n      if (typeof theUploadRequest !== \"function\") {\r\n        return console.warn(\"Uploader: [uploadMethod] must be a Function!\");\r\n      }\r\n\r\n      const uploadedFileType = params.file.type;\r\n      DEBUG && console.log(\"uploadedFileType\", uploadedFileType);\r\n\r\n      let formDataFileObj = params.file;\r\n      let formDataFileName = params.file.name;\r\n\r\n      if (uploadedFileType.indexOf(\"image/\") === 0) {\r\n        if (this.propsFinnal.imgCrop) {\r\n          // 图片剪裁\r\n          this.cropResult = null;\r\n          this.dialogVisible = true;\r\n\r\n          const imgBlob = await new Promise((resolve) => {\r\n            let oReader = new FileReader();\r\n            oReader.onload = (e) => {\r\n              let base64 = e.target.result;\r\n              let img = this.$refs.CropperImg;\r\n              img.src = base64;\r\n              //\r\n              if (cropperInstance) {\r\n                cropperInstance.destroy();\r\n              }\r\n\r\n              cropperInstance = new Cropper(img, {\r\n                viewMode: 1,\r\n                dragMode: \"none\",\r\n                movable: false,\r\n                zoomOnTouch: false,\r\n                zoomOnWheel: false,\r\n                toggleDragModeOnDblclick: false,\r\n                aspectRatio: this.propsFinnal.imgCropOption.ratio,\r\n              });\r\n            };\r\n            oReader.readAsDataURL(params.file);\r\n\r\n            this.$watch(\"cropResult\", resolve);\r\n          });\r\n\r\n          if (imgBlob) {\r\n            DEBUG && console.log(\"imgCrop\", imgBlob);\r\n            formDataFileObj = imgBlob;\r\n            formDataFileName = fixJpgFileName(formDataFileName);\r\n            this.cropperMethod(\"close\");\r\n          }\r\n        } else if (this.propsFinnal.imgCompress) {\r\n          // 图片压缩\r\n          const imgBlob = await fixImgFile(\r\n            params.file,\r\n            Object.assign({}, this.propsFinnal.imgCompressOption, {\r\n              outType: \"blob\",\r\n            })\r\n          );\r\n\r\n          DEBUG && console.log(\"imgCompress\", imgBlob);\r\n          formDataFileObj = imgBlob;\r\n          formDataFileName = fixJpgFileName(formDataFileName);\r\n        }\r\n      }\r\n\r\n      // 上传\r\n      DEBUG && console.log(\"upload params\", formDataFileName, formDataFileObj);\r\n      this.controller = new AbortController();\r\n      return theUploadRequest(formDataFileObj, formDataFileName, {\r\n        onUploadProgress: this.handleProgress,\r\n        signal: this.controller.signal,\r\n      }).then((res) => {\r\n        return res.data;\r\n      });\r\n    },\r\n    cropperMethod(action) {\r\n      // 剪裁相关处理方法\r\n      switch (action) {\r\n        case \"save\":\r\n          cropperInstance\r\n            .getCroppedCanvas({\r\n              minWidth: this.propsFinnal.imgCropOption.minWidth,\r\n              minHeight: this.propsFinnal.imgCropOption.minHeight,\r\n              maxWidth: this.propsFinnal.imgCropOption.maxWidth || 1000,\r\n              maxHeight: this.propsFinnal.imgCropOption.maxHeight || 1000,\r\n              imageSmoothingQuality: \"medium\",\r\n            })\r\n            .toBlob((blob) => {\r\n              this.cropResult = blob;\r\n            }, \"image/jpeg\");\r\n          break;\r\n        case \"close\":\r\n          this.dialogVisible = false;\r\n          if (cropperInstance) {\r\n            cropperInstance.destroy();\r\n          }\r\n          if (!this.cropResult) {\r\n            const newValue = [].concat(this.modelValue);\r\n            newValue.pop();\r\n            this.$emit(\"update:modelValue\", newValue);\r\n          }\r\n          break;\r\n        case \"rotateLeft\":\r\n          cropperInstance.rotate(-90);\r\n          break;\r\n        case \"rotateRight\":\r\n          cropperInstance.rotate(90);\r\n          break;\r\n        case \"scaleX\":\r\n          cropperInstance.scaleX(-1);\r\n          break;\r\n        case \"scaleY\":\r\n          cropperInstance.scaleY(-1);\r\n          break;\r\n        case \"reset\":\r\n          cropperInstance.reset();\r\n          break;\r\n        default:\r\n          console.warn(\"cropperMethod 参数错误: \", action);\r\n      }\r\n    },\r\n    clearFiles() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.clearFiles();\r\n    },\r\n    abort() {\r\n      this.controller.abort();\r\n    },\r\n    submit() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.submit();\r\n    },\r\n  },\r\n  created() {\r\n    this.globalOption = this.$UploaderOption || {};\r\n  },\r\n};\r\n</script>\r\n\r\n<style scoped>\r\n/* 图片剪裁弹窗 */\r\n.cropper :deep(.el-dialog__body) {\r\n  padding: 0;\r\n}\r\n\r\n.cropper_main {\r\n  height: 50vh;\r\n  min-height: 500px;\r\n}\r\n\r\n.cropper_actions {\r\n  padding: 0.5em;\r\n}\r\n\r\n.cropper_actions :deep(.el-button-group) {\r\n  margin-right: 10px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".uploader-cropper-dialog .el-dialog__body{padding:0}", "",{"version":3,"sources":["webpack://./uploader.vue"],"names":[],"mappings":"AAugBA,0CACE,SACF","sourcesContent":["<template>\r\n  <el-upload\r\n    ref=\"myupload\"\r\n    v-bind=\"$attrs\"\r\n    action\r\n    :fileList=\"fileListFinnal\"\r\n    :accept=\"acceptFinnal\"\r\n    :before-upload=\"handleBeforeUpload\"\r\n    :on-exceed=\"handleonExceed\"\r\n    :on-change=\"handleChange\"\r\n    :on-remove=\"handleRemove\"\r\n    :http-request=\"customUpload\"\r\n  >\r\n    <div :id=\"triggerId\">\r\n      <slot name=\"default\">\r\n        <el-button>点击上传</el-button>\r\n      </slot>\r\n      <slot name=\"trigger\"></slot>\r\n      <slot name=\"tip\"></slot>\r\n    </div>\r\n    <!-- edit dialog -->\r\n    <el-dialog\r\n      v-model=\"dialogVisible\"\r\n      append-to-body\r\n      title=\"图像剪裁\"\r\n      top=\"10vh\"\r\n      custom-class=\"uploader-cropper-dialog\"\r\n      :close-on-click-modal=\"false\"\r\n      :close-on-press-escape=\"false\"\r\n      @close=\"cropperMethod('close')\"\r\n    >\r\n      <div class=\"cropper_main\">\r\n        <img src ref=\"CropperImg\" />\r\n      </div>\r\n      <div class=\"cropper_actions flex-row align-center\">\r\n        <div class=\"flex-1\">\r\n          <el-button-group>\r\n            <el-button title=\"左旋\" @click=\"cropperMethod('rotateLeft')\">\r\n              <el-icon><refresh-left /></el-icon>\r\n              左旋\r\n            </el-button>\r\n            <el-button title=\"右旋\" @click=\"cropperMethod('rotateRight')\">\r\n              <el-icon><refresh-right /></el-icon>\r\n              右旋\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button title=\"水平镜像\" @click=\"cropperMethod('scaleX')\">\r\n              <el-icon style=\"transform: rotateZ(90deg)\"><sort /></el-icon>\r\n              水平镜像\r\n            </el-button>\r\n            <el-button title=\"垂直镜像\" @click=\"cropperMethod('scaleY')\">\r\n              <el-icon><sort /></el-icon>\r\n              垂直镜像\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button title=\"重置\" @click=\"cropperMethod('reset')\">\r\n              <el-icon><refresh /></el-icon>\r\n              重置\r\n            </el-button>\r\n          </el-button-group>\r\n        </div>\r\n\r\n        <el-button type=\"primary\" plain @click=\"cropperMethod('save')\">\r\n          <el-icon><crop /></el-icon>\r\n          确定\r\n        </el-button>\r\n      </div>\r\n    </el-dialog>\r\n  </el-upload>\r\n</template>\r\n<script>\r\nimport { fixImgFile } from \"ios-photo-repair\";\r\nimport Cropper from \"cropperjs\";\r\nimport \"cropperjs/dist/cropper.css\";\r\n\r\nimport {\r\n  Crop,\r\n  Refresh,\r\n  Sort,\r\n  RefreshRight,\r\n  RefreshLeft,\r\n} from \"@element-plus/icons-vue\";\r\n\r\nlet cropperInstance;\r\n\r\n// 调试开关\r\nconst DEBUG = process.env.NODE_ENV === \"development\";\r\n\r\n// 图片压缩成jpg格式\r\nconst fixJpgFileName = function (fileName) {\r\n  if (fileName.match(/\\.jpg|\\.jpeg$/)) {\r\n    return fileName;\r\n  }\r\n  return fileName + \".jpg\";\r\n};\r\n\r\n// 文件类型集合\r\nconst FileTypeMap = {\r\n  \"t-image\": [\".jpg\", \".jpeg\", \".png\", \".gif\", \".bmp\", \".webp\"],\r\n  \"t-video\": [\".mp4\", \".rmvb\", \".avi\", \".mov\", \".3gp\", \".webm\"],\r\n  \"t-audio\": [\".wav\", \".mp3\", \".ogg\", \".acc\"],\r\n  \"t-word\": [\".docx\", \".doc\"],\r\n  \"t-excel\": [\".xlsx\", \".xls\"],\r\n  \"t-ppt\": [\".ppt\", \".pptx\"],\r\n  \"t-document\": [\".pdf\", \"t-word\", \"t-excel\", \"t-ppt\"],\r\n  \"t-zip\": [\".zip\", \".rar\"],\r\n};\r\n\r\nexport default {\r\n  props: {\r\n    modelValue: {\r\n      type: Array,\r\n      required: false,\r\n      default() {\r\n        return [];\r\n      },\r\n    },\r\n    triggerId: {\r\n      // 配合实现富文本插件上传功能\r\n      type: String,\r\n      required: false,\r\n      default: \"upload_image_trigger\" + parseInt(Math.random() * 1e8),\r\n    },\r\n    limitSize: {\r\n      // 文件尺寸限制\r\n      type: Number,\r\n      required: false,\r\n      default() {\r\n        return 100 * 1024 * 1024;\r\n      },\r\n    },\r\n    imgCompress: {\r\n      // 开启图片压缩\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return true;\r\n      },\r\n    },\r\n    imgCompressOption: {\r\n      // 图片压缩配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    imgCrop: {\r\n      // 开启图片剪裁\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return false;\r\n      },\r\n    },\r\n    imgCropOption: {\r\n      // 图片剪裁配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          ratio: 1,\r\n          minWidth: 0,\r\n          minHeight: 0,\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    uploadMethod: {\r\n      // 自定义上传方法，参数（file/blob, fileName）\r\n      type: Function,\r\n      required: false,\r\n    },\r\n    responseTransfer: {\r\n      // 接口返回数据 与 fileList 数据格式转换函数\r\n      type: Function,\r\n      required: false,\r\n      default(response) {\r\n        return response;\r\n      },\r\n    },\r\n    BeforeUploadError: {\r\n      // 上传前校验失败回调\r\n      type: Function,\r\n      required: false,\r\n      default(info) {\r\n        return console.warn(info);\r\n      },\r\n    },\r\n  },\r\n  components: {\r\n    Crop,\r\n    Refresh,\r\n    Sort,\r\n    RefreshRight,\r\n    RefreshLeft,\r\n  },\r\n  data() {\r\n    return {\r\n      dialogVisible: false,\r\n      cropResult: null,\r\n      fileListFinnal: [],\r\n      controller: null,\r\n      globalOption: {},\r\n    };\r\n  },\r\n  computed: {\r\n    acceptFinnal() {\r\n      if (this.$attrs.accept && this.$attrs.accept.indexOf(\"t-\") !== -1) {\r\n        const typeArray = this.$attrs.accept.split(\",\");\r\n        let result = [];\r\n        typeArray.forEach((type) => {\r\n          result = result.concat(this.getExtByType(type));\r\n        });\r\n        return result.join(\",\");\r\n      } else {\r\n        return this.$attrs.accept || \"*\";\r\n      }\r\n    },\r\n    propsFinnal() {\r\n      const getDefaultValue = (key) => {\r\n        if (Object.keys(this.globalOption).indexOf(key) !== -1) {\r\n          return this.globalOption[key];\r\n        }\r\n        return this.$props[key];\r\n      };\r\n      let result = {};\r\n      Object.keys(this.$props).forEach((prop) => {\r\n        result[prop] = getDefaultValue(prop);\r\n      });\r\n      return result;\r\n    },\r\n  },\r\n  watch: {\r\n    modelValue: {\r\n      handler(newValue) {\r\n        this.fileListFinnal = this.$attrs.fileList || newValue || [];\r\n        if (this.$refs.myupload) {\r\n          this.$refs.myupload.uploadFiles = newValue.filter((ef) => {\r\n            return newValue.findIndex((f) => f.uid === ef.uid) !== -1;\r\n          });\r\n        }\r\n      },\r\n      deep: true,\r\n      immediate: true,\r\n    },\r\n  },\r\n  methods: {\r\n    getExtByType(type) {\r\n      const quickType = Object.assign(\r\n        {},\r\n        FileTypeMap,\r\n        this.globalOption.quickType || {}\r\n      );\r\n      if (type && Array.isArray(quickType[type])) {\r\n        let classList = [];\r\n        let extList = [];\r\n        quickType[type].forEach((e) => {\r\n          if (e.indexOf(\"t-\") === 0) {\r\n            classList.push(e);\r\n          } else {\r\n            extList.push(e);\r\n          }\r\n        });\r\n        if (classList.length) {\r\n          classList.forEach((classType) => {\r\n            extList = extList.concat(this.getExtByType(classType));\r\n          });\r\n        }\r\n        return extList;\r\n      } else if (type && type.split) {\r\n        return [type.toLowerCase()];\r\n      }\r\n    },\r\n    handleBeforeUpload: function (file) {\r\n      // 尺寸校验\r\n      if (file.size > this.propsFinnal.limitSize) {\r\n        this.propsFinnal.BeforeUploadError({\r\n          message: \"文件大小超出限制\",\r\n          type: \"warning\",\r\n        });\r\n        return false;\r\n      }\r\n      // 格式校验\r\n      if (\r\n        this.acceptFinnal !== \"*\" &&\r\n        this.acceptFinnal.indexOf(\r\n          file.name.substring(file.name.lastIndexOf(\".\")).toLowerCase()\r\n        ) === -1\r\n      ) {\r\n        this.propsFinnal.BeforeUploadError({\r\n          message: \"文件格式不正确\",\r\n          type: \"warning\",\r\n        });\r\n        return false;\r\n      }\r\n\r\n      if (typeof this.$attrs[\"before-upload\"] === \"function\") {\r\n        return this.$attrs[\"before-upload\"](file);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.beforeUpload === \"function\"\r\n      ) {\r\n        return this.globalOption.beforeUpload(file);\r\n      } else {\r\n        return true;\r\n      }\r\n    },\r\n    handleonExceed: function (file, fileList) {\r\n      if (typeof this.$attrs[\"on-exceed\"] === \"function\") {\r\n        this.$attrs[\"on-exceed\"](file, fileList);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.onExceed === \"function\"\r\n      ) {\r\n        this.globalOption.onExceed(file, fileList);\r\n      }\r\n    },\r\n    handleChange: function (file, fileList) {\r\n      const doneFiles = fileList.filter((e) => e.status === \"success\");\r\n      if (doneFiles.length === fileList.length) {\r\n        this.$emit(\r\n          \"update:modelValue\",\r\n          doneFiles.map((e) => {\r\n            let data = e.response\r\n              ? this.propsFinnal.responseTransfer(e.response)\r\n              : e;\r\n            // 扩展字段\r\n            data.uid = e.uid;\r\n            data.status = e.status;\r\n            return data;\r\n          })\r\n        );\r\n      }\r\n\r\n      if (typeof this.$attrs[\"on-change\"] === \"function\") {\r\n        this.$attrs[\"on-change\"](file, fileList);\r\n      }\r\n    },\r\n    handleProgress(e) {\r\n      if (typeof this.$attrs[\"on-progress\"] === \"function\") {\r\n        if (e.total > 0) {\r\n          e.percent = (e.loaded / e.total) * 100;\r\n        }\r\n        this.$attrs[\"on-progress\"](e);\r\n      }\r\n    },\r\n    handleRemove: function (file, fileList) {\r\n      this.$emit(\r\n        \"update:modelValue\",\r\n        fileList.map((e) => {\r\n          let data = e.response\r\n            ? this.propsFinnal.responseTransfer(e.response)\r\n            : e;\r\n          data.uid = e.uid;\r\n          return data;\r\n        })\r\n      );\r\n\r\n      if (typeof this.$attrs[\"on-remove\"] === \"function\") {\r\n        this.$attrs[\"on-remove\"](file, fileList);\r\n      }\r\n    },\r\n    customUpload: async function (params) {\r\n      if (\r\n        !this.globalOption &&\r\n        !this.globalOption.uploadMethod &&\r\n        !this.propsFinnal.uploadMethod\r\n      ) {\r\n        return console.warn(\r\n          \"Uploader: The required configuration [uploadMethod] is missing!\"\r\n        );\r\n      }\r\n\r\n      const theUploadRequest =\r\n        this.propsFinnal.uploadMethod || this.globalOption.uploadMethod;\r\n      if (typeof theUploadRequest !== \"function\") {\r\n        return console.warn(\"Uploader: [uploadMethod] must be a Function!\");\r\n      }\r\n\r\n      const uploadedFileType = params.file.type;\r\n      DEBUG && console.log(\"uploadedFileType\", uploadedFileType);\r\n\r\n      let formDataFileObj = params.file;\r\n      let formDataFileName = params.file.name;\r\n\r\n      if (uploadedFileType.indexOf(\"image/\") === 0) {\r\n        if (this.propsFinnal.imgCrop) {\r\n          // 图片剪裁\r\n          this.cropResult = null;\r\n          this.dialogVisible = true;\r\n\r\n          const imgBlob = await new Promise((resolve) => {\r\n            let oReader = new FileReader();\r\n            oReader.onload = (e) => {\r\n              let base64 = e.target.result;\r\n              let img = this.$refs.CropperImg;\r\n              img.src = base64;\r\n              //\r\n              if (cropperInstance) {\r\n                cropperInstance.destroy();\r\n              }\r\n\r\n              cropperInstance = new Cropper(img, {\r\n                viewMode: 1,\r\n                dragMode: \"none\",\r\n                movable: false,\r\n                zoomOnTouch: false,\r\n                zoomOnWheel: false,\r\n                toggleDragModeOnDblclick: false,\r\n                aspectRatio: this.propsFinnal.imgCropOption.ratio,\r\n              });\r\n            };\r\n            oReader.readAsDataURL(params.file);\r\n\r\n            this.$watch(\"cropResult\", resolve);\r\n          });\r\n\r\n          if (imgBlob) {\r\n            DEBUG && console.log(\"imgCrop\", imgBlob);\r\n            formDataFileObj = imgBlob;\r\n            formDataFileName = fixJpgFileName(formDataFileName);\r\n            this.cropperMethod(\"close\");\r\n          }\r\n        } else if (this.propsFinnal.imgCompress) {\r\n          // 图片压缩\r\n          const imgBlob = await fixImgFile(\r\n            params.file,\r\n            Object.assign({}, this.propsFinnal.imgCompressOption, {\r\n              outType: \"blob\",\r\n            })\r\n          );\r\n\r\n          DEBUG && console.log(\"imgCompress\", imgBlob);\r\n          formDataFileObj = imgBlob;\r\n          formDataFileName = fixJpgFileName(formDataFileName);\r\n        }\r\n      }\r\n\r\n      // 上传\r\n      DEBUG && console.log(\"upload params\", formDataFileName, formDataFileObj);\r\n      this.controller = new AbortController();\r\n      return theUploadRequest(formDataFileObj, formDataFileName, {\r\n        onUploadProgress: this.handleProgress,\r\n        signal: this.controller.signal,\r\n      }).then((res) => {\r\n        return res.data;\r\n      });\r\n    },\r\n    cropperMethod(action) {\r\n      // 剪裁相关处理方法\r\n      switch (action) {\r\n        case \"save\":\r\n          cropperInstance\r\n            .getCroppedCanvas({\r\n              minWidth: this.propsFinnal.imgCropOption.minWidth,\r\n              minHeight: this.propsFinnal.imgCropOption.minHeight,\r\n              maxWidth: this.propsFinnal.imgCropOption.maxWidth || 1000,\r\n              maxHeight: this.propsFinnal.imgCropOption.maxHeight || 1000,\r\n              imageSmoothingQuality: \"medium\",\r\n            })\r\n            .toBlob((blob) => {\r\n              this.cropResult = blob;\r\n            }, \"image/jpeg\");\r\n          break;\r\n        case \"close\":\r\n          this.dialogVisible = false;\r\n          if (cropperInstance) {\r\n            cropperInstance.destroy();\r\n          }\r\n          if (!this.cropResult) {\r\n            const newValue = [].concat(this.modelValue);\r\n            newValue.pop();\r\n            this.$emit(\"update:modelValue\", newValue);\r\n          }\r\n          break;\r\n        case \"rotateLeft\":\r\n          cropperInstance.rotate(-90);\r\n          break;\r\n        case \"rotateRight\":\r\n          cropperInstance.rotate(90);\r\n          break;\r\n        case \"scaleX\":\r\n          cropperInstance.scaleX(-1);\r\n          break;\r\n        case \"scaleY\":\r\n          cropperInstance.scaleY(-1);\r\n          break;\r\n        case \"reset\":\r\n          cropperInstance.reset();\r\n          break;\r\n        default:\r\n          console.warn(\"cropperMethod 参数错误: \", action);\r\n      }\r\n    },\r\n    clearFiles() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.clearFiles();\r\n    },\r\n    abort() {\r\n      this.controller.abort();\r\n    },\r\n    submit() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.submit();\r\n    },\r\n  },\r\n  created() {\r\n    this.globalOption = this.$UploaderOption || {};\r\n  },\r\n};\r\n</script>\r\n<style>\r\n.uploader-cropper-dialog .el-dialog__body {\r\n  padding: 0;\r\n}\r\n</style>\r\n<style scoped>\r\n/* 图片剪裁弹窗 */\r\n\r\n.cropper_main {\r\n  height: 50vh;\r\n  min-height: 500px;\r\n}\r\n\r\n.cropper_actions {\r\n  padding: 0.5em;\r\n}\r\n\r\n.cropper_actions :deep(.el-button-group) {\r\n  margin-right: 10px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ 839:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".cropper_main[data-v-cb1f2d1c]{height:50vh;min-height:500px}.cropper_actions[data-v-cb1f2d1c]{padding:.5em}.cropper_actions[data-v-cb1f2d1c] .el-button-group{margin-right:10px}", "",{"version":3,"sources":["webpack://./uploader.vue"],"names":[],"mappings":"AA8gBA,+BACE,WAAY,CACZ,gBACF,CAEA,kCACE,YACF,CAEA,mDACE,iBACF","sourcesContent":["<template>\r\n  <el-upload\r\n    ref=\"myupload\"\r\n    v-bind=\"$attrs\"\r\n    action\r\n    :fileList=\"fileListFinnal\"\r\n    :accept=\"acceptFinnal\"\r\n    :before-upload=\"handleBeforeUpload\"\r\n    :on-exceed=\"handleonExceed\"\r\n    :on-change=\"handleChange\"\r\n    :on-remove=\"handleRemove\"\r\n    :http-request=\"customUpload\"\r\n  >\r\n    <div :id=\"triggerId\">\r\n      <slot name=\"default\">\r\n        <el-button>点击上传</el-button>\r\n      </slot>\r\n      <slot name=\"trigger\"></slot>\r\n      <slot name=\"tip\"></slot>\r\n    </div>\r\n    <!-- edit dialog -->\r\n    <el-dialog\r\n      v-model=\"dialogVisible\"\r\n      append-to-body\r\n      title=\"图像剪裁\"\r\n      top=\"10vh\"\r\n      custom-class=\"uploader-cropper-dialog\"\r\n      :close-on-click-modal=\"false\"\r\n      :close-on-press-escape=\"false\"\r\n      @close=\"cropperMethod('close')\"\r\n    >\r\n      <div class=\"cropper_main\">\r\n        <img src ref=\"CropperImg\" />\r\n      </div>\r\n      <div class=\"cropper_actions flex-row align-center\">\r\n        <div class=\"flex-1\">\r\n          <el-button-group>\r\n            <el-button title=\"左旋\" @click=\"cropperMethod('rotateLeft')\">\r\n              <el-icon><refresh-left /></el-icon>\r\n              左旋\r\n            </el-button>\r\n            <el-button title=\"右旋\" @click=\"cropperMethod('rotateRight')\">\r\n              <el-icon><refresh-right /></el-icon>\r\n              右旋\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button title=\"水平镜像\" @click=\"cropperMethod('scaleX')\">\r\n              <el-icon style=\"transform: rotateZ(90deg)\"><sort /></el-icon>\r\n              水平镜像\r\n            </el-button>\r\n            <el-button title=\"垂直镜像\" @click=\"cropperMethod('scaleY')\">\r\n              <el-icon><sort /></el-icon>\r\n              垂直镜像\r\n            </el-button>\r\n          </el-button-group>\r\n          <el-button-group>\r\n            <el-button title=\"重置\" @click=\"cropperMethod('reset')\">\r\n              <el-icon><refresh /></el-icon>\r\n              重置\r\n            </el-button>\r\n          </el-button-group>\r\n        </div>\r\n\r\n        <el-button type=\"primary\" plain @click=\"cropperMethod('save')\">\r\n          <el-icon><crop /></el-icon>\r\n          确定\r\n        </el-button>\r\n      </div>\r\n    </el-dialog>\r\n  </el-upload>\r\n</template>\r\n<script>\r\nimport { fixImgFile } from \"ios-photo-repair\";\r\nimport Cropper from \"cropperjs\";\r\nimport \"cropperjs/dist/cropper.css\";\r\n\r\nimport {\r\n  Crop,\r\n  Refresh,\r\n  Sort,\r\n  RefreshRight,\r\n  RefreshLeft,\r\n} from \"@element-plus/icons-vue\";\r\n\r\nlet cropperInstance;\r\n\r\n// 调试开关\r\nconst DEBUG = process.env.NODE_ENV === \"development\";\r\n\r\n// 图片压缩成jpg格式\r\nconst fixJpgFileName = function (fileName) {\r\n  if (fileName.match(/\\.jpg|\\.jpeg$/)) {\r\n    return fileName;\r\n  }\r\n  return fileName + \".jpg\";\r\n};\r\n\r\n// 文件类型集合\r\nconst FileTypeMap = {\r\n  \"t-image\": [\".jpg\", \".jpeg\", \".png\", \".gif\", \".bmp\", \".webp\"],\r\n  \"t-video\": [\".mp4\", \".rmvb\", \".avi\", \".mov\", \".3gp\", \".webm\"],\r\n  \"t-audio\": [\".wav\", \".mp3\", \".ogg\", \".acc\"],\r\n  \"t-word\": [\".docx\", \".doc\"],\r\n  \"t-excel\": [\".xlsx\", \".xls\"],\r\n  \"t-ppt\": [\".ppt\", \".pptx\"],\r\n  \"t-document\": [\".pdf\", \"t-word\", \"t-excel\", \"t-ppt\"],\r\n  \"t-zip\": [\".zip\", \".rar\"],\r\n};\r\n\r\nexport default {\r\n  props: {\r\n    modelValue: {\r\n      type: Array,\r\n      required: false,\r\n      default() {\r\n        return [];\r\n      },\r\n    },\r\n    triggerId: {\r\n      // 配合实现富文本插件上传功能\r\n      type: String,\r\n      required: false,\r\n      default: \"upload_image_trigger\" + parseInt(Math.random() * 1e8),\r\n    },\r\n    limitSize: {\r\n      // 文件尺寸限制\r\n      type: Number,\r\n      required: false,\r\n      default() {\r\n        return 100 * 1024 * 1024;\r\n      },\r\n    },\r\n    imgCompress: {\r\n      // 开启图片压缩\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return true;\r\n      },\r\n    },\r\n    imgCompressOption: {\r\n      // 图片压缩配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    imgCrop: {\r\n      // 开启图片剪裁\r\n      type: Boolean,\r\n      required: false,\r\n      default() {\r\n        return false;\r\n      },\r\n    },\r\n    imgCropOption: {\r\n      // 图片剪裁配置\r\n      type: Object,\r\n      required: false,\r\n      default() {\r\n        return {\r\n          ratio: 1,\r\n          minWidth: 0,\r\n          minHeight: 0,\r\n          maxWidth: 1000,\r\n          maxHeight: 1000,\r\n        };\r\n      },\r\n    },\r\n    uploadMethod: {\r\n      // 自定义上传方法，参数（file/blob, fileName）\r\n      type: Function,\r\n      required: false,\r\n    },\r\n    responseTransfer: {\r\n      // 接口返回数据 与 fileList 数据格式转换函数\r\n      type: Function,\r\n      required: false,\r\n      default(response) {\r\n        return response;\r\n      },\r\n    },\r\n    BeforeUploadError: {\r\n      // 上传前校验失败回调\r\n      type: Function,\r\n      required: false,\r\n      default(info) {\r\n        return console.warn(info);\r\n      },\r\n    },\r\n  },\r\n  components: {\r\n    Crop,\r\n    Refresh,\r\n    Sort,\r\n    RefreshRight,\r\n    RefreshLeft,\r\n  },\r\n  data() {\r\n    return {\r\n      dialogVisible: false,\r\n      cropResult: null,\r\n      fileListFinnal: [],\r\n      controller: null,\r\n      globalOption: {},\r\n    };\r\n  },\r\n  computed: {\r\n    acceptFinnal() {\r\n      if (this.$attrs.accept && this.$attrs.accept.indexOf(\"t-\") !== -1) {\r\n        const typeArray = this.$attrs.accept.split(\",\");\r\n        let result = [];\r\n        typeArray.forEach((type) => {\r\n          result = result.concat(this.getExtByType(type));\r\n        });\r\n        return result.join(\",\");\r\n      } else {\r\n        return this.$attrs.accept || \"*\";\r\n      }\r\n    },\r\n    propsFinnal() {\r\n      const getDefaultValue = (key) => {\r\n        if (Object.keys(this.globalOption).indexOf(key) !== -1) {\r\n          return this.globalOption[key];\r\n        }\r\n        return this.$props[key];\r\n      };\r\n      let result = {};\r\n      Object.keys(this.$props).forEach((prop) => {\r\n        result[prop] = getDefaultValue(prop);\r\n      });\r\n      return result;\r\n    },\r\n  },\r\n  watch: {\r\n    modelValue: {\r\n      handler(newValue) {\r\n        this.fileListFinnal = this.$attrs.fileList || newValue || [];\r\n        if (this.$refs.myupload) {\r\n          this.$refs.myupload.uploadFiles = newValue.filter((ef) => {\r\n            return newValue.findIndex((f) => f.uid === ef.uid) !== -1;\r\n          });\r\n        }\r\n      },\r\n      deep: true,\r\n      immediate: true,\r\n    },\r\n  },\r\n  methods: {\r\n    getExtByType(type) {\r\n      const quickType = Object.assign(\r\n        {},\r\n        FileTypeMap,\r\n        this.globalOption.quickType || {}\r\n      );\r\n      if (type && Array.isArray(quickType[type])) {\r\n        let classList = [];\r\n        let extList = [];\r\n        quickType[type].forEach((e) => {\r\n          if (e.indexOf(\"t-\") === 0) {\r\n            classList.push(e);\r\n          } else {\r\n            extList.push(e);\r\n          }\r\n        });\r\n        if (classList.length) {\r\n          classList.forEach((classType) => {\r\n            extList = extList.concat(this.getExtByType(classType));\r\n          });\r\n        }\r\n        return extList;\r\n      } else if (type && type.split) {\r\n        return [type.toLowerCase()];\r\n      }\r\n    },\r\n    handleBeforeUpload: function (file) {\r\n      // 尺寸校验\r\n      if (file.size > this.propsFinnal.limitSize) {\r\n        this.propsFinnal.BeforeUploadError({\r\n          message: \"文件大小超出限制\",\r\n          type: \"warning\",\r\n        });\r\n        return false;\r\n      }\r\n      // 格式校验\r\n      if (\r\n        this.acceptFinnal !== \"*\" &&\r\n        this.acceptFinnal.indexOf(\r\n          file.name.substring(file.name.lastIndexOf(\".\")).toLowerCase()\r\n        ) === -1\r\n      ) {\r\n        this.propsFinnal.BeforeUploadError({\r\n          message: \"文件格式不正确\",\r\n          type: \"warning\",\r\n        });\r\n        return false;\r\n      }\r\n\r\n      if (typeof this.$attrs[\"before-upload\"] === \"function\") {\r\n        return this.$attrs[\"before-upload\"](file);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.beforeUpload === \"function\"\r\n      ) {\r\n        return this.globalOption.beforeUpload(file);\r\n      } else {\r\n        return true;\r\n      }\r\n    },\r\n    handleonExceed: function (file, fileList) {\r\n      if (typeof this.$attrs[\"on-exceed\"] === \"function\") {\r\n        this.$attrs[\"on-exceed\"](file, fileList);\r\n      } else if (\r\n        this.globalOption &&\r\n        typeof this.globalOption.onExceed === \"function\"\r\n      ) {\r\n        this.globalOption.onExceed(file, fileList);\r\n      }\r\n    },\r\n    handleChange: function (file, fileList) {\r\n      const doneFiles = fileList.filter((e) => e.status === \"success\");\r\n      if (doneFiles.length === fileList.length) {\r\n        this.$emit(\r\n          \"update:modelValue\",\r\n          doneFiles.map((e) => {\r\n            let data = e.response\r\n              ? this.propsFinnal.responseTransfer(e.response)\r\n              : e;\r\n            // 扩展字段\r\n            data.uid = e.uid;\r\n            data.status = e.status;\r\n            return data;\r\n          })\r\n        );\r\n      }\r\n\r\n      if (typeof this.$attrs[\"on-change\"] === \"function\") {\r\n        this.$attrs[\"on-change\"](file, fileList);\r\n      }\r\n    },\r\n    handleProgress(e) {\r\n      if (typeof this.$attrs[\"on-progress\"] === \"function\") {\r\n        if (e.total > 0) {\r\n          e.percent = (e.loaded / e.total) * 100;\r\n        }\r\n        this.$attrs[\"on-progress\"](e);\r\n      }\r\n    },\r\n    handleRemove: function (file, fileList) {\r\n      this.$emit(\r\n        \"update:modelValue\",\r\n        fileList.map((e) => {\r\n          let data = e.response\r\n            ? this.propsFinnal.responseTransfer(e.response)\r\n            : e;\r\n          data.uid = e.uid;\r\n          return data;\r\n        })\r\n      );\r\n\r\n      if (typeof this.$attrs[\"on-remove\"] === \"function\") {\r\n        this.$attrs[\"on-remove\"](file, fileList);\r\n      }\r\n    },\r\n    customUpload: async function (params) {\r\n      if (\r\n        !this.globalOption &&\r\n        !this.globalOption.uploadMethod &&\r\n        !this.propsFinnal.uploadMethod\r\n      ) {\r\n        return console.warn(\r\n          \"Uploader: The required configuration [uploadMethod] is missing!\"\r\n        );\r\n      }\r\n\r\n      const theUploadRequest =\r\n        this.propsFinnal.uploadMethod || this.globalOption.uploadMethod;\r\n      if (typeof theUploadRequest !== \"function\") {\r\n        return console.warn(\"Uploader: [uploadMethod] must be a Function!\");\r\n      }\r\n\r\n      const uploadedFileType = params.file.type;\r\n      DEBUG && console.log(\"uploadedFileType\", uploadedFileType);\r\n\r\n      let formDataFileObj = params.file;\r\n      let formDataFileName = params.file.name;\r\n\r\n      if (uploadedFileType.indexOf(\"image/\") === 0) {\r\n        if (this.propsFinnal.imgCrop) {\r\n          // 图片剪裁\r\n          this.cropResult = null;\r\n          this.dialogVisible = true;\r\n\r\n          const imgBlob = await new Promise((resolve) => {\r\n            let oReader = new FileReader();\r\n            oReader.onload = (e) => {\r\n              let base64 = e.target.result;\r\n              let img = this.$refs.CropperImg;\r\n              img.src = base64;\r\n              //\r\n              if (cropperInstance) {\r\n                cropperInstance.destroy();\r\n              }\r\n\r\n              cropperInstance = new Cropper(img, {\r\n                viewMode: 1,\r\n                dragMode: \"none\",\r\n                movable: false,\r\n                zoomOnTouch: false,\r\n                zoomOnWheel: false,\r\n                toggleDragModeOnDblclick: false,\r\n                aspectRatio: this.propsFinnal.imgCropOption.ratio,\r\n              });\r\n            };\r\n            oReader.readAsDataURL(params.file);\r\n\r\n            this.$watch(\"cropResult\", resolve);\r\n          });\r\n\r\n          if (imgBlob) {\r\n            DEBUG && console.log(\"imgCrop\", imgBlob);\r\n            formDataFileObj = imgBlob;\r\n            formDataFileName = fixJpgFileName(formDataFileName);\r\n            this.cropperMethod(\"close\");\r\n          }\r\n        } else if (this.propsFinnal.imgCompress) {\r\n          // 图片压缩\r\n          const imgBlob = await fixImgFile(\r\n            params.file,\r\n            Object.assign({}, this.propsFinnal.imgCompressOption, {\r\n              outType: \"blob\",\r\n            })\r\n          );\r\n\r\n          DEBUG && console.log(\"imgCompress\", imgBlob);\r\n          formDataFileObj = imgBlob;\r\n          formDataFileName = fixJpgFileName(formDataFileName);\r\n        }\r\n      }\r\n\r\n      // 上传\r\n      DEBUG && console.log(\"upload params\", formDataFileName, formDataFileObj);\r\n      this.controller = new AbortController();\r\n      return theUploadRequest(formDataFileObj, formDataFileName, {\r\n        onUploadProgress: this.handleProgress,\r\n        signal: this.controller.signal,\r\n      }).then((res) => {\r\n        return res.data;\r\n      });\r\n    },\r\n    cropperMethod(action) {\r\n      // 剪裁相关处理方法\r\n      switch (action) {\r\n        case \"save\":\r\n          cropperInstance\r\n            .getCroppedCanvas({\r\n              minWidth: this.propsFinnal.imgCropOption.minWidth,\r\n              minHeight: this.propsFinnal.imgCropOption.minHeight,\r\n              maxWidth: this.propsFinnal.imgCropOption.maxWidth || 1000,\r\n              maxHeight: this.propsFinnal.imgCropOption.maxHeight || 1000,\r\n              imageSmoothingQuality: \"medium\",\r\n            })\r\n            .toBlob((blob) => {\r\n              this.cropResult = blob;\r\n            }, \"image/jpeg\");\r\n          break;\r\n        case \"close\":\r\n          this.dialogVisible = false;\r\n          if (cropperInstance) {\r\n            cropperInstance.destroy();\r\n          }\r\n          if (!this.cropResult) {\r\n            const newValue = [].concat(this.modelValue);\r\n            newValue.pop();\r\n            this.$emit(\"update:modelValue\", newValue);\r\n          }\r\n          break;\r\n        case \"rotateLeft\":\r\n          cropperInstance.rotate(-90);\r\n          break;\r\n        case \"rotateRight\":\r\n          cropperInstance.rotate(90);\r\n          break;\r\n        case \"scaleX\":\r\n          cropperInstance.scaleX(-1);\r\n          break;\r\n        case \"scaleY\":\r\n          cropperInstance.scaleY(-1);\r\n          break;\r\n        case \"reset\":\r\n          cropperInstance.reset();\r\n          break;\r\n        default:\r\n          console.warn(\"cropperMethod 参数错误: \", action);\r\n      }\r\n    },\r\n    clearFiles() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.clearFiles();\r\n    },\r\n    abort() {\r\n      this.controller.abort();\r\n    },\r\n    submit() {\r\n      // el-upload 方法\r\n      this.$refs.myupload.submit();\r\n    },\r\n  },\r\n  created() {\r\n    this.globalOption = this.$UploaderOption || {};\r\n  },\r\n};\r\n</script>\r\n<style>\r\n.uploader-cropper-dialog .el-dialog__body {\r\n  padding: 0;\r\n}\r\n</style>\r\n<style scoped>\r\n/* 图片剪裁弹窗 */\r\n\r\n.cropper_main {\r\n  height: 50vh;\r\n  min-height: 500px;\r\n}\r\n\r\n.cropper_actions {\r\n  padding: 0.5em;\r\n}\r\n\r\n.cropper_actions :deep(.el-button-group) {\r\n  margin-right: 10px;\r\n}\r\n</style>\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5045,19 +5069,35 @@ exports.Z = (sfc, props) => {
 
 /***/ }),
 
-/***/ 20:
+/***/ 846:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(30);
+var content = __webpack_require__(318);
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.id, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = (__webpack_require__(402)/* ["default"] */ .Z)
-var update = add("156ec823", content, true, {"sourceMap":true,"shadowMode":false});
+var update = add("3b3db498", content, true, {"sourceMap":true,"shadowMode":false});
+
+/***/ }),
+
+/***/ 957:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(839);
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = (__webpack_require__(402)/* ["default"] */ .Z)
+var update = add("bfcf0bc4", content, true, {"sourceMap":true,"shadowMode":false});
 
 /***/ }),
 
@@ -5498,10 +5538,10 @@ if (typeof window !== 'undefined') {
 
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__(203);
-;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js??clonedRuleSet-82.use[1]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=template&id=772ef42e&scoped=true
+;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js??clonedRuleSet-82.use[1]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=template&id=cb1f2d1c&scoped=true
 
 
-const _withScopeId = n => ((0,external_commonjs_vue_commonjs2_vue_root_Vue_.pushScopeId)("data-v-772ef42e"), n = n(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.popScopeId)(), n);
+const _withScopeId = n => (_pushScopeId("data-v-cb1f2d1c"), n = n(), _popScopeId(), n);
 
 const _hoisted_1 = ["id"];
 
@@ -5521,49 +5561,34 @@ const _hoisted_6 = {
   class: "flex-1"
 };
 
-const _hoisted_7 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
-  class: "el-icon-refresh-left"
-}, null, -1));
+const _hoisted_7 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 左旋 ");
 
-const _hoisted_8 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 左旋 ");
+const _hoisted_8 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 右旋 ");
 
-const _hoisted_9 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
-  class: "el-icon-refresh-right"
-}, null, -1));
+const _hoisted_9 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 水平镜像 ");
 
-const _hoisted_10 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 右旋 ");
+const _hoisted_10 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 垂直镜像 ");
 
-const _hoisted_11 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
-  class: "el-icon-sort",
-  style: {
-    "transform": "rotateZ(90deg)"
-  }
-}, null, -1));
+const _hoisted_11 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 重置 ");
 
-const _hoisted_12 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 水平镜像 ");
-
-const _hoisted_13 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
-  class: "el-icon-sort"
-}, null, -1));
-
-const _hoisted_14 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 垂直镜像 ");
-
-const _hoisted_15 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
-  class: "el-icon-refresh"
-}, null, -1));
-
-const _hoisted_16 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 重置 ");
-
-const _hoisted_17 = /*#__PURE__*/_withScopeId(() => /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("i", {
-  class: "el-icon-crop"
-}, null, -1));
-
-const _hoisted_18 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 确定 ");
+const _hoisted_12 = /*#__PURE__*/(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createTextVNode)(" 确定 ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_el_button = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-button");
 
+  const _component_refresh_left = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("refresh-left");
+
+  const _component_el_icon = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-icon");
+
+  const _component_refresh_right = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("refresh-right");
+
   const _component_el_button_group = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-button-group");
+
+  const _component_sort = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("sort");
+
+  const _component_refresh = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("refresh");
+
+  const _component_crop = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("crop");
 
   const _component_el_dialog = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.resolveComponent)("el-dialog");
 
@@ -5592,62 +5617,78 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "append-to-body": "",
       title: "图像剪裁",
       top: "10vh",
-      "custom-class": "cropper",
+      "custom-class": "uploader-cropper-dialog",
       "close-on-click-modal": false,
       "close-on-press-escape": false,
       onClose: _cache[7] || (_cache[7] = $event => $options.cropperMethod('close'))
     }, {
       default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", _hoisted_3, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("img", _hoisted_4, null, 512)]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", _hoisted_5, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("div", _hoisted_6, [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button_group, null, {
         default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
-          size: "small",
           title: "左旋",
           onClick: _cache[0] || (_cache[0] = $event => $options.cropperMethod('rotateLeft'))
         }, {
-          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_7, _hoisted_8]),
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_icon, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_refresh_left)]),
+            _: 1
+          }), _hoisted_7]),
           _: 1
         }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
-          size: "small",
           title: "右旋",
           onClick: _cache[1] || (_cache[1] = $event => $options.cropperMethod('rotateRight'))
         }, {
-          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_9, _hoisted_10]),
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_icon, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_refresh_right)]),
+            _: 1
+          }), _hoisted_8]),
           _: 1
         })]),
         _: 1
       }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button_group, null, {
         default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
-          size: "small",
           title: "水平镜像",
           onClick: _cache[2] || (_cache[2] = $event => $options.cropperMethod('scaleX'))
         }, {
-          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_11, _hoisted_12]),
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_icon, {
+            style: {
+              "transform": "rotateZ(90deg)"
+            }
+          }, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_sort)]),
+            _: 1
+          }), _hoisted_9]),
           _: 1
         }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
-          size: "small",
           title: "垂直镜像",
           onClick: _cache[3] || (_cache[3] = $event => $options.cropperMethod('scaleY'))
         }, {
-          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_13, _hoisted_14]),
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_icon, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_sort)]),
+            _: 1
+          }), _hoisted_10]),
           _: 1
         })]),
         _: 1
       }), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button_group, null, {
         default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
-          size: "small",
           title: "重置",
           onClick: _cache[4] || (_cache[4] = $event => $options.cropperMethod('reset'))
         }, {
-          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_15, _hoisted_16]),
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_icon, null, {
+            default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_refresh)]),
+            _: 1
+          }), _hoisted_11]),
           _: 1
         })]),
         _: 1
       })]), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_button, {
-        size: "small",
         type: "primary",
         plain: "",
         onClick: _cache[5] || (_cache[5] = $event => $options.cropperMethod('save'))
       }, {
-        default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [_hoisted_17, _hoisted_18]),
+        default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_el_icon, null, {
+          default: (0,external_commonjs_vue_commonjs2_vue_root_Vue_.withCtx)(() => [(0,external_commonjs_vue_commonjs2_vue_root_Vue_.createVNode)(_component_crop)]),
+          _: 1
+        }), _hoisted_12]),
         _: 1
       })])]),
       _: 1
@@ -5655,7 +5696,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 3
   }, 16, ["fileList", "accept", "before-upload", "on-exceed", "on-change", "on-remove", "http-request"]);
 }
-;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=template&id=772ef42e&scoped=true
+;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=template&id=cb1f2d1c&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/exif-js/exif.js
 var exif = __webpack_require__(918);
@@ -5821,7 +5862,149 @@ var cropper = __webpack_require__(129);
 var cropper_default = /*#__PURE__*/__webpack_require__.n(cropper);
 // EXTERNAL MODULE: ./node_modules/cropperjs/dist/cropper.css
 var dist_cropper = __webpack_require__(168);
+;// CONCATENATED MODULE: ./node_modules/@element-plus/icons-vue/dist/es/_virtual/plugin-vue_export-helper.mjs
+var _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@element-plus/icons-vue/dist/es/crop.mjs
+
+
+
+const _sfc_main = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  name: "Crop"
+});
+const crop_hoisted_1 = {
+  viewBox: "0 0 1024 1024",
+  xmlns: "http://www.w3.org/2000/svg"
+};
+const crop_hoisted_2 = /* @__PURE__ */ (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+  fill: "currentColor",
+  d: "M256 768h672a32 32 0 1 1 0 64H224a32 32 0 0 1-32-32V96a32 32 0 0 1 64 0v672z"
+}, null, -1);
+const crop_hoisted_3 = /* @__PURE__ */ (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+  fill: "currentColor",
+  d: "M832 224v704a32 32 0 1 1-64 0V256H96a32 32 0 0 1 0-64h704a32 32 0 0 1 32 32z"
+}, null, -1);
+const crop_hoisted_4 = [
+  crop_hoisted_2,
+  crop_hoisted_3
+];
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", crop_hoisted_1, crop_hoisted_4);
+}
+var crop = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@element-plus/icons-vue/dist/es/refresh.mjs
+
+
+
+const refresh_sfc_main = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  name: "Refresh"
+});
+const refresh_hoisted_1 = {
+  viewBox: "0 0 1024 1024",
+  xmlns: "http://www.w3.org/2000/svg"
+};
+const refresh_hoisted_2 = /* @__PURE__ */ (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+  fill: "currentColor",
+  d: "M771.776 794.88A384 384 0 0 1 128 512h64a320 320 0 0 0 555.712 216.448H654.72a32 32 0 1 1 0-64h149.056a32 32 0 0 1 32 32v148.928a32 32 0 1 1-64 0v-50.56zM276.288 295.616h92.992a32 32 0 0 1 0 64H220.16a32 32 0 0 1-32-32V178.56a32 32 0 0 1 64 0v50.56A384 384 0 0 1 896.128 512h-64a320 320 0 0 0-555.776-216.384z"
+}, null, -1);
+const refresh_hoisted_3 = [
+  refresh_hoisted_2
+];
+function refresh_sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", refresh_hoisted_1, refresh_hoisted_3);
+}
+var refresh = /* @__PURE__ */ _export_sfc(refresh_sfc_main, [["render", refresh_sfc_render]]);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@element-plus/icons-vue/dist/es/sort.mjs
+
+
+
+const sort_sfc_main = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  name: "Sort"
+});
+const sort_hoisted_1 = {
+  viewBox: "0 0 1024 1024",
+  xmlns: "http://www.w3.org/2000/svg"
+};
+const sort_hoisted_2 = /* @__PURE__ */ (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+  fill: "currentColor",
+  d: "M384 96a32 32 0 0 1 64 0v786.752a32 32 0 0 1-54.592 22.656L95.936 608a32 32 0 0 1 0-45.312h.128a32 32 0 0 1 45.184 0L384 805.632V96zm192 45.248a32 32 0 0 1 54.592-22.592L928.064 416a32 32 0 0 1 0 45.312h-.128a32 32 0 0 1-45.184 0L640 218.496V928a32 32 0 1 1-64 0V141.248z"
+}, null, -1);
+const sort_hoisted_3 = [
+  sort_hoisted_2
+];
+function sort_sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", sort_hoisted_1, sort_hoisted_3);
+}
+var sort = /* @__PURE__ */ _export_sfc(sort_sfc_main, [["render", sort_sfc_render]]);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@element-plus/icons-vue/dist/es/refresh-right.mjs
+
+
+
+const refresh_right_sfc_main = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  name: "RefreshRight"
+});
+const refresh_right_hoisted_1 = {
+  viewBox: "0 0 1024 1024",
+  xmlns: "http://www.w3.org/2000/svg"
+};
+const refresh_right_hoisted_2 = /* @__PURE__ */ (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+  fill: "currentColor",
+  d: "M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"
+}, null, -1);
+const refresh_right_hoisted_3 = [
+  refresh_right_hoisted_2
+];
+function refresh_right_sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", refresh_right_hoisted_1, refresh_right_hoisted_3);
+}
+var refreshRight = /* @__PURE__ */ _export_sfc(refresh_right_sfc_main, [["render", refresh_right_sfc_render]]);
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@element-plus/icons-vue/dist/es/refresh-left.mjs
+
+
+
+const refresh_left_sfc_main = (0,external_commonjs_vue_commonjs2_vue_root_Vue_.defineComponent)({
+  name: "RefreshLeft"
+});
+const refresh_left_hoisted_1 = {
+  viewBox: "0 0 1024 1024",
+  xmlns: "http://www.w3.org/2000/svg"
+};
+const refresh_left_hoisted_2 = /* @__PURE__ */ (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementVNode)("path", {
+  fill: "currentColor",
+  d: "M289.088 296.704h92.992a32 32 0 0 1 0 64H232.96a32 32 0 0 1-32-32V179.712a32 32 0 0 1 64 0v50.56a384 384 0 0 1 643.84 282.88 384 384 0 0 1-383.936 384 384 384 0 0 1-384-384h64a320 320 0 1 0 640 0 320 320 0 0 0-555.712-216.448z"
+}, null, -1);
+const refresh_left_hoisted_3 = [
+  refresh_left_hoisted_2
+];
+function refresh_left_sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,external_commonjs_vue_commonjs2_vue_root_Vue_.openBlock)(), (0,external_commonjs_vue_commonjs2_vue_root_Vue_.createElementBlock)("svg", refresh_left_hoisted_1, refresh_left_hoisted_3);
+}
+var refreshLeft = /* @__PURE__ */ _export_sfc(refresh_left_sfc_main, [["render", refresh_left_sfc_render]]);
+
+
+
 ;// CONCATENATED MODULE: ./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib/index.js??clonedRuleSet-82.use[1]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=script&lang=js
+
 
 
 
@@ -5949,6 +6132,13 @@ const FileTypeMap = {
       }
 
     }
+  },
+  components: {
+    Crop: crop,
+    Refresh: refresh,
+    Sort: sort,
+    RefreshRight: refreshRight,
+    RefreshLeft: refreshLeft
   },
 
   data() {
@@ -6262,9 +6452,13 @@ const FileTypeMap = {
 });
 ;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js??clonedRuleSet-54.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-54.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[2]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=style&index=0&id=772ef42e&scoped=true&lang=css
-var uploadervue_type_style_index_0_id_772ef42e_scoped_true_lang_css = __webpack_require__(20);
-;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=style&index=0&id=772ef42e&scoped=true&lang=css
+// EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js??clonedRuleSet-54.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-54.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[2]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=style&index=0&id=cb1f2d1c&lang=css
+var uploadervue_type_style_index_0_id_cb1f2d1c_lang_css = __webpack_require__(846);
+;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=style&index=0&id=cb1f2d1c&lang=css
+
+// EXTERNAL MODULE: ./node_modules/vue-style-loader/index.js??clonedRuleSet-54.use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-54.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[2]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-54.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/components/uploader.vue?vue&type=style&index=1&id=cb1f2d1c&scoped=true&lang=css
+var uploadervue_type_style_index_1_id_cb1f2d1c_scoped_true_lang_css = __webpack_require__(957);
+;// CONCATENATED MODULE: ./src/components/uploader.vue?vue&type=style&index=1&id=cb1f2d1c&scoped=true&lang=css
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/dist/exportHelper.js
 var exportHelper = __webpack_require__(744);
@@ -6276,7 +6470,8 @@ var exportHelper = __webpack_require__(744);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(uploadervue_type_script_lang_js, [['render',render],['__scopeId',"data-v-772ef42e"]])
+
+const __exports__ = /*#__PURE__*/(0,exportHelper/* default */.Z)(uploadervue_type_script_lang_js, [['render',render],['__scopeId',"data-v-cb1f2d1c"]])
 
 /* harmony default export */ const uploader = (__exports__);
 ;// CONCATENATED MODULE: ./src/index.js
