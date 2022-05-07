@@ -34,7 +34,7 @@
           </div>
 
           <div class="code">
-            <textarea>
+            <textarea readonly>
             <uploader v-model="fileList" :data="{ test: 123 }" :limit="2" />
             </textarea>
           </div>
@@ -67,7 +67,7 @@
           </div>
 
           <div class="code">
-            <textarea>
+            <textarea readonly>
             <uploader accept="t-image" :value="avatar ? [avatar] : []" imgCrop :show-file-list="false" :on-success="res => {avatar = res.data}" />
             </textarea>
           </div>
