@@ -457,7 +457,7 @@ export default {
           });
 
           if (imgBlob) {
-            DEBUG && console.log("imgCrop", imgBlob);
+            DEBUG && console.log("imgCrop File", imgBlob);
             formDataFileObj = imgBlob;
             formDataFileName = fixJpgFileName(formDataFileName);
             this.cropperMethod("close");
@@ -497,10 +497,16 @@ export default {
               minHeight: this.imgCropOption.minHeight,
               maxWidth: this.imgCropOption.maxWidth || 1000,
               maxHeight: this.imgCropOption.maxHeight || 1000,
-              imageSmoothingQuality: "medium",
             })
             .toBlob((blob) => {
               this.cropResult = blob;
+              // 调试信息
+              const fileReader = new FileReader();
+              fileReader.onload = (e) => {
+                DEBUG && console.log("imgCrop Base64", e.target.result);
+              };
+              // readAsDataURL
+              fileReader.readAsDataURL(blob);
             }, "image/jpeg");
           break;
         case "close":
