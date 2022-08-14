@@ -557,7 +557,7 @@ export default {
 
 <style scoped>
 /* 图片剪裁弹窗 */
-.cropper >>> .el-dialog__body {
+.cropper :deep(.el-dialog__body) {
   padding: 0;
 }
 
@@ -570,7 +570,7 @@ export default {
   padding: 0.5em;
 }
 
-.cropper_actions >>> .el-button-group {
+.cropper_actions :deep(.el-button-group) {
   margin-right: 10px;
 }
 </style>
