@@ -20,11 +20,7 @@
 1. NPM 安装
 
 ```js
-// Vue2 + Element-UI
-npm i @cutting-mat/uploader@2.0.15 -S
-
-// Vue3 + Element-Plus
-npm i @cutting-mat/uploader@3.0.5 -S
+npm i @cutting-mat/uploader -S
 
 ```
 
