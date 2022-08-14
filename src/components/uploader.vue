@@ -110,6 +110,7 @@ const FileTypeMap = {
 };
 
 export default {
+  name: "Uploader",
   props: {
     modelValue: {
       type: Array,
