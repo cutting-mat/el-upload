@@ -75,7 +75,7 @@
 import { fixImgFile } from "ios-photo-repair";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
-
+import { inject } from "vue";
 import {
   Crop,
   Refresh,
@@ -513,7 +513,8 @@ export default {
     },
   },
   created() {
-    this.globalOption = this.$UploaderOption || {};
+    this.globalOption = inject("$UploaderOption");
+    DEBUG && console.log(this.globalOption);
   },
 };
 </script>

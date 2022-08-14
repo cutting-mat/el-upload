@@ -6,10 +6,8 @@ import Uploader from "@/components/uploader";
 
 export default {
   install: function (app, option) {
-    app.config.globalProperties.$UploaderOption = option || {};
+    app.provide("$UploaderOption", option || {});
 
-    setTimeout(() => {
-      app.component("uploader", Uploader);
-    }, 0);
+    app.component("uploader", Uploader);
   },
 };
