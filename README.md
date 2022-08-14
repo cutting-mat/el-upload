@@ -4,6 +4,8 @@
 
 基于 ElementUI/ElementPlus，整合图片上传前压缩、上传前剪裁、IOS 图片方向自动校正、自定义文件类型的 Vue 上传组件
 
+适用于 ElementPlus 的[Vue3 版本](https://github.com/cutting-mat/uploader-plus)
+
 ## Feature
 
 - [x] 支持全局配置
@@ -44,11 +46,11 @@ Vue.use(uploader, uploadConfig); // 安装时传入的配置为全局配置
 
 ```js
 /**
- * @cutting-mat/uploader 配置文件 
+ * @cutting-mat/uploader 配置文件
  * 支持 el-upload 除请求相关（action, headers, data, name, with-credentials, http-request）以外的所有 Prop
  * 支持 el-upload 的所有 Method
  * 附 el-upload 文档: https://element.eleme.cn/#/zh-CN/component/upload
- * 
+ *
  * 额外支持以下属性，均支持全局配置：
 
  * accept[String]:              允许上传的文件类型, 同el-upload, 额外支持自定义文件类型（见下方 quickType ）
@@ -57,13 +59,13 @@ Vue.use(uploader, uploadConfig); // 安装时传入的配置为全局配置
  * onExceed[Function]:          文件超出个数限制时的钩子, 同el-upload
  * limitSize[Number]:           允许上传的最大文件尺寸，默认 100 * 1024 * 1024（100M）
  * imgCompress[Boolean]:        开启图片上传前压缩, default: true
- * imgCompressOption[Object]:   图片压缩尺寸配置, default: 
+ * imgCompressOption[Object]:   图片压缩尺寸配置, default:
     {
         maxWidth: 1000,            // 最大宽度
         maxHeight: 1000,           // 最大高度
     }
  * imgCrop[Boolean]:            开启图片上传前剪裁, default: false
- * imgCropOption[Object]:       图片剪裁配置, 选项同 [fengyuanchen/compressorjs], default: 
+ * imgCropOption[Object]:       图片剪裁配置, 选项同 [fengyuanchen/compressorjs], default:
     {
         ratio: 1,               // 剪裁框宽高比
         minWidth: 0,            // 最小输出宽度
@@ -73,7 +75,7 @@ Vue.use(uploader, uploadConfig); // 安装时传入的配置为全局配置
     }
  * uploadMethod[Function]:      上传处理方法, 接收两个参数（file/blob, fileName），default: 无
  * responseTransfer[Function]:  接口返回数据 与 fileList 数据格式转换函数, default: (response) => return response;
- * quickType[Object]:           自定义文件类型, default: 
+ * quickType[Object]:           自定义文件类型, default:
     {
         "t-image": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
         "t-video": [".mp4", ".rmvb", ".avi", ".mov", ".3gp", ".webm"],
