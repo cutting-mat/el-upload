@@ -27,6 +27,7 @@
       custom-class="uploader-cropper-dialog"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
       @close="cropperMethod('close')"
     >
       <div class="cropper_main">

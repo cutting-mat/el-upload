@@ -1,13 +1,15 @@
 /**
  * @cutting-mat/uploader
- * 
+ *
  * */
-import Uploader from '@/components/uploader';
+import Uploader from "@/components/uploader";
 
 export default {
-    install: function (app, option) {
-        app.config.globalProperties.$UploaderOption = option || {}
+  install: function (app, option) {
+    app.config.globalProperties.$UploaderOption = option || {};
 
-        app.component('uploader', Uploader)
-    }
-}
+    setTimeout(() => {
+      app.component("uploader", Uploader);
+    }, 0);
+  },
+};
