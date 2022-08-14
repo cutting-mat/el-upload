@@ -1,6 +1,6 @@
 {
   "name": "@cutting-mat/uploader",
-  "version": "2.0.16",
+  "version": "4.0.0",
   "description": "",
   "main": "dist/index.common.js",
   "repository": {
