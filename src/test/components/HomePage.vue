@@ -28,6 +28,7 @@
               :data="{ test: 123 }"
               :limit="2"
               :on-progress="handleProgress"
+              :before-upload="myBeforeUpload"
             >
               <el-button>上传个文件</el-button>
             </uploader>
@@ -88,6 +89,9 @@ export default {
   methods: {
     handleProgress(e) {
       console.log("handleProgress:", e.percent);
+    },
+    myBeforeUpload() {
+      console.log("myupload");
     },
   },
   created() {

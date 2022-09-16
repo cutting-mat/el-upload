@@ -33,7 +33,7 @@
       <div class="cropper_main">
         <img src ref="CropperImg" />
       </div>
-      <div class="cropper_actions flex-row align-center">
+      <div class="flex-row cropper_actions align-center">
         <div class="flex-1">
           <el-button-group>
             <el-button
@@ -292,6 +292,7 @@ export default {
       cropResult: null,
       fileListFinnal: [],
       controller: null,
+      debugMode: Vue.$UploaderOption.debug,
     };
   },
   computed: {
@@ -341,11 +342,19 @@ export default {
       }
 
       if (typeof this.$attrs["before-upload"] === "function") {
+        this.debugMode &&
+          console.log(
+            `@cutting-mat/uploader: use $attrs["before-upload"] method`
+          );
         return this.$attrs["before-upload"](file);
       } else if (
         Vue.$UploaderOption &&
         typeof Vue.$UploaderOption.beforeUpload === "function"
       ) {
+        this.debugMode &&
+          console.log(
+            `@cutting-mat/uploader: use Vue.$UploaderOption.beforeUpload method`
+          );
         return Vue.$UploaderOption.beforeUpload(file);
       } else {
         return true;
