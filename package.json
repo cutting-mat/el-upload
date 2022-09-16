@@ -22,7 +22,7 @@
   "dependencies": {
     "cropperjs": "^1.5.12",
     "ios-photo-repair": "^1.1.1",
-    "vue": "^2.6.14"
+    "vue": "^2.7.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.13",
@@ -38,7 +38,7 @@
     "eslint-plugin-vue": "^7.10.0",
     "promise-polyfill": "^8.2.3",
     "unfetch": "^4.2.0",
-    "vue-template-compiler": "^2.6.12",
+    "vue-template-compiler": "^2.7.10",
     "regenerator-runtime": "^0.13.9"
   }
 }
